@@ -15,6 +15,7 @@ const helmet = require("helmet");
 const mongoConnection = require('../db/mongoConnect');
 const clientErrorHandler = require('../middlewares/clientErrorHandler');
 const logError = require('../middlewares/logError');
+const notFound = require("../middlewares/notFound");
 
 // Middleware
 app.use(bodyParser.urlencoded({extended : true}));
@@ -23,6 +24,9 @@ app.use(helmet());
 
 // Error handler middleware
 app.use(logError, clientErrorHandler);
+
+// Handle not found routes
+app.all("*", notFound);
 
 // start the server if the database connection succed
 
