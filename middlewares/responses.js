@@ -2,9 +2,9 @@
 module.exports = {
     
     invalidCredentials : function (res) {
-        res.status(403).json({
+        return res.status(403).json({
             error : true,
-            message : "Invalid credentials"
+            data : "Invalid credentials"
         });
     },
 
@@ -13,5 +13,26 @@ module.exports = {
             error : true,
             data : "Not Found"
         })
+    },
+
+    ok: function (data="ok", res) {
+        return res.status(200).json({
+            success : true,
+            data: data
+        });
+    },
+
+    created : function (data="201 Created", res) {
+        return res.status(200).json({
+            success : true,
+            data: data
+        });
+    },
+
+    upload : function (res) {
+        return res.status(204).json({
+            success : true,
+            data: "Ok"
+        });
     }
 }
