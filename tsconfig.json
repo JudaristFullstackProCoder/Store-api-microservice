@@ -1,0 +1,14 @@
+{
+
+    "include": [
+        "typescript/**/*"
+    ],
+    "compilerOptions": {
+        "outDir": "dist",
+        "target" : "ES2016",
+        "strict": true,
+        "rootDir": "./typescript",
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+    }
+}
