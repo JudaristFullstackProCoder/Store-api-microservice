@@ -4,6 +4,7 @@
         "axios": "^0.24.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.1",
+        "concurrently": "^7.0.0",
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
@@ -30,6 +31,6 @@
     "scripts": {
         "prod": "NODE_ENV=production && nodemon ./server/server.js",
         "dev": "NODE_ENV=development && nodemon ./server/server.js",
-        "ts-dev" : "concurrently \"tsc --watch\"  \"nodemon dist/server/index.js\""
+        "ts-dev": "concurrently \"tsc --watch\"  \"nodemon dist/server/index.js\""
     }
 }
