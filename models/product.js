@@ -1,11 +1,21 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+/**
+ * @description Descrine the strucuture of product's options
+ * All the product dont't have the same category then all product
+ * can't have the same option then we need to link product's category options
+ * with the product
+ */
 const productOptionsSchema = new Schema({
-    options: {
+    // the id of the option
+    option: {
         type: Schema.Types.ObjectId,
-        required: [true, "option's id is required !"]
+        required: [true, "option's id is required !"],
+        ref: 'options',
+        unique: true
     },
+    // the value of the option
     value: {
         type: Schema.Types.Mixed,
         required: [true, "option's value is required !"]
@@ -27,26 +37,42 @@ const productSchema = new Schema({
         required: [true, "product's description is required !"],
         trim: true
     },
+    // product's options
     options: [productOptionsSchema],
     category: {
         type: Schema.Types.ObjectId,
         required: [true, "product category is required !"]
     },
+    // if the product has been published already,
     online: {
         type: Schema.Types.Boolean,
         required: [true, "product is online ? required !"]
     },
+    // the user who created this product
     shopkeeper: {
         type: Schema.Types.ObjectId,
         required: [true, "product shopkeeper is required !"]
     },
+    // the is of the store where this product is stored
     store: {
         type: Schema.Types.ObjectId,
         required: [true, "product shop is required !"]
-    }
+    },
+    // product's additionals images
+    images: [{}],
+    image: {
+        type : Schema.Types.Mixed,
+        required: false,
+    }, 
+    // presentation video
+    pre_video: {}
 });
 
+// Exports
 module.exports = {
     model : mongoose.model("product", productSchema),
-    schema: productSchema
+    schema: productSchema,
+    requiredFields : ["name", "price", "description", 
+    "category", "shopkeeper", "store", "online"],
+    productOptionsRequiredFields : ["option", "value"]
 };

@@ -12,7 +12,9 @@ const optionSchema = new Schema({
     name : {
         type : Schema.Types.String,
         required : [true, "the option's name is required"],
-        trim: true
+        trim: true,
+        minlength: 4,
+        maxlength:30
     }
 });
 

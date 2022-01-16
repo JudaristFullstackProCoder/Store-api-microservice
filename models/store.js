@@ -1,30 +1,36 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const productSchema = require("./product").schema
 
+/**
+ * @description Describe the structure of all settings of a store.
+ * Because all store settings are the same.
+ */
 const storeSettingSchema = new Schema({
-    setting: {
-        type: Schema.Types.ObjectId,
-        required: [true, "store setting id is required !"]
-    },
-    value: {
-        type: Schema.Types.Mixed,
-        required: [true, "store setting value is required !"]
-    }
+   
 });
 
+/**
+ * @description Describe the structure of a store.
+ */
 const storeSchema = new Schema({
+    // the name if the store
     name: {
         type: Schema.Types.String,
         required: [true, "store name is required"],
-        trim: true
+        trim: true,
+        minlength: 4,
+        maxlength: 22
     },
+    // the owner of the store
     shopkeeper: {
         type: Schema.Types.ObjectId,
-        required: [true, "store shopkeeper id is required !"]
+        required: false,//[true, "store shopkeeper id is required !"]
     },
-    settings:[storeSettingSchema],
-    products: [productSchema]
+    settings:{
+        type: storeSettingSchema,
+        required: [true, "store settings is required !"],
+        default: {}
+    }
 });
 
 module.exports = {
