@@ -10,6 +10,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const helmet = require("helmet");
 const multer = require("multer");
+// File upload
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/")
@@ -23,14 +24,13 @@ const uploadStorage = multer({ storage: storage });
 // custom modules imports
 const mongoConnection = require('../db/mongoConnect');
 const clientErrorHandler = require('../middlewares/clientErrorHandler');
-const logError = require('../middlewares/logError');
+const errorLogger = require('../middlewares/errorLogger');
 const notFound = require("../middlewares/notFound");
 const storeRoutes = require("../routes/store");
 const productsRoutes = require("../routes/product");
 const categoryRoutes = require("../routes/category");
 const optionsRoutes = require("../routes/option");
 const addProductImage = require("../controllers/product").addProductImage;
-const responses = require("../middlewares/responses");
 
 // Middleware
 app.use(express.json());
@@ -53,7 +53,7 @@ app.post("/products/:id/upload", uploadStorage.single('image'), function(req, re
 });
 
 // Error handler middleware
-app.use(logError, clientErrorHandler);
+app.use(errorLogger, clientErrorHandler);
 
 // Handle not found routes
 app.all("*", notFound);
