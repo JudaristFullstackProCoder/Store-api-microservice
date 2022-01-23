@@ -22,6 +22,21 @@ const productOptionsSchema = new Schema({
     }
 });
 
+/**
+ * Product composition schema
+ */
+const productComposition = new Schema({
+    options: [productOptionsSchema],
+    image : {
+        type: Schema.Types.Mixed,
+        required: true
+    },
+    price : {
+        type: Schema.Types.Number,
+        required: true
+    }
+});
+
 const productSchema = new Schema({
     name: {
         type: Schema.Types.String,
@@ -65,7 +80,11 @@ const productSchema = new Schema({
         required: false,
     }, 
     // presentation video
-    pre_video: {}
+    pre_video: {
+        type: Schema.Types.Mixed,
+        required: false
+    },
+    compositions : [productComposition]
 });
 
 // Exports
