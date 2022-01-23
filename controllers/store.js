@@ -14,18 +14,6 @@ const createStore = async function (req, res, next) {
         }
     }
     
-    try{
-        await axios.post("http://localhost:4422/authentication/user/is-authenticated").then((data) => {
-            // I don't need data because axios throw error and 
-            // end script the when the request fails with status of 403
-            // the call to url http://localhost:4422/authentication/user/is-authenticated return status 403 if user
-            // isn't authenticated and status 200 if the user is authenticated and if
-            // axios get the status 403 he end the script this is while i surounded this with try catch
-            // this permit me to handle the case when axios throw an error when the call to the api response with status 403 
-    });
-    }catch(err){
-        //return next(new Error("Authentication required !"));
-    }
     // One name per store
     let named = await Store.findOne({
         name : req.body.name,
