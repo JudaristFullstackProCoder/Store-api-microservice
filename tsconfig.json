@@ -1,5 +1,4 @@
 {
-
     "include": [
         "typescript/**/*"
     ],
@@ -10,5 +9,7 @@
         "rootDir": "./typescript",
         "esModuleInterop": true,
         "moduleResolution": "node",
+        "forceConsistentCasingInFileNames" : true,
+        "importHelpers" : true
     }
 }
