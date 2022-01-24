@@ -11,7 +11,8 @@ const promoCodeSchema = new Schema({
     },
     from : {
         type: Schema.Types.Date,
-        required: true
+        required: true,
+        default: parseInt(Date.parse(new Date().toISOString())) // Timestamp GMT
     },
     to:{
         type: Schema.Types.Date,
