@@ -5,6 +5,10 @@ const Schema = mongoose.Schema;
  * Promocodes mongoose model
  */
 const promoCodeSchema = new Schema({
+    name : {
+        type : Schema.Types.String,
+        required : true
+    },
     discount : {
         type: Schema.Types.Number,
         required: true
