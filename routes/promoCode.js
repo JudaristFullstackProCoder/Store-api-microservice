@@ -5,4 +5,4 @@ router.route("/:id").get(promoCodeController.getPromoCode)
     .delete(promoCodeController.deletePromoCode).patch(promoCodeController.updatePromoCode);
 router.route("/").post(promoCodeController.createPromoCode);
 
-export default router;
+module.exports = router;

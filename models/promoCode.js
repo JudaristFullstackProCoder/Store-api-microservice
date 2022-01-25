@@ -32,4 +32,4 @@ const promoCodeSchema = new Schema({
     }
 });
 
-export default mongoose.model("promocodes", promoCodeSchema);
+module.exports = mongoose.model("promocodes", promoCodeSchema);

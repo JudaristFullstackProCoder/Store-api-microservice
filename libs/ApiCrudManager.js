@@ -10,7 +10,7 @@ class ApiCrudManager {
      * @param {mongoose.Model} model 
      * @param {Array} requiredFields 
      */
-    create (ctx, model, requiredFields) {
+    create = async (ctx, model, requiredFields) => {
 
         // required fields
         for (let i = 0; i <requiredFields.length; i++) {
@@ -36,7 +36,7 @@ class ApiCrudManager {
      * @param {mongoose.Model} model 
      * @param {Array} requiredFields 
      */    
-    read (ctx, model) {
+    read  = async (ctx, model) => {
 
         let product = null;
 
@@ -57,7 +57,7 @@ class ApiCrudManager {
      * @param {Object} ctx {req : {express.Request}, res : {express.Response}, next : {express.NextFunction}}
      * @param {mongoose.Model} model 
      */ 
-    update (ctx, model) {
+    update = async (ctx, model) => {
 
         let updated = null;
 
@@ -81,7 +81,7 @@ class ApiCrudManager {
      * @param {mongoose.Model} model 
      * @param {Array} requiredFields 
      */ 
-    delete (ctx, model) {
+    delete = async (ctx, model) => {
 
         let deleted = null;
 
