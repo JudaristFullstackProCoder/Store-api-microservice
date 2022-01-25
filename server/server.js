@@ -30,6 +30,7 @@ const storeRoutes = require("../routes/store");
 const productsRoutes = require("../routes/product");
 const categoryRoutes = require("../routes/category");
 const optionsRoutes = require("../routes/option");
+const promoCodeRoutes = require("../routes/promoCode");
 const addProductImage = require("../controllers/product").addProductImage;
 
 // Middleware
@@ -45,6 +46,7 @@ app.use("/stores", storeRoutes);
 app.use("/products", productsRoutes);
 app.use("/category", categoryRoutes);
 app.use("/options", optionsRoutes);
+app.use("/promocodes", promoCodeRoutes);
 // images upload for product
 app.post("/products/:id/upload", uploadStorage.single('image'), function(req, res, next) {
     // req.file is the name of your file in the form above, here 'uploaded_file'
