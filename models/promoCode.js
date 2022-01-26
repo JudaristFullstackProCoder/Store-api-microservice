@@ -14,12 +14,12 @@ const promoCodeSchema = new Schema({
         required: true
     },
     from : {
-        type: Schema.Types.Date,
+        type: Schema.Types.Number, // timestamp GMT
         required: true,
         default: parseInt(Date.parse(new Date().toISOString())) // Timestamp GMT
     },
     to:{
-        type: Schema.Types.Date,
+        type: Schema.Types.Number, // timestamp GMT
         required: true
     },
     maxuse : {
