@@ -10,7 +10,7 @@ class ApiCrudManager {
      * @param {mongoose.Model} model 
      * @param {Array} requiredFields 
      */
-    create = async (ctx, model, requiredFields) => {
+    create = async (ctx, model, requiredFields = []) => {
 
         // required fields
         for (let i = 0; i <requiredFields.length; i++) {
@@ -19,14 +19,14 @@ class ApiCrudManager {
             }
         }
 
-        let obj =  new model(req.body);
+        let obj =  new model(ctx.req.body);
         try{
             obj = await obj.save();
         }catch(err){
-            return next(err);
+            return ctx.next(err);
         }
 
-        return responses.ok(obj, res);
+        return responses.ok(obj, ctx.res);
 
     }
 
@@ -48,7 +48,7 @@ class ApiCrudManager {
             return ctx.next(err);
         }
 
-        return responses.ok(product, res);
+        return responses.ok(product, ctx.res);
 
     }
 
@@ -63,7 +63,7 @@ class ApiCrudManager {
 
         try {
             updated = await model.findOneAndUpdate({
-                _id: new mongoose.Types.ObjectId(req.params.id)
+                _id: new mongoose.Types.ObjectId(ctx.req.params.id)
             }, ctx.req.body,{
                 new: true
             }).exec();
@@ -71,7 +71,7 @@ class ApiCrudManager {
             return ctx.next(err);
         }
 
-        return responses.ok(updated, res);
+        return responses.ok(updated, ctx.res);
 
     }
 
@@ -93,7 +93,7 @@ class ApiCrudManager {
             return ctx.next(err);
         }
 
-        return responses.ok(deleted, res);
+        return responses.ok(deleted, ctx.res);
         
     }
 
