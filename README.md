@@ -77,8 +77,8 @@ The api manage promo code crud
 
 * name : string
 * discount : int
-* to  ; Date
-* from : Date
+* to  : int
+* from : int
 * remaininguse : int (remaining use)
 * maxuse : int (max nomber of use)
 
