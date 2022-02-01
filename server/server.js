@@ -9,17 +9,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const helmet = require("helmet");
-const multer = require("multer");
-// File upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/")
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname)
-  },
-});
-const uploadStorage = multer({ storage: storage });
+
+
 
 // custom modules imports
 const mongoConnection = require('../db/mongoConnect');
@@ -32,6 +23,7 @@ const categoryRoutes = require("../routes/category");
 const optionsRoutes = require("../routes/option");
 const promoCodeRoutes = require("../routes/promoCode");
 const addProductImage = require("../controllers/product").addProductImage;
+const uploadStorage = require("../libs/MulterUpload");
 
 // Middleware
 app.use(express.json());
@@ -47,11 +39,11 @@ app.use("/products", productsRoutes);
 app.use("/category", categoryRoutes);
 app.use("/options", optionsRoutes);
 app.use("/promocodes", promoCodeRoutes);
-// images upload for product
-app.post("/products/:id/upload", uploadStorage.single('image'), function(req, res, next) {
-    // req.file is the name of your file in the form above, here 'uploaded_file'
+// single image upload for product
+app.post("/products/:id/upload", uploadStorage("/images/products").single('image'), function(req, res, next) {
+    // req.file is the name of your file in the form above
    // req.body will hold the text fields, if there were any 
-   return addProductImage(req, res, next);
+   return addProductImage(req, res, next); // save into the product the information about his uploaded image
 });
 
 // Error handler middleware
