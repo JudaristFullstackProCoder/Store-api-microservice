@@ -82,4 +82,10 @@ The api manage promo code crud
 * remaininguse : int (remaining use)
 * maxuse : int (max nomber of use)
 
+## Local development
+
+* Clone the repository
+* npm install
+* npm run dev
+
 made by `Judarist Fullstack  - judearist@gmail.com`
