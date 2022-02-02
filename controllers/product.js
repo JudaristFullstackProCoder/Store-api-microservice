@@ -25,7 +25,9 @@ const getProduct = async function (req, res, next) {
     try{
         product = await Product.findOne({ 
             _id: req.params.id,
-        }).populate("options.option", "name").exec();
+        }).populate("options.option", "name")
+        .populate("category", "name")
+        .exec();
     }catch(err){
         return next(err);
     }
