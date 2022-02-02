@@ -22,8 +22,7 @@ const productsRoutes = require("../routes/product");
 const categoryRoutes = require("../routes/category");
 const optionsRoutes = require("../routes/option");
 const promoCodeRoutes = require("../routes/promoCode");
-const addProductImage = require("../controllers/product").addProductImage;
-const uploadStorage = require("../libs/MulterUpload");
+const uploadRoutes = require("../routes/upload");
 
 // Middleware
 app.use(express.json());
@@ -39,13 +38,7 @@ app.use("/products", productsRoutes);
 app.use("/category", categoryRoutes);
 app.use("/options", optionsRoutes);
 app.use("/promocodes", promoCodeRoutes);
-
-// single image upload for product
-app.post("/upload/product/:id/image", uploadStorage("images/products").single('image'), function(req, res, next) {
-  // req.file is the name of your file in the form above
-  // req.body will hold the text fields, if there were any 
-  return addProductImage(req, res, next); // save into the product the information about his uploaded image
-});
+app.use("/upload", uploadRoutes);
 
 // Error handler middleware
 app.use(errorLogger, clientErrorHandler);
