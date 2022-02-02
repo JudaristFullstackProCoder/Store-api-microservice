@@ -9,17 +9,10 @@
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "express": "^4.17.2",
-        "express-multipart": "^1.0.6",
-        "express-rate-limit": "^6.0.5",
-        "express-session": "^1.17.2",
         "helmet": "^5.0.1",
         "mongodb": "^4.2.2",
         "mongoose": "^6.1.2",
-        "multer": "^1.4.4",
-        "nodemailer": "^6.7.2",
-        "passport": "^0.5.2",
-        "passport-local": "^1.0.0",
-        "systeminformation": "^5.9.17"
+        "multer": "^1.4.4"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",
@@ -29,5 +22,11 @@
     },
     "scripts": {
         "dev": "nodemon ./server/server.js"
-    }
+    },
+    "name": "store-api",
+    "version": "1.0.0",
+    "main": "server/server.js",
+    "repository": "https://github.com/judaristFullstack/Store-API.git",
+    "author": "judarist Fullstack <jude22fullstack@gmail.com>",
+    "license": "MIT"
 }
