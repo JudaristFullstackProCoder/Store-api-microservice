@@ -56,7 +56,8 @@ const productSchema = new Schema({
     options: [productOptionsSchema],
     category: {
         type: Schema.Types.ObjectId,
-        required: [true, "product category is required !"]
+        ref: "category",
+        required: [true, "product category is required !"],
     },
     // if the product has been published already,
     online: {
