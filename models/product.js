@@ -75,7 +75,9 @@ const productSchema = new Schema({
         required: [true, "product shop is required !"]
     },
     // product's additionals images
-    images: [{}],
+    images: {
+        type: Schema.Types.Array,
+    },
     image: {
         type : Schema.Types.Mixed,
         required: false,
