@@ -77,6 +77,7 @@ const productSchema = new Schema({
     // product's additionals images
     images: {
         type: Schema.Types.Array,
+        validate: [ function (arr) { return arr.length <= 5; } , 'maximum number of files reached']
     },
     image: {
         type : Schema.Types.Mixed,
