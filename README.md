@@ -9,6 +9,7 @@ The goal of this project is to create an api is to manage entities : store, prod
 1. Vscode
 2. Nodejs / Express
 3. Mongodb / Mongoose
+4. Docker
 
 ## Managing store
 
