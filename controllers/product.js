@@ -95,6 +95,38 @@ const addProductImage = async function (req, res, next)  {
     }
 }
 
+const addProductAdditionalsImages = async function (req, res, next) {
+    try {
+        Product.updateOne({
+            _id: req.params.id
+        }, {
+            $push : {images : req.file}
+        }, {new : true} , function (err, product) {
+            if (err) return next(err);
+            return responses.ok(product, res);
+        })
+    }catch(err){
+        return next(err);
+    }
+}
+
+const addProductVideo = function (req, res, next) {
+    // This method is called when we upload an image for a product
+    // Store all informatios about uploaded video into the product
+    try{
+        Product.findOneAndUpdate({
+            _id : new Mongoose.Types.ObjectId(req.params.id)
+        }, {
+            video : req.file
+        }, {new: true}, function (err, success) {
+            if(err) return next(err);
+            return responses.upload(res);
+        });
+    }catch(err){
+        return next(err);
+    }
+}
+
 module.exports = {
     createProduct: createProduct,
     getProduct: getProduct,
@@ -103,5 +135,7 @@ module.exports = {
     addProductOption : addProductOption,
     deleteProductOption : deleteProductOption,
     addProductImage : addProductImage,
-    getAllProductWithPagination : getAllProductWithPagination
+    getAllProductWithPagination : getAllProductWithPagination,
+    addProductAdditionalsImages : addProductAdditionalsImages,
+    addProductVideo : addProductVideo
 }
