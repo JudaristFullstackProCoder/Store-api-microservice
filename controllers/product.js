@@ -2,22 +2,11 @@ const responses = require("../middlewares/responses");
 const Product = require("../models/product").model;
 const requiredFields = require("../models/product").requiredFields;
 const Mongoose = require("mongoose");
+const cm = require("../libs/ApiCrudManager");
+const crudManager = new cm();
 
 const createProduct = async function (req, res, next) {
-    // required fields
-    for (let i = 0; i <requiredFields.length; i++) {
-        if(!req.body[requiredFields[i]]){
-            return next(new Error(`${requiredFields[i]} is required`));
-        }
-    }
-
-    let product =  new Product(req.body);
-    try{
-        product = await product.save();
-    }catch(err){
-        return next(err);
-    }
-   return responses.ok(product, res);
+   return crudManager.create({req:req, res:res, next:next}, Product, requiredFields);
 }
 
 const getProduct = async function (req, res, next) {
@@ -35,29 +24,15 @@ const getProduct = async function (req, res, next) {
 }
 
 const updateProduct = async function (req, res, next) {
-    let updated = null;
-    try {
-        updated = await Product.findOneAndUpdate({
-            _id: new Mongoose.Types.ObjectId(req.params.id || "")
-        }, req.body,{
-            new: true
-        }).exec();
-    }catch(err){
-        return next(err);
-    }
-    return responses.ok(updated, res);
+    return crudManager.update({req:req, res:res, next:next}, Product);
 }
 
 const deleteProduct = async function (req, res, next) {
-    let deleted = null;
-    try {
-        deleted = await Product.findOneAndDelete({
-            _id: new Mongoose.Types.ObjectId(req.params.id)
-        }).exec();
-    }catch(err){
-        return next(err);
-    }
-    return responses.ok(deleted, res);
+    return crudManager.delete({req:req, res:res, next:next}, Product);
+}
+
+const getAllProductWithPagination = function (req, res, next) {
+
 }
 
 const addProductOption = async function (req, res, next) {
@@ -127,5 +102,6 @@ module.exports = {
     deleteProduct: deleteProduct,
     addProductOption : addProductOption,
     deleteProductOption : deleteProductOption,
-    addProductImage : addProductImage
+    addProductImage : addProductImage,
+    getAllProductWithPagination : getAllProductWithPagination
 }
