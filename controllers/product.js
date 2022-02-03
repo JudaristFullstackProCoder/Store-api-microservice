@@ -88,7 +88,7 @@ const addProductImage = async function (req, res, next)  {
             image : req.file
         }, {new: true}, function (err, success) {
             if(err) return next(err);
-            return responses.upload(res);
+            //return responses.upload(res);
         });
     }catch(err){
         return next(err);
