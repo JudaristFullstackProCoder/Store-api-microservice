@@ -34,5 +34,13 @@ module.exports = {
             success : true,
             data: "Ok"
         });
+    },
+
+    deleted : function (res) {
+        return res.status(204).json({
+            success : true,
+            data: "Ok"
+        });
     }
+
 }
