@@ -38,7 +38,7 @@ function (subDirectory, fileType="image") {
 function checkFileType(file,fileType, FileFilterCallback){
   // Allowed ext
   
-  const filetypes = /jpeg|jpg|png|gif/;
+  let filetypes = /jpeg|jpg|png|gif/;
 
   if (fileType === "video") {
     filetypes = /.mp4|.mkv|.avi|.m4v|.ogv|.ogg /
