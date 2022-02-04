@@ -35,7 +35,7 @@ function addFileToProduct (req, res, next) {
 
     //  we pass the next:Express.NextFunction to this function to handle error when uploading or when 
     // when file validation failed
-    uploadStorage(filePath, fileType).single('image')(req, res, next);
+    uploadStorage(filePath, fileType).single(fileType)(req, res, next);
     
     // Delete the old image if it exist
     if (fileDirectoryLength > 1){
@@ -84,8 +84,10 @@ router.post("/product/:id/images", function(req, res, next) {
         // then product already have a featured image
        return next(new Error("Maximum number of images reached"));
     }
-
-    uploadStorage(`uploads/${filePath}`).array('images', 5);
+    
+    // uploadStorage(`uploads/${filePath}`).array('images', 5) returns middleware that needs 
+    // req, res, next objects to upload files
+    uploadStorage(`uploads/${filePath}`).array('images', 5)(req, res, next);
 
     return addProductAdditionalImage(req, res, next); // save into the product the information about his uploaded image
     
