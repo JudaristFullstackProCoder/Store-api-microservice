@@ -129,6 +129,22 @@ const addProductVideo = function (req, res, next) {
     }
 }
 
+const addProductComposition = function (req, res, next) {
+
+}
+
+const deleteProductComposition = function (req, res, next) {
+
+}
+
+const addProductCompositionOption = function (req, res, next) {
+
+}
+
+const deleteProductCompositionOption = function (req, res, next) {
+
+}
+
 module.exports = {
     createProduct: createProduct,
     getProduct: getProduct,
@@ -139,5 +155,9 @@ module.exports = {
     addProductImage : addProductImage,
     getAllProductWithPagination : getAllProductWithPagination,
     addProductAdditionalsImages : addProductAdditionalsImages,
-    addProductVideo : addProductVideo
+    addProductVideo : addProductVideo,
+    addProductComposition : addProductComposition,
+    deleteProductComposition : deleteProductComposition,
+    addProductCompositionOption : addProductCompositionOption,
+    deleteProductCompositionOption : deleteProductCompositionOption
 }
