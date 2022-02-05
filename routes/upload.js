@@ -38,7 +38,7 @@ function addFileToProduct (req, res, next) {
     uploadStorage(filePath, fileType).single(fileType)(req, res, next);
     
     // Delete the old image if it exist
-    if (fileDirectoryLength > 1){
+    if (fileDirectoryLength+1 > 1){
         fs.unlinkSync(fileToDelete);
     }
 
@@ -78,16 +78,22 @@ router.post("/product/:id/images", function(req, res, next) {
     // req.body will hold the text fields, if there were any 
 
     // product max additionals images is 5
-    let filePath = `${req.params.id}` + req.file.name;
+    let filePath = `uploads/${req.params.id}`;
     // filePath : equal the id of the product, then uploaded images will be stored in this folder
-    if (fs.readdirSync(`uploads/${filePath}}`).length >5){
+    let numberOfFile = 0;
+    fs.readdirSync(`uploads/${req.params.id}`).forEach((val) => {
+        if (/\./.test(val)){
+            numberOfFile += 1;
+        }
+    })
+    if (numberOfFile >= 5){ 
         // then product already have a featured image
        return next(new Error("Maximum number of images reached"));
     }
     
     // uploadStorage(`uploads/${filePath}`).array('images', 5) returns middleware that needs 
     // req, res, next objects to upload files
-    uploadStorage(`uploads/${filePath}`).array('images', 5)(req, res, next);
+    uploadStorage(req.params.id).array('images', 5)(req, res, next);
 
     return addProductAdditionalImage(req, res, next); // save into the product the information about his uploaded image
     
