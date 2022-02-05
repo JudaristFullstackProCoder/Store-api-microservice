@@ -79,9 +79,11 @@ class ApiCrudManager {
     /**
      * @param {Object} ctx {req : {express.Request}, res : {express.Response}, next : {express.NextFunction}}
      * @param {mongoose.Model} model 
-     * @param {Array} requiredFields 
+     * @params {Object} options {
+     *  afterDelete : function : any
+     * }
      */ 
-    delete = async (ctx, model) => {
+    delete = async (ctx, model, options) => {
 
         let deleted = null;
 
@@ -89,6 +91,11 @@ class ApiCrudManager {
             deleted = await model.findOneAndDelete({
                 _id: new mongoose.Types.ObjectId(ctx.req.params.id)
             }).exec();
+            // if we want to do something after file deletion
+            if (Object.prototype.toString.call(options.afterDelete || null) === "[object Function]"){
+                // Then the argument is a valid function
+                options.afterDelete();
+            }
         }catch(err){
             return ctx.next(err);
         }
