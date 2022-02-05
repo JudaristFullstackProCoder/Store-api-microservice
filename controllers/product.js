@@ -28,7 +28,9 @@ const updateProduct = async function (req, res, next) {
 }
 
 const deleteProduct = async function (req, res, next) {
-    return crudManager.delete({req:req, res:res, next:next}, Product);
+    return crudManager.delete({req:req, res:res, next:next}, Product, {
+        // afterDelete : delete the files directory associated with this product 
+    });
 }
 
 const getAllProductWithPagination = function (req, res, next) {
@@ -86,9 +88,9 @@ const addProductImage = async function (req, res, next)  {
             _id : new Mongoose.Types.ObjectId(req.params.id)
         }, {
             image : req.file
-        }, {new: true}, function (err, success) {
+        }, {new: true}, function (err, product) {
             if(err) return next(err);
-            //return responses.upload(res);
+            return responses.ok(product, res);
         });
     }catch(err){
         return next(err);
