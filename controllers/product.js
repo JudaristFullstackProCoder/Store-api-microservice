@@ -16,6 +16,7 @@ const getProduct = async function (req, res, next) {
             _id: req.params.id,
         }).populate("options.option", "name")
         .populate("category", "name")
+        .populate("compositions.options.option")
         .exec();
     }catch(err){
         return next(err);
