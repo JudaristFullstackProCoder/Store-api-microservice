@@ -1,15 +1,17 @@
 FROM mongo
-WORKDIR /web
-ADD ./package.json ./
+WORKDIR /store-api
+ADD package.json .
 RUN npm install
-ADD . ./
-CMD ["nodemon", "./server/server.js"]
+ADD . .
+RUN yarn add global nodemon
+CMD nodemon /server/server.js
 EXPOSE 2222/tcp
 
-FROM node:16.13.5
-WORKDIR /web
-ADD ./package.json ./
+FROM node:16-alpine3.14
+WORKDIR /store-api
+ADD package.json .
 RUN npm install
-ADD . ./
-CMD ["nodemon", "./server/server.js"]
+ADD . .
+RUN yarn add global nodemon
+CMD nodemon ./server/server.js
 EXPOSE 2222/tcp
