@@ -1,4 +1,6 @@
-./node_modules
-./Dockerfile
-./package-lock.json
-./README.md
+node_modules
+DockerFile
+.dockerignore
+.gitignore
+README.md
+yarn.lock
