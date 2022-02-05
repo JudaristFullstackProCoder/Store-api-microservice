@@ -91,7 +91,7 @@ class ApiCrudManager {
             deleted = await model.findOneAndDelete({
                 _id: new mongoose.Types.ObjectId(ctx.req.params.id)
             }).exec();
-            // if we want to do something after file deletion
+            // if we want to do something after the db resource was deleted
             if (Object.prototype.toString.call(options.afterDelete || null) === "[object Function]"){
                 // Then the argument is a valid function
                 options.afterDelete();
