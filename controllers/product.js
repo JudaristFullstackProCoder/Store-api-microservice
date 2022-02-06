@@ -14,7 +14,8 @@ const getProduct = async function (req, res, next) {
     try{
         product = await Product.findOne({ 
             _id: req.params.id,
-        }).populate("options.option", "name")
+        })
+        .populate("options.option", "name")
         .populate("category", "name")
         .populate("compositions.options.option", "name")
         .exec();
@@ -130,20 +131,83 @@ const addProductVideo = function (req, res, next) {
     }
 }
 
+/**
+ * Add a composition to a product
+ */
 const addProductComposition = function (req, res, next) {
-
+    Product.updateOne({
+        _id: req.params.id
+    }, {
+        $push : {
+        compositions : 
+            { 
+                image : req.body.image,
+                price : req.body.price,
+                options : {
+                    option : req.body.option,
+                    value : req.body.value
+                }
+            }
+        }
+    }, {new : true} , function (err, product) {
+        if (err) return next(err);
+        return responses.ok(product, res);
+    })
 }
 
+/**
+ * Delete a composition from a product
+ */
 const deleteProductComposition = function (req, res, next) {
-
+    Product.updateOne({
+        _id : req.params.id
+    }, {
+        $pull : { compositions : {_id : req.body.id } }
+    }, {}, function(err, result) {
+        if (err) return next(err);
+        return res.ok(result);
+    })
 }
 
+/**
+ *  Add an option inside a composition of a product
+ */
 const addProductCompositionOption = function (req, res, next) {
-
+    Product.updateOne({
+        _id: req.params.id
+    }, {
+        $push : {
+            compositions : {
+                options : {
+                    option : req.body.option,
+                    value : req.body.value
+                }
+            }
+        }
+    }, {new : true} , function (err, product) {
+        if (err) return next(err);
+        return responses.ok(product, res);
+    })
 }
 
+/**
+ * Delete an option inside a composition of a product
+ */
 const deleteProductCompositionOption = function (req, res, next) {
-
+    Product.updateOne({
+        _id : req.params.id
+    }, {
+        $pull : { 
+            compositions : {
+                options : {
+                    _id : req.body.id 
+                }
+            } 
+        }
+    }, {}, function(err, result) {
+        if (err) return next(err);
+        return res.ok(result);
+    })
 }
 
 module.exports = {
