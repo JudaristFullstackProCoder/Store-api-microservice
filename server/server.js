@@ -74,7 +74,7 @@ if (cluster.isMaster) {
     // Workers can share any TCP connection
     // In this case it is an HTTP server
     try {
-        mongoConnection(process.env.mongodb);
+        mongoConnection(process.env.mongodb_prod);
         app.listen(process.env.port);
     }catch(err) {
         console.log("The server can't start ");
