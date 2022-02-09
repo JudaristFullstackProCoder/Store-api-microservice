@@ -43,6 +43,14 @@ app.use("/upload", uploadRoutes);
 // Error handler middleware
 app.use(errorLogger, clientErrorHandler);
 
+// home page
+
+app.all("/", (req, res, next) => {
+  res.json({
+    message : "Api Home page"
+  })
+})
+
 // Handle not found routes
 app.all("*", notFound);
 
