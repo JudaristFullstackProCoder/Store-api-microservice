@@ -144,6 +144,11 @@ The api manage promo code crud
 * `POST` /api/v1/upload/product/:id/images (add more images)
 * `POST` /api/v1/upload/product/:id/images/:name (delete an image in the additional images)
 
+## Create an image to use the API as a microservice
+
+* `cd` to project folder
+* `run command` docker buil -t `image name` .
+
 ## Local development
 
 * Clone the repository
