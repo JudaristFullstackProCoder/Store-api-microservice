@@ -95,6 +95,45 @@ The api manage promo code crud
 * `PATCH` /api/v1/category/:id
 * `DELETE` /api/v1/category/:id
 
+### Child Category
+
+* `POST` /api/v1/category/childs
+* `GET`  /api/v1/category/childs/:id
+* `PATCH` /api/v1/category/childs/:id
+* `DELETE` /api/v1/category/childs/:id
+* `DELETE` /api/v1/category/childs/:id/options
+* `POST` /api/v1/category/childs/:id/options
+
+### Options
+
+* `POST` /api/v1/options
+* `GET`  /api/v1/options/:id
+* `PATCH` /api/v1/options/:id
+* `DELETE` /api/v1/options/:id
+
+### Store
+
+* `POST` /api/v1/store
+* `GET`  /api/v1/store/:id
+* `PATCH` /api/v1/store/:id
+* `DELETE` /api/v1/store/:id
+
+### Products
+
+* `POST` /api/v1/products
+* `GET`  /api/v1/products/:id
+* `PATCH` /api/v1/products/:id
+* `DELETE` /api/v1/products/:id
+* `POST`   /api/v1/products/:id/options
+* `DELETE`   /api/v1/products/:id/options
+
+### Promocodes
+
+* `POST` /api/v1/promocodes
+* `GET`  /api/v1/promocodes/:id
+* `PATCH` /api/v1/promocodes/:id
+* `DELETE` /api/v1/promocodes/:id
+
 ## Local development
 
 * Clone the repository
