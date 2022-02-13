@@ -32,7 +32,7 @@ The api manage crud of products, each product have (name, price, description, op
 * shopkeeper (author) : id
 * store : id
 * image: object
-* image : array of object
+* images : array of object
 * pre_video: object
 * compositions: array of object
 
@@ -47,13 +47,15 @@ and this options will be used by all product that have this category. Exemple : 
 
 Product's images allow to store additional images to a product.
 
-### Product compositions
+### Variable product
 
-Allow us give a different price to a product depending on his specificity. For example a PC Core i7 with 8 GO RAM will cost less than a PC Core i7 with 32 GO RAM.
+Allow us give a different price and image to a product depending on his specificity. For example a PC Core i7 with 8 GO RAM will cost less than a PC Core i7 with 32 GO RAM.
+This product variability is inspired from woocommerce  take a look at this for more understanding [Woocommerce variable product](https://woocommerce.com/document/variable-product/).
+the API will create this type of product from the several specificity (product options)
 
 ### Product store and shopkeeper
 
-Its the store from where this product was created, and the person who create this product.
+`store` is where product is stored, and `shopkeper` the user who create this product.
 
 ### Product pre_video
 
@@ -71,6 +73,7 @@ This api manage crud of category and child category
 
     1. name : string
     2. category : id
+    3. category : id of the parent category
 
 ## Managing promocode crud
 
@@ -82,6 +85,9 @@ The api manage promo code crud
 * from : int
 * remaininguse : int (remaining use)
 * maxuse : int (max nomber of use)
+
+## Api endpoints
+
 
 ## Local development
 
