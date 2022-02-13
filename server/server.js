@@ -33,12 +33,12 @@ app.use(helmet());
 app.use(express.static('../uploads'));
 
 // Handle routes
-app.use("/stores", storeRoutes);
-app.use("/products", productsRoutes);
-app.use("/category", categoryRoutes);
-app.use("/options", optionsRoutes);
-app.use("/promocodes", promoCodeRoutes);
-app.use("/upload", uploadRoutes);
+app.use("/api/v1/stores", storeRoutes);
+app.use("/api/v1/products", productsRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/options", optionsRoutes);
+app.use("/api/v1/promocodes", promoCodeRoutes);
+app.use("/api/v1/upload", uploadRoutes);
 
 // Error handler middleware
 app.use(errorLogger, clientErrorHandler);
