@@ -88,6 +88,12 @@ The api manage promo code crud
 
 ## Api endpoints
 
+### Category
+
+`POST` /api/v1/category
+`GET`  /api/v1/category/:id
+`PATCH` /api/v1/category/:id
+`DELETE` /api/v1/category/:id
 
 ## Local development
 
