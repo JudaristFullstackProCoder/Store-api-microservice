@@ -5,8 +5,8 @@ router.route('/')
   .post(categoryController.createCategory);
 router.route('/:id')
   .get(categoryController.getCategory)
-  .patch(categoryController.updatecategory)
-  .delete(categoryController.deletecategory);
+  .patch(categoryController.updateCategory)
+  .delete(categoryController.deleteCategory);
 
 router.route('/childs').post(categoryController.createChildCategory);
 router.route('/childs/:id')
