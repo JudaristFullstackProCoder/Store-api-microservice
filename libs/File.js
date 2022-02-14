@@ -1,9 +1,9 @@
-const fs = require("fs");
+const fs = require('fs');
 
-const deleteFile = function (filePath) {
-    fs.unlinkSync(filePath);
-}
+const deleteFile = function delFile(filePath) {
+  fs.unlinkSync(filePath);
+};
 
 module.exports = {
-    delete : deleteFile
-}
+  delete: deleteFile,
+};
