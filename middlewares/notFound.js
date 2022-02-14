@@ -1,4 +1,5 @@
+const responses = require('./responses');
 
-module.exports = function (req, res, next) {
-    return require("./responses").notFound(req, res, next);
-}
+module.exports = function NotFound(req, res, next) {
+  return responses.notFound(req, res, next);
+};
