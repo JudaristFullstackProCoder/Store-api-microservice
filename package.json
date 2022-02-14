@@ -12,7 +12,8 @@
         "helmet": "^5.0.1",
         "mongodb": "^4.2.2",
         "mongoose": "^6.1.2",
-        "multer": "^1.4.4"
+        "multer": "^1.4.4",
+        "pm2": "^5.1.2"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",
