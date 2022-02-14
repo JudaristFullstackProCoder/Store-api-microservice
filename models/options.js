@@ -5,20 +5,20 @@
  * so we would be able to link option(s) to a category and the products of this category
  * will take the options of their category
  */
-const mongoose = require("mongoose");
-const Schema = require("mongoose").Schema;
+const mongoose = require('mongoose');
+const { Schema } = require('mongoose');
 
 const optionSchema = new Schema({
-    name : {
-        type : Schema.Types.String,
-        required : [true, "the option's name is required"],
-        trim: true,
-        minlength: 4,
-        maxlength:30
-    }
+  name: {
+    type: Schema.Types.String,
+    required: [true, "the option's name is required"],
+    trim: true,
+    minlength: 4,
+    maxlength: 30,
+  },
 });
 
 module.exports = {
-    model : mongoose.model("options", optionSchema),
-    schema : optionSchema
-}
+  model: mongoose.model('options', optionSchema),
+  schema: optionSchema,
+};
