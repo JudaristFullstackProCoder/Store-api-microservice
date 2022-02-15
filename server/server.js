@@ -1,5 +1,4 @@
 // Built-in modules imports
-const process = require('process');
 const resolve = require('path').resolve('.env');
 require('dotenv').config({ path: resolve });
 const cluster = require('cluster');
@@ -24,6 +23,9 @@ const categoryRoutes = require('../routes/category');
 const optionsRoutes = require('../routes/option');
 const promoCodeRoutes = require('../routes/promoCode');
 const uploadRoutes = require('../routes/upload');
+const {
+  MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, API_PORT,
+} = require('../config/config');
 
 // Middleware
 app.use(express.json());
@@ -75,8 +77,8 @@ if (cluster.isMaster) {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
   try {
-    mongoConnection(process.env.mongodb);
-    app.listen(process.env.port);
+    mongoConnection(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`);
+    app.listen(`${API_PORT}`);
   } catch (err) {
     console.log(err);
   }
