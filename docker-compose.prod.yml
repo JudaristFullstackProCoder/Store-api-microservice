@@ -1,0 +1,10 @@
+version: '3'
+services:
+  store-api:
+    build:
+      context: .
+      args:
+        NODE_ENV: production
+    environment:
+      - NODE_ENV=production
+    command: npm run start
