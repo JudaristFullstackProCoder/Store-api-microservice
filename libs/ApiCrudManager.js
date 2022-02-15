@@ -9,6 +9,7 @@ class ApiCrudManager {
      * @param {Array} requiredFields
      */
   async create(ctx, Model, requiredFields = []) {
+    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     // required fields
     for (let i = 0; i < requiredFields.length; i += 1) {
       if (!ctx.req.body[requiredFields[i]]) {
@@ -32,7 +33,8 @@ class ApiCrudManager {
      * @param {mongoose.Model} model
      * @param {Array} requiredFields
      */
-  async read (ctx, model) {
+  async read(ctx, model) {
+    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let product = null;
 
     try {
@@ -52,6 +54,7 @@ class ApiCrudManager {
      * @param {mongoose.Model} model
      */
   async update(ctx, model) {
+    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let updated = null;
 
     try {
@@ -76,6 +79,7 @@ class ApiCrudManager {
      * }
      */
   async delete(ctx, model, options) {
+    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let deleted = null;
 
     try {
