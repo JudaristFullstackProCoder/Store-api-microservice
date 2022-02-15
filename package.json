@@ -27,7 +27,9 @@
     },
     "scripts": {
         "dev": "nodemon ./server/server.js",
-        "start": "node ./server/server.js"
+        "start": "node ./server/server.js",
+        "lint" : "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
+        "lint-fix" : "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
     },
     "name": "store-api",
     "version": "1.0.0",
