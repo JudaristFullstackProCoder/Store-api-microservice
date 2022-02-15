@@ -1,0 +1,8 @@
+version: '3'
+services:
+  store-api:
+    build: .
+    ports:
+      - 2222:2222
+    environment:
+      - PORT=2222
