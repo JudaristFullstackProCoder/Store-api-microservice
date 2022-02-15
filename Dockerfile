@@ -1,15 +1,27 @@
 FROM mongo
 WORKDIR /store-api
 ADD package.json .
-RUN npm install
+ARG NODE_ENV
+RUN if [ "$NODE_ENV"="production" ]; \
+        then npm install --only=production; \
+        else npm install; \
+        fi
+
 ADD . .
-CMD node ./server/server.js
-EXPOSE 2222/tcp
+CMD ["npm" ,"run" ,"dev"]
+ENV PORT 2222
+EXPOSE ${PORT}
 
 FROM node:16-alpine3.14
 WORKDIR /store-api
 ADD package.json .
-RUN npm install
+ARG NODE_ENV
+RUN if [ "$NODE_ENV"="production" ]; \
+        then npm install --only=production; \
+        else npm install; \
+        fi
+
 ADD . .
-CMD node ./server/server.js
-EXPOSE 2222/tcp
+CMD ["npm", "run", "dev"]
+ENV PORT 2222
+EXPOSE ${PORT}
