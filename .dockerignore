@@ -4,3 +4,4 @@ DockerFile
 .gitignore
 README.md
 yarn.lock
+docker-compose*
