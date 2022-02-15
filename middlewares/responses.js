@@ -1,46 +1,45 @@
-
 module.exports = {
-    
-    invalidCredentials : function (res) {
-        return res.status(403).json({
-            error : true,
-            data : "Invalid credentials"
-        });
-    },
 
-    notFound : function (req, res, next) {
-        return res.status(404).json({
-            error : true,
-            data : "Not Found"
-        })
-    },
+  invalidCredentials(res) {
+    return res.status(403).json({
+      error: true,
+      data: 'Invalid credentials',
+    });
+  },
 
-    ok: function (data="ok", res) {
-        return res.status(200).json({
-            success : true,
-            data: data
-        });
-    },
+  notFound(req, res) {
+    return res.status(404).json({
+      error: true,
+      data: 'Not Found',
+    });
+  },
 
-    created : function (data="201 Created", res) {
-        return res.status(200).json({
-            success : true,
-            data: data
-        });
-    },
+  ok(res, data = 'ok') {
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  },
 
-    upload : function (res) {
-        return res.status(204).json({
-            success : true,
-            data: "Ok"
-        });
-    },
+  created(res, data = '201 Created') {
+    return res.status(200).json({
+      success: true,
+      data,
+    });
+  },
 
-    deleted : function (res) {
-        return res.status(204).json({
-            success : true,
-            data: "Ok"
-        });
-    }
+  upload(res) {
+    return res.status(204).json({
+      success: true,
+      data: 'Ok',
+    });
+  },
 
-}
+  deleted(res) {
+    return res.status(204).json({
+      success: true,
+      data: 'Ok',
+    });
+  },
+
+};
