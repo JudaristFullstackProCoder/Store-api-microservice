@@ -148,6 +148,8 @@ The api manage promo code crud
 
 * `cd` to project folder
 * `run command` docker buil -t `image name` .
+*  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container port`:`your pc port` --name `image name`     `image name`
+* docker run -v %cd%:/store-api -v /store-api/node_modules --env PORT=value -p `container port`:`your pc port` --name `image name` `image name`
 
 ## Local development
 
