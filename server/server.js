@@ -26,7 +26,7 @@ const optionsRoutes = require('../routes/option');
 const promoCodeRoutes = require('../routes/promoCode');
 const uploadRoutes = require('../routes/upload');
 const {
-  MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, API_PORT, MONGODBURI
+  MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, API_PORT, MONGODBURI,
 } = require('../config/config');
 
 // Middleware
@@ -38,11 +38,11 @@ app.use(helmet());
 app.use(express.static('../uploads'));
 
 // Handle routes
-app.use('/api/v1/stores', storeRoutes);
-app.use('/api/v1/products', productsRoutes);
+app.use('/api/v1/store', storeRoutes);
+app.use('/api/v1/product', productsRoutes);
 app.use('/api/v1/category', categoryRoutes);
-app.use('/api/v1/options', optionsRoutes);
-app.use('/api/v1/promocodes', promoCodeRoutes);
+app.use('/api/v1/option', optionsRoutes);
+app.use('/api/v1/promocode', promoCodeRoutes);
 app.use('/api/v1/upload', uploadRoutes);
 
 // Error handler middleware
@@ -79,9 +79,9 @@ if (cluster.isMaster) {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
   try {
-    if (process.env.NODE_ENV = "production"){
+    if (process.env.NODE_ENV === 'production') {
       mongoConnection(MONGODBURI);
-    }else{
+    } else {
       mongoConnection(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`);
     }
     app.listen(`${API_PORT}`);
