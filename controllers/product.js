@@ -2,14 +2,13 @@ const Mongoose = require('mongoose');
 
 const responses = require('../middlewares/responses');
 const Product = require('../models/product').model;
-const { requiredFields } = require('../models/product');
+const { ProductComposition } = require('../models/product');
 const CM = require('../libs/ApiCrudManager');
-const rf = require('../models/product').productOptionsRequiredFields;
 
 const crudManager = new CM();
 
 const createProduct = async function createProd(req, res, next) {
-  return crudManager.create({ req, res, next }, Product, requiredFields);
+  return crudManager.create({ req, res, next }, Product, []);
 };
 
 const getProduct = async function getProd(req, res, next) {
@@ -20,7 +19,6 @@ const getProduct = async function getProd(req, res, next) {
     })
       .populate('options.option', 'name')
       .populate('category', 'name')
-      .populate('compositions.options.option', 'name')
       .exec();
   } catch (err) {
     return next(err);
@@ -43,13 +41,6 @@ const getAllProductWithPagination = function getAllProdWithPage() {
 };
 
 const addProductOption = async function addProdOption(req, res, next) {
-  // required fields
-  for (let i = 0; i < rf.length; i += 1) {
-    if (!req.body[rf[i]]) {
-      return next(new Error(`${rf[i]} is required`));
-    }
-  }
-
   Product.updateOne({
     _id: req.params.id,
   }, {
@@ -58,18 +49,46 @@ const addProductOption = async function addProdOption(req, res, next) {
     if (err) return next(err);
     return responses.ok(product, res);
   });
-  return false;
+  return next(new Error());
+};
+
+const updateProductOption = async function updateProductOption(req, res, next) {
+  const { id } = req.params;
+  const { optionId } = req.params;
+  Product.findOneAndUpdate({
+    _id: id,
+    'product.options.option': optionId,
+  }, {
+    value: req.body.value,
+  }, { new: true }, (err, data) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      success: true,
+      data,
+    });
+  });
+};
+
+const getProductOption = async function getProductOption(req, res, next) {
+  const { id } = req.params;
+  const { optionId } = req.params;
+  Product.findOne({
+    _id: id,
+    'product.options.option': optionId,
+  }, { _id: 1, 'product.options.option': 1, 'product.options.value': 1 }, {}, (err, data) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      success: true,
+      data,
+    });
+  });
 };
 
 const deleteProductOption = async function deleteProductOption(req, res, next) {
-  // required fields
-  const requiredFiels = ['option']; // the id of option that will be removed
-  for (let i = 0; i < requiredFiels.length; i += 1) {
-    if (!req.body[rf[i]]) {
-      return next(new Error(`${rf[i]} is required`));
-    }
-  }
-
   Product.updateOne({
     _id: req.params.id,
   }, {
@@ -142,23 +161,23 @@ const addProductVideo = function addProdVideo(req, res, next) {
  * Add a composition to a product
  */
 const addProductComposition = function addProductComposition(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
-  }, {
-    $push: {
-      compositions:
-            {
-              image: req.body.image,
-              price: req.body.price,
-              options: {
-                option: req.body.option,
-                value: req.body.value,
-              },
-            },
+  const productComposition = new ProductComposition({
+    image: req.body.image,
+    price: req.body.price,
+    options: {
+      option: req.body.option,
+      value: req.body.value,
     },
-  }, { new: true }, (err, product) => {
-    if (err) return next(err);
-    return responses.ok(product, res);
+    product: req.params.id,
+  });
+  productComposition.save((err, data) => {
+    if (err) {
+      return next(err);
+    }
+    return res.json({
+      success: true,
+      data,
+    });
   });
 };
 
@@ -224,6 +243,8 @@ module.exports = {
   deleteProduct,
   addProductOption,
   deleteProductOption,
+  getProductOption,
+  updateProductOption,
   addProductImage,
   getAllProductWithPagination,
   addProductAdditionalsImages,
