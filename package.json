@@ -11,7 +11,7 @@
         "express": "^4.17.2",
         "helmet": "^5.0.1",
         "mongodb": "^4.2.2",
-        "mongoose": "^6.1.2",
+        "mongoose": "^6.2.4",
         "multer": "^1.4.4",
         "pm2": "^5.1.2"
     },
@@ -26,10 +26,11 @@
         "ts-node": "^10.4.0"
     },
     "scripts": {
-        "dev": "nodemon ./server/server.js",
+        "dev": "nodemon ./server/server.js NODE_ENV=development",
+        "prod": "node ./server/server.js NODE_ENV=production",
         "start": "node ./server/server.js",
-        "lint" : "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
-        "lint-fix" : "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
+        "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
+        "lint-fix": "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
     },
     "name": "store-api",
     "version": "1.0.0",
