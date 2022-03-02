@@ -8,12 +8,12 @@ router.route('/:id')
   .patch(categoryController.updateCategory)
   .delete(categoryController.deleteCategory);
 
-router.route('/childs').post(categoryController.createChildCategory);
-router.route('/childs/:id')
+router.route('/child').post(categoryController.createChildCategory);
+router.route('/child/:id')
   .delete(categoryController.deleteChildCategory)
   .get(categoryController.getChildCategory)
   .patch(categoryController.updateChildCategory);
-router.route('/childs/:id/options')
+router.route('/child/:id/option')
   .delete(categoryController.deleteChildCategoryOption)
   .put(categoryController.addChildCategoryOption);
 
