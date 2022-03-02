@@ -10,7 +10,7 @@ class ApiCrudManager {
      */
   async create(ctx, Model, requiredFields = []) {
     this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
-    // required fields
+    // required field
     for (let i = 0; i < requiredFields.length; i += 1) {
       if (!ctx.req.body[requiredFields[i]]) {
         return ctx.next(new Error(`${requiredFields[i]} is required`));
