@@ -36,6 +36,10 @@ const productComposition = new Schema({
     type: Schema.Types.Number,
     required: true,
   },
+  product: {
+    type: Schema.Types.ObjectId,
+    required: [true, 'product id is required for product composition'],
+  },
 });
 
 const productSchema = new Schema({
@@ -89,14 +93,14 @@ const productSchema = new Schema({
     type: Schema.Types.Mixed,
     required: false,
   },
-  compositions: [productComposition],
+  compositions: {
+    type: Schema.Types.ObjectId,
+    required: false,
+  },
 });
 
 // Exports
 module.exports = {
   model: mongoose.model('product', productSchema),
-  schema: productSchema,
-  requiredFields: ['name', 'price', 'description',
-    'category', 'shopkeeper', 'store', 'online'],
-  productOptionsRequiredFields: ['option', 'value'],
+  ProductComposition: mongoose.model('productcompositions', productComposition),
 };
