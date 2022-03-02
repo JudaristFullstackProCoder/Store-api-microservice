@@ -151,6 +151,11 @@ The api manage promo code crud
 *  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container port`:`your pc port` --name `image name`     `image name`
 * docker run -v %cd%:/store-api -v /store-api/node_modules --env PORT=value -p `container port`:`your pc port` --name `image name` `image name`
 
+## With Docker Composer
+
+* docker-compose up
+* docker-compose down
+
 ## Local development
 
 * Clone the repository
