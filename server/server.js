@@ -25,9 +25,6 @@ const categoryRoutes = require('../routes/category');
 const optionsRoutes = require('../routes/option');
 const promoCodeRoutes = require('../routes/promoCode');
 const uploadRoutes = require('../routes/upload');
-const {
-  MONGO_USER, MONGO_PASSWORD, MONGO_IP, MONGO_PORT, API_PORT, MONGODBURI,
-} = require('../config/config');
 
 // Middleware
 app.use(express.json());
@@ -50,11 +47,7 @@ app.use(errorLogger, clientErrorHandler);
 
 // home page
 
-app.all('/', (req, res) => {
-  res.json({
-    message: 'Api Home page',
-  });
-});
+app.all('/', (req, res) => res.json({ message: 'Api Home page' }));
 
 // Handle not found routes
 app.all('*', notFound);
@@ -80,11 +73,11 @@ if (cluster.isMaster) {
   // In this case it is an HTTP server
   try {
     if (process.env.NODE_ENV === 'production') {
-      mongoConnection(MONGODBURI);
+      mongoConnection(process.env.MONGODBURI);
     } else {
-      mongoConnection(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_IP}:${MONGO_PORT}/?authSource=admin`);
+      mongoConnection(process.env.DEVMONGOURI);
     }
-    app.listen(`${API_PORT}`);
+    app.listen(process.env.API_PORT);
   } catch (err) {
     console.log(err);
   }
