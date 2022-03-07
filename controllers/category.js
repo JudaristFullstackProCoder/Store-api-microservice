@@ -31,13 +31,13 @@ const createCategory = async function createCtg(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(category, res);
+  return responses.ok(res, category);
 };
 
 const updateCategory = async function upCtg(req, res, next) {
   let updated = null;
   try {
-    updated = await Option.findOneAndUpdate({
+    updated = await Category.findOneAndUpdate({
       _id: new Mongoose.Types.ObjectId(req.params.id || ''),
     }, req.body, {
       new: true,
@@ -45,7 +45,7 @@ const updateCategory = async function upCtg(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(updated, res);
+  return responses.ok(res, updated);
 };
 
 // deleted === the deleted category and
@@ -59,7 +59,7 @@ const deleteCategory = async function delCtg(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(deleted, res);
+  return responses.ok(res, deleted);
 };
 
 const getCategory = async function getCtg(req, res, next) {
@@ -71,7 +71,7 @@ const getCategory = async function getCtg(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(option, res);
+  return responses.ok(res, option);
 };
 
 /**
