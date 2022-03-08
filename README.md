@@ -11,7 +11,7 @@ The goal of this project is to create an api is to manage entities : store, prod
 3. Mongodb / Mongoose
 4. Docker
 
-## Managing store
+## store properties
 
 The api manage crud of store, each store have his properties (id, name, settings, shopkeeper) and settings
 
@@ -19,7 +19,7 @@ The api manage crud of store, each store have his properties (id, name, settings
 * settings : object
 * shopkeeper : id (The store user owner)
 
-## Managing prouduct
+## prouduct properties
 
 The api manage crud of products, each product have (name, price, description, options, category, online, shopkeeper, store, images, pre_video, compositions)
 
@@ -35,6 +35,35 @@ The api manage crud of products, each product have (name, price, description, op
 * images : array of object
 * pre_video: object
 * compositions: array of object
+
+## category and child category properties
+
+This api manage crud of category and child category
+
+* category
+
+    1. name : string
+
+* child category
+
+    1. name : string
+    2. category : id
+    3. category : id of the parent category
+
+## promocode properties
+
+The api manage promo code crud
+
+* name : string
+* discount : int
+* to  : int
+* from : int
+* remaininguse : int (remaining use)
+* maxuse : int (max nomber of use)
+
+## option properties
+
+* name
 
 ### Product options
 
@@ -60,31 +89,6 @@ the API will create this type of product from the several specificity (product o
 ### Product pre_video
 
 Its the video that present the product (facultative).
-
-## Managing category and child category
-
-This api manage crud of category and child category
-
-* category
-
-    1. name : string
-
-* child category
-
-    1. name : string
-    2. category : id
-    3. category : id of the parent category
-
-## Managing promocode crud
-
-The api manage promo code crud
-
-* name : string
-* discount : int
-* to  : int
-* from : int
-* remaininguse : int (remaining use)
-* maxuse : int (max nomber of use)
 
 ## Api endpoints
 
@@ -148,7 +152,7 @@ The api manage promo code crud
 
 * `cd` to project folder
 * `run command` docker buil -t `image name` .
-*  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container port`:`your pc port` --name `image name`     `image name`
+*  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container            port`:`your pc port` --name `image name`     `image name`
 * docker run -v %cd%:/store-api -v /store-api/node_modules --env PORT=value -p `container port`:`your pc port` --name `image name` `image name`
 
 ## With Docker Composer
