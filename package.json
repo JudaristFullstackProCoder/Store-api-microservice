@@ -31,7 +31,7 @@
     "scripts": {
         "dev": "nodemon ./server/server.js NODE_ENV=development",
         "prod": "node ./server/server.js NODE_ENV=production",
-        "start": "node ./server/server.js",
+        "start": "nodemon ./server/server.js NODE_ENV=production",
         "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
         "lint-fix": "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
     },
