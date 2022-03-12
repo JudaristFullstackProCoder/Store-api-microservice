@@ -59,7 +59,7 @@ if (cluster.isMaster) {
   const numCPUs = length;
   // Fork workers.
   for (let i = 0; i < numCPUs; i += 1) {
-    cluster.fork();
+    // cluster.fork();
     // console.log(`Worker ${process.pid} started`);
   }
 
