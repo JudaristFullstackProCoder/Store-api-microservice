@@ -1,10 +1,4 @@
 // Built-in modules imports
-const resolve = require('path').resolve('.env.dev');
-const resolveProduction = require('path').resolve('.env');
-require('dotenv').config({ path: resolve });
-require('dotenv').config({ path: resolveProduction });
-const cluster = require('cluster');
-const { length } = require('os').cpus();
 
 // Third library imports
 const cookieParser = require('cookie-parser');
@@ -15,7 +9,6 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
 // custom modules imports
-const mongoConnection = require('../db/mongoConnect');
 const clientErrorHandler = require('../middlewares/clientErrorHandler');
 const errorLogger = require('../middlewares/errorLogger');
 const notFound = require('../middlewares/notFound');
@@ -52,34 +45,4 @@ app.all('/', (req, res) => res.json({ message: 'Api Home page' }));
 // Handle not found routes
 app.all('*', notFound);
 
-// start the server if the database connection succed
-// For Master process
-if (cluster.isMaster) {
-  // console.log(`Master ${process.pid} is running`);
-  const numCPUs = length;
-  // Fork workers.
-  for (let i = 0; i < numCPUs; i += 1) {
-    // cluster.fork();
-    // console.log(`Worker ${process.pid} started`);
-  }
-
-  // This event is firs when worker died
-  cluster.on('exit', (/* worker */) => {
-    // console.log(`worker ${worker.process.pid} died`);
-  });
-  // For Worker
-} else {
-  // Workers can share any TCP connection
-  // In this case it is an HTTP server
-  try {
-    if (process.env.NODE_ENV === 'production') {
-      mongoConnection(process.env.MONGODBURI);
-    } else {
-      mongoConnection(process.env.DEVMONGOURI);
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-module.exports = { app, port: process.env.API_PORT };
+module.exports = app;
