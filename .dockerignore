@@ -5,3 +5,4 @@ DockerFile
 README.md
 yarn.lock
 docker-compose*
+test
