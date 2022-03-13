@@ -2,8 +2,10 @@ const cluster = require('cluster');
 const { length } = require('os').cpus();
 const resolve = require('path').resolve('.env.dev');
 const resolveProduction = require('path').resolve('.env');
+const resilveTestingEnvironment = require('path').resolve('.env.test.local');
 require('dotenv').config({ path: resolve });
 require('dotenv').config({ path: resolveProduction });
+require('dotenv').config({ path: resilveTestingEnvironment });
 const app = require('./app');
 const mongoConnection = require('../db/mongoConnect');
 
@@ -33,6 +35,8 @@ if (cluster.isMaster) {
   try {
     if (process.env.NODE_ENV === 'production') {
       mongoConnection(process.env.MONGODBURI);
+    } else if (process.env.NODE_ENV === 'testing') {
+      mongoConnection(process.env.TESTMONGODBURI);
     } else {
       mongoConnection(process.env.DEVMONGODBURI);
     }
