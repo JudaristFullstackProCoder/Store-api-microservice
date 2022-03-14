@@ -6,10 +6,18 @@ The goal of this project is to create an api is to manage entities : store, prod
 
 ## Tools and sofwares
 
-1. Vscode
+1. [Visual studio code](https://code.visualstudio.com/)
 2. Nodejs / Express
 3. Mongodb / Mongoose
-4. Docker
+4. [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
+5. MongoDb Server and MongoDB Compass (GUI)
+6. [Git](https://git-scm.com/)
+7. [Elesticsearch](https://www.elastic.co/fr/elasticsearch/) I want to use Elesticsearch to allow advanced product search, Elasticsearch is used there like a search engine
+
+## For Testing
+
+For testing this api i started using a vscode extension called [Thunder Client](https://www.thunderclient.com/), but i realise that this is not efficient.
+Testing the Api with testing librairy may be more sufficient and more simple. For testing i use chai-http, axios, chai, and mocha. 
 
 ## store properties
 
