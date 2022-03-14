@@ -1,6 +1,7 @@
 {
     "type": "commonjs",
     "dependencies": {
+        "axios": "^0.26.1",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.1",
         "chai": "^4.3.6",
@@ -29,7 +30,8 @@
     },
     "scripts": {
         "dev": "nodemon ./server/server.js NODE_ENV=development",
-        "test": "jest --watch",
+        "test": "nodemon ./server/server.js NODE_ENV=testing && mocha",
+        "start-test": "npx mocha --recursive",
         "prod": "node ./server/server.js NODE_ENV=production",
         "start": "nodemon ./server/server.js NODE_ENV=production",
         "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
