@@ -171,6 +171,7 @@ Its the video that present the product (facultative).
 ## Local development
 
 * install mongodb server
+* install Elasticsearch
 * Clone the repository
 * npm install
 * npm run dev
