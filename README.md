@@ -19,6 +19,12 @@ The goal of this project is to create an api is to manage entities : store, prod
 For testing this api i started using a vscode extension called [Thunder Client](https://www.thunderclient.com/), but i realise that this is not efficient.
 Testing the Api with testing librairy may be more sufficient and more simple. For testing i use [chai-http](https://www.chaijs.com/plugins/chai-http/), [axios](https://axios-http.com/), [chai](https://www.chaijs.com/), and [mocha](https://mochajs.org/). 
 
+## About Elasticsearch
+
+For product search to be possible, products must be stored in mongodb and Elasticsearch at the same time. However mongodb will be used as the main storage as Elasticsearch will be used only for research. It will be possible to search for products with very advanced criteria thanks to Elasticsearch. When a product is therefore created, an event will be triggered which will trigger the registration of the product in elasticsearch.
+NB: Products stored in Elasticsearch will first be populated using mongoose's `populated` method.
+NB: The products in Mongodb will therefore be updated, each time those are modified in mongodb.
+
 ## store properties
 
 The api manage crud of store, each store have his properties (id, name, settings, shopkeeper) and settings
