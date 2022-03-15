@@ -19,9 +19,8 @@ if (cluster.isMaster) {
   // Fork workers.
   for (let i = 0; i < numCPUs; i += 1) {
     cluster.fork();
-    console.log(`Worker ${process.pid} started`);
   }
-  // This event is firs when worker listening
+  // This event is firs when worker start
   cluster.on('listening', (worker, address) => {
     console.log(`worker ${worker.process.pid} started`);
     console.log(`A worker is now connected to ${address.address}:${address.port}`);
@@ -34,6 +33,9 @@ if (cluster.isMaster) {
 } else {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
+  const port = process.env.PORT || 80;
+  app.listen(port);
+  console.log(`API listen on port ${port}`);
 
   try {
     if (process.env.NODE_ENV === 'production') {
@@ -51,7 +53,3 @@ if (cluster.isMaster) {
     console.log(err);
   }
 }
-
-const port = process.env.PORT || 80;
-app.listen(port);
-console.log(`API listen on port ${port}`);
