@@ -6,6 +6,11 @@ services:
       - 2222:2222
     environment:
       - PORT=2222
+    depends_on:
+      - mongo
+      - es01
+      - es02
+      - es03
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
     container_name: es01
@@ -15,7 +20,7 @@ services:
       - discovery.seed_hosts=es02,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms80m -Xmx80m"
     ulimits:
       memlock:
         soft: -1
@@ -35,7 +40,7 @@ services:
       - discovery.seed_hosts=es01,es03
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms80m -Xmx80m"
     ulimits:
       memlock:
         soft: -1
@@ -53,7 +58,7 @@ services:
       - discovery.seed_hosts=es01,es02
       - cluster.initial_master_nodes=es01,es02,es03
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "ES_JAVA_OPTS=-Xms80m -Xmx80m"
     ulimits:
       memlock:
         soft: -1
@@ -62,12 +67,21 @@ services:
       - data03:/usr/share/elasticsearch/data
     networks:
       - elastic
+  mongo:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=jude
+      - MONGO_INITDB_ROOT_PASSWORD=22102003
+    volumes:
+      - mongo-db:/data/db
 volumes:
   data01:
     driver: local
   data02:
     driver: local
   data03:
+    driver: local
+  mongo-db:
     driver: local
 
 networks:
