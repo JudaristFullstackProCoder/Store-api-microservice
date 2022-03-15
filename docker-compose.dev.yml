@@ -4,10 +4,13 @@ services:
     build:
       context: .
       args:
-        NODE_ENV: development
+        NODE_ENV: docker-dev
     volumes:
       - ./:/store-api
-      - /store-api/node_modules
+      - store-api-node_modules:/store-api/node_modules
     environment:
-      - NODE_ENV=development
-    command: npm run dev
+      - NODE_ENV=docker-dev
+    command: npm run docker-dev
+volumes:
+  store-api-node_modules:
+    driver: local
