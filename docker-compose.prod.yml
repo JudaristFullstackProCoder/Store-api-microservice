@@ -4,7 +4,7 @@ services:
     build:
       context: .
       args:
-        NODE_ENV: production
+        NODE_ENV: docker
     environment:
-      - NODE_ENV=production
-    command: npm run start
+      - NODE_ENV=docker
+    command: npm run docker
