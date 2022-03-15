@@ -22,7 +22,7 @@ module.exports = {
   },
 
   created(res, data = '201 Created') {
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       data,
     });
@@ -39,6 +39,13 @@ module.exports = {
     return res.status(204).json({
       success: true,
       data: 'Ok',
+    });
+  },
+
+  error(res, message = 'An Error occured. Please try again latter') {
+    return res.status(500).json({
+      success: false,
+      data: message,
     });
   },
 
