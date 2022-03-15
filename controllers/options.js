@@ -2,12 +2,12 @@ const Mongoose = require('mongoose');
 const Option = require('../models/options').model;
 const responses = require('../middlewares/responses');
 
-const createOption = async function createOpt(req, res, next) {
+const createOption = async function createOpt(req, res) {
   // required fields
   const requiredFields = ['name'];
   for (let i = 0; i < requiredFields.length; i += 1) {
     if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
+      return responses.error(res, `${requiredFields[i]} is required`);
     }
   }
   // One name per Option
@@ -20,31 +20,31 @@ const createOption = async function createOpt(req, res, next) {
      * @conditon Then email address already used
      */
   if (named != null) {
-    return next(new Error('this name is already assigned to an option'));
+    return responses.error(res, 'this name is already assigned to an option');
   }
 
   let option = new Option(req.body);
   try {
     option = await option.save();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.created(option, res);
+  return responses.created(res, option);
 };
 
-const deleteOption = async function delOpt(req, res, next) {
+const deleteOption = async function delOpt(req, res) {
   let option = null;
   try {
     option = await Option.findOneAndDelete({
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(option, res);
+  return responses.ok(res, option);
 };
 
-const updateOption = async function upOpt(req, res, next) {
+const updateOption = async function upOpt(req, res) {
   let updated = null;
   try {
     updated = await Option.findOneAndUpdate({
@@ -53,21 +53,21 @@ const updateOption = async function upOpt(req, res, next) {
       new: true,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(updated, res);
+  return responses.ok(res, updated);
 };
 
-const getOption = async function getOpt(req, res, next) {
+const getOption = async function getOpt(req, res) {
   let option = null;
   try {
     option = await Option.findOne({
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(option, res);
+  return responses.ok(res, option);
 };
 
 module.exports = {

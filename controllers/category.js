@@ -3,13 +3,13 @@ const responses = require('../middlewares/responses');
 const Category = require('../models/category').model;
 const { ChildCategoryModel } = require('../models/category');
 
-const createCategory = async function createCtg(req, res, next) {
+const createCategory = async function createCtg(req, res) {
   // required fields
   // Only the name is required
   const requiredFields = ['name'];
   for (let i = 0; i < requiredFields.length; i += 1) {
     if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
+      return responses.error(res, `${requiredFields[i]} is required`);
     }
   }
   // One name per Option
@@ -22,19 +22,19 @@ const createCategory = async function createCtg(req, res, next) {
      * @conditon Then category's name already used
      */
   if (named != null) {
-    return next(new Error('this name is already assigned to a category'));
+    return responses.error(res, 'this name is already assigned to a category');
   }
 
   let category = new Category(req.body);
   try {
     category = await category.save();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(res, category);
+  return responses.created(res, category);
 };
 
-const updateCategory = async function upCtg(req, res, next) {
+const updateCategory = async function upCtg(req, res) {
   let updated = null;
   try {
     updated = await Category.findOneAndUpdate({
@@ -43,33 +43,33 @@ const updateCategory = async function upCtg(req, res, next) {
       new: true,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
   return responses.ok(res, updated);
 };
 
 // deleted === the deleted category and
 // if the category wasn't found then deleted === null
-const deleteCategory = async function delCtg(req, res, next) {
+const deleteCategory = async function delCtg(req, res) {
   let deleted = null;
   try {
     deleted = await Category.findOneAndDelete({
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
   return responses.ok(res, deleted);
 };
 
-const getCategory = async function getCtg(req, res, next) {
+const getCategory = async function getCtg(req, res) {
   let option = null;
   try {
     option = await Category.findOne({
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
   return responses.ok(res, option);
 };
@@ -78,13 +78,13 @@ const getCategory = async function getCtg(req, res, next) {
  * CRUD for Child Category entity
  * @returns
  */
-const createChildCategory = async function createChCtg(req, res, next) {
+const createChildCategory = async function createChCtg(req, res) {
   // required fields
   // Only the name is required
   const requiredFields = ['name', 'parent'];
   for (let i = 0; i < requiredFields.length; i += 1) {
     if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
+      return responses.error(res, `${requiredFields[i]} is required`);
     }
   }
   // One name per Option
@@ -96,33 +96,33 @@ const createChildCategory = async function createChCtg(req, res, next) {
      * @var {Array|null} name
      */
   if (named != null) {
-    return next(new Error('this name is already assigned to a child category'));
+    return responses.error(res, 'this name is already assigned to a child category');
   }
 
   let childCategory = new ChildCategoryModel(req.body);
   try {
     childCategory = await childCategory.save();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(childCategory, res);
+  return responses.ok(res, childCategory);
 };
 
 // deleted === the deleted category is the category was found
 // deleted === null if the category was not found
-const deleteChildCategory = async function delChCtg(req, res, next) {
+const deleteChildCategory = async function delChCtg(req, res) {
   let deleted = null;
   try {
     deleted = await ChildCategoryModel.findOneAndDelete({
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(deleted, res);
+  return responses.ok(res, deleted);
 };
 
-const updateChildCategory = async function upChCtg(req, res, next) {
+const updateChildCategory = async function upChCtg(req, res) {
   let updated = null;
   try {
     updated = await ChildCategoryModel.findOneAndUpdate({
@@ -131,22 +131,22 @@ const updateChildCategory = async function upChCtg(req, res, next) {
       new: true,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
-  return responses.ok(updated, res);
+  return responses.ok(res, updated);
 };
 
-const getChildCategory = async function getChCtg(req, res, next) {
+const getChildCategory = async function getChCtg(req, res) {
   let child = null;
   try {
     child = await ChildCategoryModel.findOne({
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
 
-  return responses.ok(child, res);
+  return responses.ok(res, child);
 };
 
 const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
@@ -154,7 +154,7 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
   const requiredFields = ['option'];
   for (let i = 0; i < requiredFields.length; i += 1) {
     if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
+      return responses.error(res, `${requiredFields[i]} is required`);
     }
   }
 
@@ -167,11 +167,11 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
     const childOptions = [...child.options];
     for (let i = 0; i < childOptions.length; i += 1) {
       if (childOptions[i].valueOf() === req.body.option) {
-        return responses.ok(child, res);
+        return responses.ok(res, child);
       }
     }
   } catch (err) {
-    return next(err);
+    return responses.error(res, err.message);
   }
 
   ChildCategoryModel.updateOne(
@@ -186,7 +186,7 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
     },
     (err, result) => {
       if (err) return next(err);
-      return responses.ok(result, res);
+      return responses.ok(res, result);
     },
   );
   return false;
@@ -197,7 +197,7 @@ const deleteChildCategoryOption = async function delChCtgOpt(req, res, next) {
   const requiredFields = ['option'];
   for (let i = 0; i < requiredFields.length; i += 1) {
     if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
+      return responses.error(res, `${requiredFields[i]} is required`);
     }
   }
   // remove the option
@@ -211,10 +211,10 @@ const deleteChildCategoryOption = async function delChCtgOpt(req, res, next) {
     },
     (err, result) => {
       if (err) return next(err);
-      return responses.ok(result, res);
+      return responses.ok(res, result);
     },
   );
-  return false;
+  return responses.error(res);
 };
 
 module.exports = {
