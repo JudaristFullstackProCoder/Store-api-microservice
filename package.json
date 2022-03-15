@@ -30,10 +30,11 @@
     },
     "scripts": {
         "dev": "nodemon ./server/server.js NODE_ENV=development",
-        "test": "nodemon ./server/server.js NODE_ENV=testing && mocha",
+        "test": "nodemon ./server/server.js NODE_ENV=testing",
         "start-test": "npx mocha --recursive",
-        "prod": "node ./server/server.js NODE_ENV=production",
         "start": "nodemon ./server/server.js NODE_ENV=production",
+        "docker": "nodemon ./server/server.js NODE_ENV=docker",
+        "docker-dev": "nodemon ./server/server.js NODE_ENV=docker-dev",
         "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
         "lint-fix": "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
     },
