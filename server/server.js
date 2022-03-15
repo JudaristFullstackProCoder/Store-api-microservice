@@ -2,10 +2,12 @@ const cluster = require('cluster');
 const { length } = require('os').cpus();
 const resolve = require('path').resolve('.env.dev');
 const resolveProduction = require('path').resolve('.env');
-const resilveTestingEnvironment = require('path').resolve('.env.test.local');
+const resolveTestingEnvironment = require('path').resolve('.env.test.local');
+const resolveDockerEnvironment = require('path').resolve('docker-compose.env');
 require('dotenv').config({ path: resolve });
 require('dotenv').config({ path: resolveProduction });
-require('dotenv').config({ path: resilveTestingEnvironment });
+require('dotenv').config({ path: resolveTestingEnvironment });
+require('dotenv').config({ path: resolveDockerEnvironment });
 const app = require('./app');
 const mongoConnection = require('../db/mongoConnect');
 
@@ -19,7 +21,11 @@ if (cluster.isMaster) {
     cluster.fork();
     console.log(`Worker ${process.pid} started`);
   }
-
+  // This event is firs when worker listening
+  cluster.on('listening', (worker, address) => {
+    console.log(`worker ${worker.process.pid} started`);
+    console.log(`A worker is now connected to ${address.address}:${address.port}`);
+  });
   // This event is firs when worker died
   cluster.on('exit', (worker) => {
     console.log(`worker ${worker.process.pid} died`);
@@ -28,15 +34,16 @@ if (cluster.isMaster) {
 } else {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
-  const port = process.env.API_PORT;
-  app.listen(port);
-  console.log(`API listen on port ${port}`);
 
   try {
     if (process.env.NODE_ENV === 'production') {
       mongoConnection(process.env.MONGODBURI);
     } else if (process.env.NODE_ENV === 'testing') {
       mongoConnection(process.env.TESTMONGODBURI);
+    } else if (process.env.NODE_ENV === 'docker') {
+      mongoConnection(process.env.MONGODB_DOCKER_URI);
+    } else if (process.env.NODE_ENV === 'docker-dev') {
+      mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
     } else {
       mongoConnection(process.env.DEVMONGODBURI);
     }
@@ -44,3 +51,7 @@ if (cluster.isMaster) {
     console.log(err);
   }
 }
+
+const port = process.env.PORT || 80;
+app.listen(port);
+console.log(`API listen on port ${port}`);
