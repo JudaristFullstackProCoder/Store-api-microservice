@@ -3,7 +3,7 @@ services:
   store-api:
     build: .
     ports:
-      - 2222:2222
+      - 2223:2223
     environment:
       - PORT=2222
     depends_on:
