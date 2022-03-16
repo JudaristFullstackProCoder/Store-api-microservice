@@ -32,7 +32,7 @@
         "dev": "nodemon ./server/server.js NODE_ENV=development",
         "test": "nodemon ./server/server.js NODE_ENV=testing",
         "start-test": "npx mocha --recursive",
-        "start": "nodemon ./server/server.js NODE_ENV=production",
+        "start": "node ./server/server.js NODE_ENV=production",
         "docker": "nodemon ./server/server.js NODE_ENV=docker",
         "docker-dev": "nodemon ./server/server.js NODE_ENV=docker-dev",
         "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
