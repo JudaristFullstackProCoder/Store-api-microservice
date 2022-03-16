@@ -21,9 +21,8 @@ if (cluster.isMaster) {
     cluster.fork();
   }
   // This event is firs when worker start
-  cluster.on('listening', (worker, address) => {
+  cluster.on('listening', (worker) => {
     console.log(`worker ${worker.process.pid} started`);
-    console.log(`A worker is now connected to ${address.address}:${address.port}`);
   });
   // This event is firs when worker died
   cluster.on('exit', (worker) => {
