@@ -135,7 +135,7 @@ describe('PATCH /api/v1/category/child/id', () => {
 });
 
 // Add child category option
-describe('POST /api/v1/category/child/id/option', () => {
+describe('PUT /api/v1/category/child/id/option', () => {
   it('should return status 200 when a child category option is added', async () => {
     new Option({
       name: 'Test option',
@@ -164,6 +164,9 @@ describe('POST /api/v1/category/child/id/option', () => {
 describe('DELETE /api/v1/category/child/id/option', () => {
   it('should return status 200 when a child category is deleted', async () => {
     let option = await Option.findOne({name: 'Test option'}).exec();
+    // Delete the option
+    Option.findOneAndDelete({name: 'Test option'}).exec();
+    // ----------------------------------------------
     let childCategory = await ChildCategory.findOne({name: 'Child Category test (updated)'}).exec();
     const res = await request(app).delete(`/api/v1/category/child/${childCategory._id}/option`).send({
       option: option._id,
