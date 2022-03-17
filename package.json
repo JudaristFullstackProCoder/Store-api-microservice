@@ -17,6 +17,7 @@
         "mongodb": "^4.2.2",
         "mongoose": "^6.2.4",
         "multer": "^1.4.4",
+        "supertest": "^6.2.2",
         "underscore": "^1.13.2"
     },
     "devDependencies": {
