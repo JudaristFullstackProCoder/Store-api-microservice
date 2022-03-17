@@ -29,7 +29,7 @@ const createCategory = async function createCtg(req, res) {
   try {
     category = await category.save();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.created(res, category);
 };
@@ -43,7 +43,7 @@ const updateCategory = async function upCtg(req, res) {
       new: true,
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.ok(res, updated);
 };
@@ -57,7 +57,7 @@ const deleteCategory = async function delCtg(req, res) {
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.ok(res, deleted);
 };
@@ -69,7 +69,7 @@ const getCategory = async function getCtg(req, res) {
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.ok(res, option);
 };
@@ -92,20 +92,17 @@ const createChildCategory = async function createChCtg(req, res) {
     name: req.body.name,
   }, 'name').exec();
 
-  /**
-     * @var {Array|null} name
-     */
-  if (named != null) {
-    return responses.error(res, 'this name is already assigned to a child category');
+  if (named) {
+    return responses.error(res, new Error(), 'this name is already assigned to a child category');
   }
 
   let childCategory = new ChildCategoryModel(req.body);
   try {
     childCategory = await childCategory.save();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
-  return responses.ok(res, childCategory);
+  return responses.created(res, childCategory);
 };
 
 // deleted === the deleted category is the category was found
@@ -117,7 +114,7 @@ const deleteChildCategory = async function delChCtg(req, res) {
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.ok(res, deleted);
 };
@@ -131,7 +128,7 @@ const updateChildCategory = async function upChCtg(req, res) {
       new: true,
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
   return responses.ok(res, updated);
 };
@@ -143,7 +140,7 @@ const getChildCategory = async function getChCtg(req, res) {
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
 
   return responses.ok(res, child);
@@ -171,7 +168,7 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
       }
     }
   } catch (err) {
-    return responses.error(res, err.message);
+    return responses.error(res, err, err.message);
   }
 
   ChildCategoryModel.updateOne(
@@ -184,9 +181,12 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
     {
       new: true,
     },
-    (err, result) => {
+    async (err) => {
       if (err) return next(err);
-      return responses.ok(res, result);
+      const child = await ChildCategoryModel.findOne({
+        _id: req.params.id,
+      }).exec();
+      return responses.ok(res, child);
     },
   );
   return false;
@@ -209,9 +209,12 @@ const deleteChildCategoryOption = async function delChCtgOpt(req, res, next) {
     },
     {
     },
-    (err, result) => {
+    async (err) => {
       if (err) return next(err);
-      return responses.ok(res, result);
+      const child = await ChildCategoryModel.findOne({
+        _id: req.params.id,
+      }).exec();
+      return responses.ok(res, child);
     },
   );
   return responses.error(res);
