@@ -1,21 +1,14 @@
-const assert = require('assert');
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-const server = require('../server/app');
+//During the test the env variable is set to test
+process.env.NODE_ENV = 'test';
+const request = require("supertest");
 
-const should = chai.should();
+const expect = require("chai").expect;
+//Require the dev-dependencies
+let app = require('../server/app');
 
-chai.use(chaiHttp);
-
-describe('API', () => {
-  describe('homepage', () => {
-    it('should respond with status 200', (done) => {
-      chai.request(server)
-        .get('/').send({}).end((err, res) => {
-            if (err) console.log(err);
-          res.should.have.status(200);
-          done();
-        });
-    });
+describe("GET /", () => {
+  it("should return status 200 when trying to get the homepage", async () => {
+    const res = await request(app).get("/");
+    expect(res.status).to.equal(200);
   });
 });
