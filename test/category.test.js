@@ -78,7 +78,7 @@ describe('GET /api/v1/category/id', () => {
   });
 });
 
-// Craete child category
+// Create child category
 describe('POST /api/v1/category/child', () => {
   it('should return status 201 when a child category is created', async () => {
     let category = await Category.findOne({name: 'Category of test (updated)'}).exec();
