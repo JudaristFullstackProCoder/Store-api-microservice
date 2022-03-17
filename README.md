@@ -8,7 +8,7 @@ The goal of this project is to create an api is to manage entities : store, prod
 
 1. [Visual studio code](https://code.visualstudio.com/)
 2. [Nodejs](https://nodejs.org/) / [Express](http://expressjs.com/)
-3. Mongodb / [Mongoose](https://mongoosejs.com/)
+3. [Mongodb](https://www.mongodb.com/fr-fr) / [Mongoose](https://mongoosejs.com/)
 4. [Docker](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 5. [MongoDb](https://www.mongodb.com/fr-fr) Server and MongoDB Compass (GUI)
 6. [Git](https://git-scm.com/)
@@ -169,10 +169,30 @@ Its the video that present the product (facultative).
 *  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container            port`:`your pc port` --name `image name`     `image name`
 * docker run -v %cd%:/store-api -v /store-api/node_modules --env PORT=value -p `container port`:`your pc port` --name `image name` `image name`
 
-## With Docker Composer
+## With Docker Compose
 
-* docker-compose up
+* docker-compose -f docker-compose.yml -f docker-compose.dev.yml -d up (development env)
+* docker-compose -f docker-compose.yml -f docker-compose.dev.prod -d up (production env)
 * docker-compose down
+
+## Design document
+
+### Differents entities
+
+- Product
+- Category
+- Child category
+- Promocode
+- Option
+- Store
+
+### UML
+
+#### CLASS DIAGRAM
+
+#### USE CASE DIAGRAM
+
+#### SEQUENCE DIAGRAM
 
 ## Local development
 
