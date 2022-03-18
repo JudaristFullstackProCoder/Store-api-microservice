@@ -192,32 +192,26 @@ const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
   return false;
 };
 
-const deleteChildCategoryOption = async function delChCtgOpt(req, res, next) {
-  // required fields
-  const requiredFields = ['option'];
-  for (let i = 0; i < requiredFields.length; i += 1) {
-    if (!req.body[requiredFields[i]]) {
-      return responses.error(res, `${requiredFields[i]} is required`);
-    }
+const deleteChildCategoryOption = async function delChCtgOpt(req, res) {
+  try {
+    // remove the option
+    ChildCategoryModel.updateOne(
+      { _id: req.params.id },
+      {
+        $pull: { options: req.body.option },
+      },
+      {},
+      async (err) => {
+        if (err) return responses.error(res, err, err.message);
+        const child = await ChildCategoryModel.findOne({
+          _id: req.params.id,
+        }).exec();
+        return responses.ok(res, child);
+      },
+    );
+  } catch (err) {
+    return responses.error(res, err, err.data);
   }
-  // remove the option
-  ChildCategoryModel.updateOne(
-    { _id: req.params.id },
-    {
-      $pull: { options: req.body.option },
-      // $pullAll : {options : [req.body.option]}
-    },
-    {
-    },
-    async (err) => {
-      if (err) return next(err);
-      const child = await ChildCategoryModel.findOne({
-        _id: req.params.id,
-      }).exec();
-      return responses.ok(res, child);
-    },
-  );
-  return responses.error(res);
 };
 
 module.exports = {
