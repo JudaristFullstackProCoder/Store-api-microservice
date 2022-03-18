@@ -10,10 +10,7 @@ const Option = require('../models/options').model;
 
 const expect = require("chai").expect;
 //Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
 let app = require('../server/app');
-chai.use(chaiHttp);
 
 before(async () => {
   await mongooseConnect(process.env.TESTMONGODBURI);
