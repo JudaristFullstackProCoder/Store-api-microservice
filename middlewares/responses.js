@@ -42,8 +42,10 @@ module.exports = {
     });
   },
 
-  error(res, err, message = 'An Error occured. Please try again latter') {
-    console.log(err.message);
+  error(res, err = false, message = 'An Error occured. Please try again latter') {
+    if (err) {
+      console.log(err.message);
+    }
     return res.status(500).json({
       error: true,
       data: message,
