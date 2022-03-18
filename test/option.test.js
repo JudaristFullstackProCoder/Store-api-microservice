@@ -29,6 +29,19 @@ it('should return status 201 when we create an option', async () => {
   });
 });
 
+// Create option
+describe('POST /api/v1/option', () => {
+     it('should return status 500 if the name is not available (already taken by another option)', async () => {
+          const res = await request(app).post('/api/v1/option').send({
+               name: 'Option test',
+          });
+          const data = res.body;
+          expect(res.status).to.equal(500);
+          expect(data).to.have.property('data');
+          expect(data).to.have.property('error', true);
+     });
+});
+
 // Retrieve an option
 describe('GET /api/v1/option', () => {
      it('should return status 200 when we retrieve an option', async () => {
