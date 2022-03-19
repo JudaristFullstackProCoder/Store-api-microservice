@@ -3,10 +3,14 @@
 // Third library imports
 const cookieParser = require('cookie-parser');
 const express = require('express');
-
-const app = express();
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const swaggerUi = require('swagger-ui-express');
+const yaml = require('yamljs');
+
+const swaggerDocument = yaml.load(require('path').resolve('swagger.yml'));
+
+const app = express();
 
 // custom modules imports
 const clientErrorHandler = require('../middlewares/clientErrorHandler');
@@ -21,6 +25,7 @@ const uploadRoutes = require('../routes/upload');
 
 // Middleware
 app.use(express.json());
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -37,10 +42,6 @@ app.use('/api/v1/upload', uploadRoutes);
 
 // Error handler middleware
 app.use(errorLogger, clientErrorHandler);
-
-// home page
-
-app.all('/', (req, res) => res.json({ message: 'Api Home page' }));
 
 // Handle not found routes
 app.all('*', notFound);
