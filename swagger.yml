@@ -1,0 +1,8 @@
+openapi: "3.0"
+info:
+  title: "STORE API"
+  description: "A store api made with expressjs, mongoose and docker [Source code](https://github.com/judaristFullstack/Store-api-microservice)."
+  version: "1.0"
+servers:
+  - url: "http://api.example.com/v1"
+    description: "Main production server on heroku"
