@@ -18,7 +18,9 @@
         "mongoose": "^6.2.4",
         "multer": "^1.4.4",
         "supertest": "^6.2.2",
-        "underscore": "^1.13.2"
+        "swagger-ui-express": "^4.3.0",
+        "underscore": "^1.13.2",
+        "yamljs": "^0.3.0"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",
@@ -32,12 +34,12 @@
         "ts-node": "^10.4.0"
     },
     "scripts": {
-        "dev": "nodemon ./server/server.js NODE_ENV=development",
-        "test": "nodemon ./server/server.js NODE_ENV=testing",
-        "start-test": "npx mocha --recursive",
-        "start": "node ./server/server.js NODE_ENV=production",
-        "docker": "nodemon ./server/server.js NODE_ENV=docker",
-        "docker-dev": "nodemon ./server/server.js NODE_ENV=docker-dev",
+        "dev": "set NODE_ENV=development && nodemon ./server/server.js",
+        "test": "NODE_ENV=testing && nodemon ./server/server.js",
+        "start-test": "npx mocha",
+        "start": "set NODE_ENV=production && node ./server/server.js",
+        "docker": "set NODE_ENV=docker && nodemon ./server/server.js",
+        "docker-dev": "set NODE_ENV=docker-dev && nodemon ./server/server.js",
         "lint": "eslint controllers && eslint db && eslint middlewares && eslint models && eslint routes && eslint server",
         "lint-fix": "eslint controllers --fix && eslint db --fix && eslint middlewares --fix && eslint models --fix && eslint routes --fix && eslint server --fix"
     },
