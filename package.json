@@ -35,7 +35,7 @@
     },
     "scripts": {
         "dev": "set NODE_ENV=development && nodemon ./server/server.js",
-        "test": "NODE_ENV=testing && nodemon ./server/server.js",
+        "test": "set NODE_ENV=testing && nodemon ./server/server.js",
         "start-test": "npx mocha",
         "start": "set NODE_ENV=production && node ./server/server.js",
         "docker": "set NODE_ENV=docker && nodemon ./server/server.js",
