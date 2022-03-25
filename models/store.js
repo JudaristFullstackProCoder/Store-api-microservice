@@ -25,7 +25,7 @@ const storeSchema = new Schema({
   // the owner of the store
   shopkeeper: {
     type: Schema.Types.ObjectId,
-    required: false, // [true, "store shopkeeper id is required !"]
+    required: [true, 'store shopkeeper id is required !'],
   },
   settings: {
     type: storeSettingSchema,
