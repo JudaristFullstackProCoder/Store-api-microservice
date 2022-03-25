@@ -1,19 +1,10 @@
 const { Schema } = require('mongoose');
 const Mongoose = require('mongoose');
-const { ObjectId } = require('mongoose').Types;
 
 const Store = require('../models/store').model;
 const responses = require('../middlewares/responses');
 
 const createStore = async function createStore(req, res, next) {
-  // required fields
-  const requiredFields = ['name'];
-  for (let i = 0; i < requiredFields.length; i += 1) {
-    if (!req.body[requiredFields[i]]) {
-      return next(new Error(`${requiredFields[i]} is required`));
-    }
-  }
-
   // One name per store
   const named = await Store.findOne({
     name: req.body.name,
@@ -33,19 +24,13 @@ const createStore = async function createStore(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(store, res);
+  return responses.created(res, store);
 };
 
 const deleteStore = async function delStore(req, res, next) {
-  let store = null;
-  try {
-    store = await Store.findOneAndDelete({
-      _id: new ObjectId(req.params.id),
-    }).exec();
-  } catch (err) {
-    return next(err);
-  }
-  return responses.ok(store, res);
+  Store.findOneAndDelete({
+    _id: new Mongoose.Types.ObjectId(req.params.id),
+  }).exec().then((doc) => responses.ok(res, doc)).catch((err) => next(err));
 };
 
 const updateStore = async function upStore(req, res, next) {
@@ -65,7 +50,7 @@ const updateStore = async function upStore(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(updated, res);
+  return responses.ok(res, updated);
 };
 
 const updateStoreSettings = async function upStoreSettings(req, res, next) {
@@ -81,7 +66,7 @@ const updateStoreSettings = async function upStoreSettings(req, res, next) {
         },
       },
     );
-    return responses.ok(updated, res);
+    return responses.ok(res, updated);
   } catch (err) {
     next(err);
   }
@@ -98,7 +83,7 @@ const getStore = async function getStore(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(store, res);
+  return responses.ok(res, store);
 };
 
 const getStoreProductsWithPagination = async function getStoreProdWithPage(req, res, next) {
@@ -111,7 +96,7 @@ const getStoreProductsWithPagination = async function getStoreProdWithPage(req, 
   } catch (err) {
     return next(err);
   }
-  return responses.ok(store, res);
+  return responses.ok(res, store);
 };
 
 module.exports = {
