@@ -38,32 +38,15 @@ if (cluster.isMaster) {
     app.listen(port);
   };
   const getUri = function Jf(env) {
-    let uri = null;
-    switch (env) {
-      case 'production':
-        uri = process.env.MONGODBURI;
-        break;
-      case 'testing':
-        uri = process.env.TESTMONGODBURI;
-        break;
-      case 'docker':
-        uri = process.env.MONGODB_DOCKER_URI;
-        break;
-      case 'docker-dev':
-        uri = process.env.MONGODB_DOCKER_DEV_URI;
-        break;
-      case 'development':
-        uri = process.env.DEVMONGODBURI;
-        break;
-      default:
-        uri = process.env.MONGODBURI;
-        break;
-    }
-    return uri;
+    if (env === 'production') mongoConnection(process.env.MONGODBURI);
+    if (env === 'testing') mongoConnection(process.env.TESTMONGODBURI);
+    if (env === 'docker') mongoConnection(process.env.MONGODB_DOCKER_URI);
+    if (env === 'docker-dev') mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
+    if (env === 'development') mongoConnection(process.env.DEVMONGODBURI);
   };
   try {
     startServer();
-    mongoConnection(getUri(process.env.NODE_ENV));
+    getUri(process.env.NODE_ENV);
   } catch (err) {
     log.error(err);
   }
