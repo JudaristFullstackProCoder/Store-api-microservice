@@ -10,11 +10,12 @@ require('dotenv').config({ path: resolveTestingEnvironment });
 require('dotenv').config({ path: resolveDockerEnvironment });
 const app = require('./app');
 const mongoConnection = require('../db/mongoConnect');
+const log = require('../libs/log');
 
 // start the server if the database connection succed
 // For Master process
 if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+  log.warn(`Master Process ${process.pid} is running`);
   const numCPUs = length;
   // Fork workers.
   for (let i = 0; i < numCPUs; i += 1) {
@@ -22,33 +23,48 @@ if (cluster.isMaster) {
   }
   // This event is firs when worker start
   cluster.on('listening', (worker) => {
-    console.log(`worker ${worker.process.pid} started`);
+    log.info(`worker ${worker.process.pid} started`);
   });
   // This event is firs when worker died
   cluster.on('exit', (worker) => {
-    console.log(`worker ${worker.process.pid} died`);
+    log.info(`worker ${worker.process.pid} died`);
   });
   // For Worker
 } else {
   // Workers can share any TCP connection
   // In this case it is an HTTP server
   const port = process.env.PORT || 80;
-  app.listen(port);
-  console.log(`API listen on port ${port}`);
-
-  try {
-    if (process.env.NODE_ENV === 'production') {
-      mongoConnection(process.env.MONGODBURI);
-    } else if (process.env.NODE_ENV === 'testing') {
-      mongoConnection(process.env.TESTMONGODBURI);
-    } else if (process.env.NODE_ENV === 'docker') {
-      mongoConnection(process.env.MONGODB_DOCKER_URI);
-    } else if (process.env.NODE_ENV === 'docker-dev') {
-      mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
-    } else {
-      mongoConnection(process.env.DEVMONGODBURI);
+  const startServer = function strServApp() {
+    app.listen(port);
+  };
+  const getUri = function Jf(env) {
+    let uri = null;
+    switch (env) {
+      case 'production':
+        uri = process.env.MONGODBURI;
+        break;
+      case 'testing':
+        uri = process.env.TESTMONGODBURI;
+        break;
+      case 'docker':
+        uri = process.env.MONGODB_DOCKER_URI;
+        break;
+      case 'docker-dev':
+        uri = process.env.MONGODB_DOCKER_DEV_URI;
+        break;
+      case 'development':
+        uri = process.env.DEVMONGODBURI;
+        break;
+      default:
+        uri = process.env.MONGODBURI;
+        break;
     }
+    return uri;
+  };
+  try {
+    startServer();
+    mongoConnection(getUri(process.env.NODE_ENV));
   } catch (err) {
-    console.log(err);
+    log.error(err);
   }
 }
