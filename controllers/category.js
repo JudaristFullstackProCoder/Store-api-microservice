@@ -50,14 +50,14 @@ const updateCategory = async function upCtg(req, res) {
 
 // deleted === the deleted category and
 // if the category wasn't found then deleted === null
-const deleteCategory = async function delCtg(req, res) {
+const deleteCategory = async function delCtg(req, res, next) {
   let deleted = null;
   try {
     deleted = await Category.findOneAndDelete({
       _id: new Mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return responses.error(res, err, err.message);
+    return next(err);
   }
   return responses.ok(res, deleted);
 };
