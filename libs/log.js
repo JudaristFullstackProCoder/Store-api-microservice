@@ -8,12 +8,6 @@ const levels = {
   debug: 4,
 };
 
-const level = () => {
-  const env = process.env.NODE_ENV || 'development';
-  const isDevelopment = env === 'development';
-  return isDevelopment ? 'debug' : 'warn';
-};
-
 const colors = {
   error: 'red',
   warn: 'yellow',
@@ -29,6 +23,10 @@ const format = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.printf(
     (info) => `${info.timestamp} ${info.level}: ${info.message}`,
+    (warn) => `${warn.timestamp} ${warn.level}: ${warn.message}`,
+    (debug) => `${debug.timestamp} ${debug.level}: ${debug.message}`,
+    (http) => `${http.timestamp} ${http.level}: ${http.message}`,
+    (error) => `${error.timestamp} ${error.level}: ${error.message}`,
   ),
 );
 
@@ -42,7 +40,6 @@ const transports = [
 ];
 
 const log = winston.createLogger({
-  level: level(),
   levels,
   format,
   transports,
