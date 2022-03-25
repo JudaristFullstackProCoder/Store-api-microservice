@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const log = require('../libs/log');
 
 const options = {
   useNewUrlParser: true,
@@ -11,5 +12,9 @@ const options = {
 };
 
 module.exports = async function main(url) {
-  return mongoose.connect(url, options);
+  await mongoose.connect(url, options).then(() => {
+    log.debug('successfully connected to db');
+  }).catch((err) => {
+    log.error(err);
+  });
 };
