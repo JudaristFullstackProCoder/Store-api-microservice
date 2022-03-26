@@ -10,12 +10,12 @@ require('dotenv').config({ path: resolveTestingEnvironment });
 require('dotenv').config({ path: resolveDockerEnvironment });
 const app = require('./app');
 const mongoConnection = require('../db/mongoConnect');
-const log = require('../libs/log');
+const Console = require('../libs/logger');
 
 // start the server if the database connection succed
 // For Master process
 if (cluster.isMaster) {
-  log.warn(`Master Process ${process.pid} is running`);
+  Console.warn(`Master Process ${process.pid} is running`);
   const numCPUs = length;
   // Fork workers.
   for (let i = 0; i < numCPUs; i += 1) {
@@ -23,11 +23,11 @@ if (cluster.isMaster) {
   }
   // This event is firs when worker start
   cluster.on('listening', (worker) => {
-    log.info(`worker ${worker.process.pid} started`);
+    Console.info(`worker ${worker.process.pid} started`);
   });
   // This event is firs when worker died
   cluster.on('exit', (worker) => {
-    log.info(`worker ${worker.process.pid} died`);
+    Console.info(`worker ${worker.process.pid} died`);
   });
   // For Worker
 } else {
@@ -37,17 +37,17 @@ if (cluster.isMaster) {
   const startServer = function strServApp() {
     app.listen(port);
   };
-  const getUri = function Jf(env) {
-    if (env === 'production') mongoConnection(process.env.MONGODBURI);
-    if (env === 'testing') mongoConnection(process.env.TESTMONGODBURI);
-    if (env === 'docker') mongoConnection(process.env.MONGODB_DOCKER_URI);
-    if (env === 'docker-dev') mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
-    if (env === 'development') mongoConnection(process.env.DEVMONGODBURI);
+  const getUri = async function Jf(env) {
+    if (env === 'production') await mongoConnection(process.env.MONGODBURI);
+    if (env === 'testing') await mongoConnection(process.env.TESTMONGODBURI);
+    if (env === 'docker') await mongoConnection(process.env.MONGODB_DOCKER_URI);
+    if (env === 'docker-dev') await mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
+    if (env === 'development') await mongoConnection(process.env.DEVMONGODBURI);
   };
   try {
     startServer();
-    getUri(process.env.NODE_ENV);
+    getUri(process.env.NODE_ENV).then(() => Console.info('Connected to MongoDB Server')).catch((err) => Console.error(err));
   } catch (err) {
-    log.error(err);
+    Console.error(err);
   }
 }
