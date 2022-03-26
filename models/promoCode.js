@@ -17,6 +17,7 @@ const promoCodeSchema = new Schema({
   from: {
     type: Schema.Types.Number, // timestamp GMT
     required: true,
+    default: Date.now(),
   },
   to: {
     type: Schema.Types.Number, // timestamp GMT
