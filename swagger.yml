@@ -53,15 +53,15 @@ paths:
       tags:
         - "Option"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -118,15 +118,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -157,7 +157,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK'
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/option/:
     post:
@@ -198,15 +209,15 @@ paths:
       tags:
         - "Category"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -263,15 +274,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -302,7 +313,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK'
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/category/:
     post:
@@ -343,15 +365,15 @@ paths:
       tags:
         - "Child Category"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -408,15 +430,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -447,7 +469,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK' 
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/category/child/:
     post:
@@ -488,15 +521,15 @@ paths:
       tags:
         - "Store"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -553,15 +586,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -592,7 +625,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK'
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/store/:
     post:
@@ -633,15 +677,15 @@ paths:
       tags:
         - "Product"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -698,15 +742,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -737,7 +781,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK' 
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/product/:
     post:
@@ -778,15 +833,15 @@ paths:
       tags:
         - "Code promo"
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       responses:
         '200':
@@ -843,15 +898,15 @@ paths:
                   style: deepObject
           description: 'OK'
       parameters:
-        - name: Id
-          description: Option (MongoDB Id)
+        - name: id
+          description: Option (MongoDB id)
           example: 623db0d00265e0309ed61f50
           in: path
           allowEmptyValue: false
           required: true
           style: label
           schema:
-            description: Option Id
+            description: Option id
             nullable: false
       x-42c-no-authentication: true
     patch:
@@ -882,7 +937,18 @@ paths:
               encoding:
                 "utf-8":
                   style: deepObject
-          description: 'OK'          
+          description: 'OK'   
+      parameters:
+        - name: id
+          description: Option (MongoDB id)
+          example: 623db0d00265e0309ed61f50
+          in: path
+          allowEmptyValue: false
+          required: true
+          style: label
+          schema:
+            description: Option id
+            nullable: false
       x-42c-no-authentication: true  
   /api/v1/promocode/:
     post:
