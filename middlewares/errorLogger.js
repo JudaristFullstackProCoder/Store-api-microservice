@@ -1,6 +1,6 @@
-const log = require('../libs/log');
+const Console = require('../libs/logger');
 
 module.exports = function logError(err, req, res, next) {
-  log.error(err.message);
+  Console.error(err.message);
   return next(err);
 };
