@@ -47,7 +47,7 @@ describe("POST /api/v1/category", () => {
     expect(res.status).to.equal(500);
     expect(data).to.have.property('error');
     expect(data).to.have.property('error', true);
-    expect(data).to.have.property('message');
+    expect(data).to.have.property('data');
   });
 });
 

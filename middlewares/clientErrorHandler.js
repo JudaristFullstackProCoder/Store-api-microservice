@@ -4,6 +4,6 @@ module.exports = function clientErrHandl(err, req, res, next) {
   }
   return res.status(500).json({
     error: true,
-    message: err.message || 'Something went wrong, try again later',
+    data: err.message || 'Something went wrong, try again later',
   }).end();
 };
