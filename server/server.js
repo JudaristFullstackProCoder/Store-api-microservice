@@ -1,13 +1,6 @@
 const cluster = require('cluster');
 const { length } = require('os').cpus();
-const resolve = require('path').resolve('.env.dev');
-const resolveProduction = require('path').resolve('.env');
-const resolveTestingEnvironment = require('path').resolve('.env.test.local');
-const resolveDockerEnvironment = require('path').resolve('docker-compose.env');
-require('dotenv').config({ path: resolve });
-require('dotenv').config({ path: resolveProduction });
-require('dotenv').config({ path: resolveTestingEnvironment });
-require('dotenv').config({ path: resolveDockerEnvironment });
+const mongoose = require('mongoose');
 const app = require('./app');
 const mongoConnection = require('../db/mongoConnect');
 const Console = require('../libs/logger');
@@ -15,6 +8,8 @@ const Console = require('../libs/logger');
 // start the server if the database connection succed
 // For Master process
 if (cluster.isMaster) {
+  process.stdout.write('\x1B[2J'); // clear the console
+  Console.debug('The Server is starting ...');
   Console.warn(`Master Process ${process.pid} is running`);
   const numCPUs = length;
   // Fork workers.
@@ -37,16 +32,10 @@ if (cluster.isMaster) {
   const startServer = function strServApp() {
     app.listen(port);
   };
-  const getUri = async function Jf(env) {
-    if (env === 'production') await mongoConnection(process.env.MONGODBURI);
-    if (env === 'testing') await mongoConnection(process.env.TESTMONGODBURI);
-    if (env === 'docker') await mongoConnection(process.env.MONGODB_DOCKER_URI);
-    if (env === 'docker-dev') await mongoConnection(process.env.MONGODB_DOCKER_DEV_URI);
-    if (env === 'development') await mongoConnection(process.env.DEVMONGODBURI);
-  };
+
   try {
+    mongoConnection(mongoose);
     startServer();
-    getUri(process.env.NODE_ENV).then(() => Console.info('Connected to MongoDB Server')).catch((err) => Console.error(err));
   } catch (err) {
     Console.error(err);
   }

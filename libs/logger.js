@@ -142,28 +142,24 @@ const Logger = {
     },
   },
   // // // // / // // Status colors // // // // // // // /
-  warn(str) {
-    process.stdout.write(ConsoleLog.yellowBright('Warn: '));
-    process.stdout.write(ConsoleLog.yellow(`${(new Date()).toUTCString()}`));
-    process.stdout.write(ConsoleLog.whiteBright(': '));
+  warn(str, flag = 'Warn') {
+    process.stdout.write(ConsoleLog.yellowBright(`[${flag}]: `));
+    process.stdout.write(ConsoleLog.yellow(`${(new Date()).toUTCString()} `));
     process.stdout.write(ConsoleLog.white(`${str} \n`));
   },
-  error(str) {
-    process.stdout.write(ConsoleLog.redBright('Error: '));
-    process.stdout.write(ConsoleLog.red(`${(new Date()).toUTCString()}`));
-    process.stdout.write(ConsoleLog.whiteBright(': '));
+  error(str, flag = 'Error') {
+    process.stdout.write(ConsoleLog.redBright(`[${flag}]: `));
+    process.stdout.write(ConsoleLog.red(`${(new Date()).toUTCString()} `));
     process.stdout.write(ConsoleLog.white(`${str} \n`));
   },
-  debug(str) {
-    process.stdout.write(ConsoleLog.blueBright('Debug: '));
-    process.stdout.write(ConsoleLog.blue(`${(new Date()).toUTCString()}`));
-    process.stdout.write(ConsoleLog.whiteBright(': '));
+  debug(str, flag = 'Debug') {
+    process.stdout.write(ConsoleLog.blueBright(`[${flag}]: `));
+    process.stdout.write(ConsoleLog.blue(`${(new Date()).toUTCString()} `));
     process.stdout.write(ConsoleLog.white(`${str} \n`));
   },
-  info(str) {
-    process.stdout.write(ConsoleLog.greenBright('Info: '));
-    process.stdout.write(ConsoleLog.green(`${(new Date()).toUTCString()}`));
-    process.stdout.write(ConsoleLog.whiteBright(': '));
+  info(str, flag = 'Info') {
+    process.stdout.write(ConsoleLog.greenBright(`[${flag}]: `));
+    process.stdout.write(ConsoleLog.green(`${(new Date()).toUTCString()} `));
     process.stdout.write(ConsoleLog.white(`${str} \n`));
   },
   // // // // // // // // Background colors // // // // // // // // // // //

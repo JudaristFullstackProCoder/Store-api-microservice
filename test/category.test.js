@@ -1,7 +1,9 @@
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'testing';
+const mongoose = require('mongoose');
 const request = require("supertest");
 const mongooseConnect = require('../db/mongoConnect');
+const mongooseDisconnect = require('../db/mongoDisconnect');
 require('dotenv').config({path: require('path').resolve('.env.test.local')});
 // MODELS
 const Category = require('../models/category').model;
@@ -12,8 +14,11 @@ const expect = require("chai").expect;
 //Require the dev-dependencies
 let app = require('../server/app');
 
-before(async () => {
-  await mongooseConnect(process.env.TESTMONGODBURI);
+before( () => {
+  mongooseConnect(mongoose);
+});
+after(async () => {
+  await mongooseDisconnect();
 });
 
 // Create category
@@ -38,10 +43,11 @@ describe("POST /api/v1/category", () => {
         name: 'Category of test'
       });
     const data = res.body;
+    console.log(data);
     expect(res.status).to.equal(500);
     expect(data).to.have.property('error');
     expect(data).to.have.property('error', true);
-    expect(data).to.have.property('data');
+    expect(data).to.have.property('message');
   });
 });
 

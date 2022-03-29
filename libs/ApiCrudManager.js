@@ -24,7 +24,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(obj, ctx.res);
+    return responses.created(ctx.res, obj);
   }
 
   /**
@@ -45,7 +45,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(product, ctx.res);
+    return responses.ok(ctx.res, product);
   }
 
   /**
@@ -67,7 +67,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(updated, ctx.res);
+    return responses.ok(ctx.res, updated);
   }
 
   /**
@@ -95,7 +95,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(deleted, ctx.res);
+    return responses.ok(ctx.res, deleted);
   }
 }
 

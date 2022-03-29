@@ -1,35 +1,38 @@
 const { Schema } = require('mongoose');
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const Store = require('../models/store').model;
 const responses = require('../middlewares/responses');
+const mongooseConnect = require('../db/mongoConnect');
+
+mongooseConnect(mongoose);
 
 const createStore = async function createStore(req, res, next) {
   // One name per store
-  const named = await Store.findOne({
-    name: req.body.name,
-  }, 'name').exec();
-
-  /**
-     * @var {Array} email
-     * @conditon Then email address already used
-     */
-  if (named != null) {
-    return next(new Error('this name is already assigned to a shop'));
-  }
-
-  let store = new Store(req.body);
   try {
+    const named = await Store.findOne({
+      name: req.body.name,
+    }, 'name').exec();
+
+    /**
+       * @var {Array} email
+       * @conditon Then email address already used
+       */
+    if (named != null) {
+      return next(new Error('this name is already assigned to a shop'));
+    }
+
+    let store = new Store(req.body);
     store = await store.save();
+    return responses.created(res, store);
   } catch (err) {
     return next(err);
   }
-  return responses.created(res, store);
 };
 
 const deleteStore = async function delStore(req, res, next) {
   Store.findOneAndDelete({
-    _id: new Mongoose.Types.ObjectId(req.params.id),
+    _id: new mongoose.Types.ObjectId(req.params.id),
   }).exec().then((doc) => responses.ok(res, doc)).catch((err) => next(err));
 };
 
@@ -43,16 +46,17 @@ const updateStore = async function upStore(req, res, next) {
 
   try {
     updated = await Store.findOneAndUpdate({
-      _id: new Mongoose.Types.ObjectId(req.params.id || ''),
+      _id: new mongoose.Types.ObjectId(req.params.id || ''),
     }, req.body, {
       new: true,
     }).exec();
+    return responses.ok(res, updated);
   } catch (err) {
     return next(err);
   }
-  return responses.ok(res, updated);
 };
 
+/* eslint consistent-return: "off" */
 const updateStoreSettings = async function upStoreSettings(req, res, next) {
   // update store settings informations
   // find the store first, then update the settings of the store
@@ -70,7 +74,6 @@ const updateStoreSettings = async function upStoreSettings(req, res, next) {
   } catch (err) {
     next(err);
   }
-  return false;
 };
 
 const getStore = async function getStore(req, res, next) {
@@ -80,23 +83,22 @@ const getStore = async function getStore(req, res, next) {
     store = await Store.findOne({
       _id: req.params.id,
     }, 'name shopkeeper settings').exec();
+    return responses.ok(res, store);
   } catch (err) {
     return next(err);
   }
-  return responses.ok(res, store);
 };
 
 const getStoreProductsWithPagination = async function getStoreProdWithPage(req, res, next) {
   // only retrieve store products
-  let store = null;
   try {
-    store = await Store.findOne({
+    const store = await Store.findOne({
       _id: new Schema.Types.ObjectId(req.params.id),
     }, 'products');
+    return responses.ok(res, store);
   } catch (err) {
     return next(err);
   }
-  return responses.ok(res, store);
 };
 
 module.exports = {

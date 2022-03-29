@@ -1,8 +1,9 @@
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'testing';
 const { default: mongoose } = require('mongoose');
 const request = require('supertest');
 const mongooseConnect = require('../db/mongoConnect');
+const mongooseDisconnect = require('../db/mongoDisconnect');
 require('dotenv').config({path: require('path').resolve('.env.test.local')});
 // MODELS
 const Store = require('../models/store').model;
@@ -10,28 +11,31 @@ const Store = require('../models/store').model;
 const expect = require('chai').expect;
 
 let app = require('../server/app');
-const logger = require('../libs/log');
+const logger = require('../libs/logger');
 
-before(async () => {
-  await mongooseConnect(process.env.TESTMONGODBURI);
+before(() => {
+  mongooseConnect(mongoose);
 });
+after(async () => {
+  await mongooseDisconnect();
+})
 
 // Create store
 describe('POST /api/v1/store', () => {
-it('should return status 201 when we create an store', async () => {
-     // Create fake Id for shopkeeper
-     const res = await request(app).post('/api/v1/store').send({
-          name: 'store exemple',
-          shopkeeper: '623d3f36e507bb9be1d9c5a6',
+     it('should return status 201 when we create an store', async () => {
+          // Create fake Id for shopkeeper
+          const res = await request(app).post('/api/v1/store').send({
+               name: 'store exemple',
+               shopkeeper: '623d3f36e507bb9be1d9c5a6',
+          });
+          const data = res.body;
+          expect(res.status).to.equal(201);
+          expect(data).to.have.property('data');
+          expect(data).to.have.property('success', true);
+          expect(data.data).to.have.property('_id');
+          expect(data.data).to.have.property('name', 'store exemple');
+          expect(data.data.settings).to.have.property('_id');
      });
-     const data = res.body;
-     expect(res.status).to.equal(201);
-     expect(data).to.have.property('data');
-     expect(data).to.have.property('success', true);
-     expect(data.data).to.have.property('_id');
-     expect(data.data).to.have.property('name', 'store exemple');
-     expect(data.data.settings).to.have.property('_id');
-  });
 });
 
 describe('PATCH /api/v1/store/:id', () => {

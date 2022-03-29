@@ -1,12 +1,15 @@
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const mongooseConnect = require('../db/mongoConnect');
 const Option = require('../models/options').model;
 const responses = require('../middlewares/responses');
 
-const createOption = async function createOpt(req, res) {
+mongooseConnect(mongoose);
+
+const createOption = async function createOpt(req, res, next) {
   // required fields
   const requiredFields = ['name'];
   if (!req.body[requiredFields[0]]) {
-    return responses.error(res, false, `${requiredFields[0]} is required`);
+    return next(res, false, `${requiredFields[0]} is required`);
   }
   // One name per Option
   const named = await Option.findOne({
@@ -18,52 +21,52 @@ const createOption = async function createOpt(req, res) {
      * @conditon Then email address already used
      */
   if (named) {
-    return responses.error(res, false, 'this name is already assigned to an option');
+    return next(new Error('this name is already assigned to an option'));
   }
 
   let option = new Option(req.body);
   try {
     option = await option.save();
   } catch (err) {
-    return responses.error(res, err, err.message);
+    return next(res, err, err.message);
   }
   return responses.created(res, option);
 };
 
-const deleteOption = async function delOpt(req, res) {
+const deleteOption = async function delOpt(req, res, next) {
   let option = null;
   try {
     option = await Option.findOneAndDelete({
-      _id: new Mongoose.Types.ObjectId(req.params.id),
+      _id: new mongoose.Types.ObjectId(req.params.id),
     }).exec();
   } catch (err) {
-    return responses.error(res, err, err.message);
+    return next(res, err, err.message);
   }
   return responses.ok(res, option);
 };
 
-const updateOption = async function upOpt(req, res) {
+const updateOption = async function upOpt(req, res, next) {
   let updated = null;
   try {
     updated = await Option.findOneAndUpdate({
-      _id: new Mongoose.Types.ObjectId(req.params.id || ''),
+      _id: new mongoose.Types.ObjectId(req.params.id || ''),
     }, req.body, {
       new: true,
     }).exec();
   } catch (err) {
-    return responses.error(res, err, err.message);
+    return next(res, err, err.message);
   }
   return responses.ok(res, updated);
 };
 
-const getOption = async function getOpt(req, res) {
+const getOption = async function getOpt(req, res, next) {
   let option = null;
   try {
     option = await Option.findOne({
       _id: req.params.id,
     }).exec();
   } catch (err) {
-    return responses.error(res, err, err.message);
+    return next(res, err, err.message);
   }
   return responses.ok(res, option);
 };

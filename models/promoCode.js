@@ -31,6 +31,8 @@ const promoCodeSchema = new Schema({
     type: Schema.Types.Number,
     required: true,
   },
+}, {
+  bufferCommands: true,
 });
 
 module.exports = mongoose.model('promocodes', promoCodeSchema);

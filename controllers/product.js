@@ -1,4 +1,7 @@
-const Mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const mongooseConnection = require('../db/mongoConnect');
+
+mongooseConnection(mongoose);
 
 const responses = require('../middlewares/responses');
 const Product = require('../models/product').model;
@@ -23,7 +26,7 @@ const getProduct = async function getProd(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return responses.ok(product, res);
+  return responses.ok(res, product);
 };
 
 const updateProduct = async function upProd(req, res, next) {
@@ -47,7 +50,7 @@ const addProductOption = async function addProdOption(req, res, next) {
     $push: { options: { option: req.body.option, value: req.body.value } },
   }, { new: true }, (err, product) => {
     if (err) return next(err);
-    return responses.ok(product, res);
+    return responses.ok(res, product);
   });
   return next(new Error());
 };
@@ -95,7 +98,7 @@ const deleteProductOption = async function deleteProductOption(req, res, next) {
     $pull: { options: { option: req.body.option } },
   }, {}, (err, result) => {
     if (err) return next(err);
-    return res.ok(result);
+    return responses.ok(res, result);
   });
   return false;
 };
@@ -110,12 +113,12 @@ const addProductImage = async function addProdImage(req, res, next) {
   // Store all informatios about uploaded image into the product
   try {
     Product.findOneAndUpdate({
-      _id: new Mongoose.Types.ObjectId(req.params.id),
+      _id: new mongoose.Types.ObjectId(req.params.id),
     }, {
       image: req.file,
     }, { new: true }, (err, product) => {
       if (err) return next(err);
-      return responses.ok(product, res);
+      return responses.ok(res, product);
     });
   } catch (err) {
     return next(err);
@@ -131,7 +134,7 @@ const addProductAdditionalsImages = async function addProdAdditionalsImages(req,
       $push: { images: req.file },
     }, { new: true }, (err, product) => {
       if (err) return next(err);
-      return responses.ok(product, res);
+      return responses.ok(res, product);
     });
   } catch (err) {
     return next(err);
@@ -144,7 +147,7 @@ const addProductVideo = function addProdVideo(req, res, next) {
   // Store all informatios about uploaded video into the product
   try {
     Product.findOneAndUpdate({
-      _id: new Mongoose.Types.ObjectId(req.params.id),
+      _id: new mongoose.Types.ObjectId(req.params.id),
     }, {
       video: req.file,
     }, { new: true }, (err) => {
@@ -191,7 +194,7 @@ const deleteProductComposition = function deleteProductComposition(req, res, nex
     $pull: { compositions: { _id: req.body.id } },
   }, {}, (err, result) => {
     if (err) return next(err);
-    return res.ok(result);
+    return responses.ok(res, result);
   });
 };
 
@@ -212,7 +215,7 @@ const addProductCompositionOption = function addProductCompositionOption(req, re
     },
   }, { new: true }, (err, product) => {
     if (err) return next(err);
-    return responses.ok(product, res);
+    return responses.ok(res, product);
   });
 };
 
@@ -232,7 +235,7 @@ const deleteProductCompositionOption = function deleteProductCompositionOption(r
     },
   }, {}, (err, result) => {
     if (err) return next(err);
-    return res.ok(result);
+    return responses.ok(res, result);
   });
 };
 

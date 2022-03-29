@@ -1,5 +1,5 @@
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'testing';
 const request = require("supertest");
 
 const expect = require("chai").expect;

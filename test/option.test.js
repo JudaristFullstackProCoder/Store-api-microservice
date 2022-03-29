@@ -1,7 +1,9 @@
 //During the test the env variable is set to test
-process.env.NODE_ENV = 'test';
+process.env.NODE_ENV = 'testing';
 const request = require('supertest');
+const mongoose = require('mongoose');
 const mongooseConnect = require('../db/mongoConnect');
+const mongooseDisconnect = require('../db/mongoDisconnect');
 require('dotenv').config({path: require('path').resolve('.env.test.local')});
 // MODELS
 const Option = require('../models/options').model;
@@ -11,9 +13,11 @@ const expect = require('chai').expect;
 let app = require('../server/app');
 
 before(async () => {
-  await mongooseConnect(process.env.TESTMONGODBURI);
+  await mongooseConnect(mongoose);
 });
-
+after(async () => {
+  await mongooseDisconnect();
+});
 // Create option
 describe('POST /api/v1/option', () => {
 it('should return status 201 when we create an option', async () => {
@@ -37,7 +41,7 @@ describe('POST /api/v1/option', () => {
           });
           const data = res.body;
           expect(res.status).to.equal(500);
-          expect(data).to.have.property('data');
+          expect(data).to.have.property('message');
           expect(data).to.have.property('error', true);
      });
 });
