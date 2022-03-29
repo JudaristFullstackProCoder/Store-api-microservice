@@ -1,3 +1,5 @@
+// const Console = require('../libs/logger');
+
 module.exports = {
 
   invalidCredentials(res) {
@@ -39,16 +41,6 @@ module.exports = {
     return res.status(204).json({
       success: true,
       data: 'Ok',
-    });
-  },
-
-  error(res, err = false, message = 'An Error occured. Please try again latter') {
-    if (err) {
-      console.log(err.message);
-    }
-    return res.status(500).json({
-      error: true,
-      data: message,
     });
   },
 
