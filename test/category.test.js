@@ -11,6 +11,7 @@ const ChildCategory = require('../models/category').ChildCategoryModel;
 const Option = require('../models/options').model;
 
 const expect = require("chai").expect;
+const logger = require('../libs/logger');
 //Require the dev-dependencies
 let app = require('../server/app');
 
@@ -143,6 +144,7 @@ describe('PUT /api/v1/category/child/id/option', () => {
     new Option({
       name: 'Test option',
     }).save((err, doc) => {
+      logger.debug(doc);
       if (err) console.log(err);
     });
     let childCategory = await ChildCategory.findOne({name: 'Child Category test (updated)'}).exec();
