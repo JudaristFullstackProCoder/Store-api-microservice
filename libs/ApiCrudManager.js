@@ -6,24 +6,24 @@ class ApiCrudManager {
      * @param {Object} ctx {req : {express.Request},
      * res : {express.Response}, next : {express.NextFunction}}
      * @param {mongoose.Model} model
-     * @param {Array} requiredFields
+     * @param {Object} options
      */
-  async create(ctx, Model, requiredFields = []) {
+  async create(ctx, Model, options = {}) {
     this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
-    // required field
-    for (let i = 0; i < requiredFields.length; i += 1) {
-      if (!ctx.req.body[requiredFields[i]]) {
-        return ctx.next(new Error(`${requiredFields[i]} is required`));
-      }
-    }
-
     let obj = new Model(ctx.req.body);
     try {
+      if (Object.prototype.toString.call(options.beforeCreate || null) === '[object Function]') {
+        // Then the argument is a valid function
+        options.beforeCreate();
+      }
       obj = await obj.save();
     } catch (err) {
       return ctx.next(err);
     }
-
+    if (Object.prototype.toString.call(options.afterCreate || null) === '[object Function]') {
+      // Then the argument is a valid function
+      options.afterCreate();
+    }
     return responses.created(ctx.res, obj);
   }
 
@@ -75,13 +75,17 @@ class ApiCrudManager {
      *  res : {express.Response}, next : {express.NextFunction}}
      * @param {mongoose.Model} model
      * @params {Object} options {
+     * beforeDelete: function :any
      *  afterDelete : function : any
      * }
      */
-  async delete(ctx, model, options) {
+  async delete(ctx, model, options = {}) {
     this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let deleted = null;
-
+    if (Object.prototype.toString.call(options.beforeDelete || null) === '[object Function]') {
+      // Then the argument is a valid function
+      options.beforeDelete();
+    }
     try {
       deleted = await model.findOneAndDelete({
         _id: new mongoose.Types.ObjectId(ctx.req.params.id),
