@@ -46,11 +46,66 @@ describe('POST /api/v1/promocode', () => {
      });
 });
 
+// Update promocode
+
+describe('UPDATE /api/v1/promocode/id', () => {
+  it('should return status 200 when we update a promocode', async() => {
+    let promocode = await Promocde.findOne({
+      name: 'promo785s',
+    }).exec();
+    const promocodeUpdate = {
+      name: 'promo22',
+      discount: 70,
+      remaininguse: 55,
+      to: (new Date('2050/12/25')).getTime(),
+      from: (new Date()).getTime(),
+      maxuse: 300,
+    };
+    const response = await request(app)
+    .patch(`/api/v1/promocode/${promocode._id}`).send({
+      ...promocodeUpdate
+    });
+    const data = response.body;
+    expect(response.status).to.equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.have.property('_id', promocode._id.toString());
+    expect(data.data).to.have.property('maxuse', promocodeUpdate.maxuse);
+    expect(data.data).to.have.property('to', promocodeUpdate.to);
+    expect(data.data).to.have.property('from', promocodeUpdate.from);
+    expect(data.data).to.have.property('discount', promocodeUpdate.discount);
+    expect(data.data).to.have.property('remaininguse', promocodeUpdate.remaininguse);
+    expect(data.data).to.have.property('name', promocodeUpdate.name);
+  });
+});
+
+// Get promocode
+
+describe('GET /api/v1/promocode/id', () => {
+  it('should return status 200 when we update a promocode', async() => {
+    let promocode = await Promocde.findOne({
+      name: 'promo22',
+    }).exec();
+    const response = await request(app).get(`/api/v1/promocode/${promocode._id}`);
+    const data = response.body;
+    expect(response.status).to.equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.have.property('_id', promocode._id.toString());
+    expect(data.data).to.have.property('maxuse', promocode.maxuse);
+    expect(data.data).to.have.property('to', promocode.to);
+    expect(data.data).to.have.property('from', promocode.from);
+    expect(data.data).to.have.property('discount', promocode.discount);
+    expect(data.data).to.have.property('remaininguse', promocode.remaininguse);
+    expect(data.data).to.have.property('name', promocode.name);
+  });
+});
+
 // Delete promocode
 
 describe('DELETE /api/v1/promocode/id', () => {
   it('should return status 200 when we delete a promocode', async () => {
-    let promocodeName = 'promo785s';
+    let promocodeName = 'promo22';
     let promocode =  await Promocde.findOne({
       name: promocodeName,
     }).exec();
