@@ -21,6 +21,7 @@ const storeSchema = new Schema({
     trim: true,
     minlength: 4,
     maxlength: 22,
+    unique: true,
   },
   // the owner of the store
   shopkeeper: {

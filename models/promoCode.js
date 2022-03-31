@@ -9,6 +9,7 @@ const promoCodeSchema = new Schema({
   name: {
     type: Schema.Types.String,
     required: true,
+    unique: true,
   },
   discount: {
     type: Schema.Types.Number,

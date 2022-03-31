@@ -18,6 +18,7 @@ const childCategorySchema = new Schema({
     trim: true,
     minLength: 3,
     maxLength: 30,
+    unique: true,
   },
   abbr: {
     type: Schema.Types.String,
@@ -40,6 +41,7 @@ const categorySchema = new Schema({
     type: Schema.Types.String,
     required: [true, "category's name is required"],
     trim: true,
+    unique: true,
   },
 });
 

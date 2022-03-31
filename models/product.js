@@ -14,7 +14,6 @@ const productOptionsSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: [true, "option's id is required !"],
     ref: 'options',
-    unique: true,
   },
   // the value of the option
   value: {

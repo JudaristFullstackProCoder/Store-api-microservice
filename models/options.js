@@ -15,6 +15,7 @@ const optionSchema = new Schema({
     trim: true,
     minlength: 4,
     maxlength: 30,
+    unique: true,
   },
 });
 
