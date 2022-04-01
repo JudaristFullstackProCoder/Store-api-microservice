@@ -8,7 +8,6 @@ const Console = require('../libs/logger');
 // start the server if the database connection succed
 // For Master process
 if (cluster.isMaster) {
-  process.stdout.write('\x1B[2J'); // clear the console
   Console.debug('The Server is starting ...');
   Console.warn(`Master Process ${process.pid} is running`);
   const numCPUs = length;
