@@ -79,8 +79,8 @@ describe('POST /api/v1/product', () => {
   });
 });
 
-// Create Product
-describe('DELETE /api/v1/product', () => {
+// Delete Product
+describe('DELETE /api/v1/product/id', () => {
   it('should return status 200 when we delete a product', async () => {
       
     const product = await Product.findOne({
