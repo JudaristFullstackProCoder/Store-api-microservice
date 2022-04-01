@@ -13,23 +13,14 @@ const options = {
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 10000,
   autoIndex: false, // Don't build indexes
-  maxPoolSize: 50, // Maintain up to 50 socket connections
+  maxPoolSize: 100, // Maintain up to 50 socket connections
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
   family: 4, // Use IPv4, skip trying IPv6
 };
 
 module.exports = function mongooseConnect(mongoose) {
-  // const nodeenv = process.env.NODE_ENV;
   const pe = process.env;
-  // const obj = {
-  //   production: pe.MONGODBURI,
-  //   testing: pe.TESTMONGODBURI,
-  //   docker: pe.MONGODB_DOCKER_URI,
-  //   docker_dev: pe.MONGODB_DOCKER_DEV_URI,
-  //   development: pe.DEVMONGODBURI,
-  // };
-
-  mongoose.connect(pe.TESTMONGODBURI, options)
+  mongoose.connect(pe.MONGODBURI, options)
     .then((mongo) => mongo)
     .catch((err) => Console.error(err));
 };
