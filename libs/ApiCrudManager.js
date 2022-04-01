@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+const mongooseConnection = require('../db/mongoConnect');
 const responses = require('../middlewares/responses');
 
+mongooseConnection(mongoose);
 class ApiCrudManager {
   /**
      * @param {Object} ctx {req : {express.Request},
