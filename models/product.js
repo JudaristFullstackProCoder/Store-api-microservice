@@ -12,13 +12,13 @@ const productOptionsSchema = new Schema({
   // the id of the option
   option: {
     type: Schema.Types.ObjectId,
-    required: [true, "option's id is required !"],
+    required: [false, "option's id is required !"],
     ref: 'options',
   },
   // the value of the option
   value: {
     type: Schema.Types.Mixed,
-    required: [true, "option's value is required !"],
+    required: [false, "option's value is required !"],
   },
 });
 
@@ -57,26 +57,30 @@ const productSchema = new Schema({
     trim: true,
   },
   // product's options
-  options: [productOptionsSchema],
+  options: {
+    type: [productOptionsSchema],
+    required: false,
+  },
   category: {
     type: Schema.Types.ObjectId,
     ref: 'category',
-    required: [true, 'product category is required !'],
+    required: true,
   },
   // if the product has been published already,
   online: {
     type: Schema.Types.Boolean,
-    required: [true, 'product is online ? required !'],
+    required: true,
   },
   // the user who created this product
   shopkeeper: {
     type: Schema.Types.ObjectId,
-    required: [true, 'product shopkeeper is required !'],
+    required: true,
   },
   // the is of the store where this product is stored
   store: {
     type: Schema.Types.ObjectId,
-    required: [true, 'product shop is required !'],
+    required: true,
+    ref: 'store',
   },
   // product's additionals images
   images: {
@@ -95,6 +99,7 @@ const productSchema = new Schema({
   compositions: {
     type: Schema.Types.ObjectId,
     required: false,
+    ref: 'productcompositions',
   },
 });
 
