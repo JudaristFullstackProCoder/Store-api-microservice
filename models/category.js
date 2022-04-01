@@ -45,6 +45,21 @@ const categorySchema = new Schema({
   },
 });
 
+// Create index
+childCategorySchema.index({
+  name: 1,
+  countryOfOrigin: 1,
+}, {
+  unique: true,
+});
+
+categorySchema.index({
+  name: 1,
+  countryOfOrigin: 1,
+}, {
+  unique: true,
+});
+
 // Exports
 module.exports = {
   schema: categorySchema,

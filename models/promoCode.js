@@ -36,4 +36,12 @@ const promoCodeSchema = new Schema({
   bufferCommands: true,
 });
 
+// Create index
+promoCodeSchema.index({
+  name: 1,
+  countryOfOrigin: 1,
+}, {
+  unique: true,
+});
+
 module.exports = mongoose.model('promocodes', promoCodeSchema);

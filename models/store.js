@@ -20,8 +20,7 @@ const storeSchema = new Schema({
     required: [true, 'store name is required'],
     trim: true,
     minlength: 4,
-    maxlength: 22,
-    unique: true,
+    maxlength: 30,
   },
   // the owner of the store
   shopkeeper: {

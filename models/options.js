@@ -19,6 +19,14 @@ const optionSchema = new Schema({
   },
 });
 
+// Create index
+optionSchema.index({
+  name: 1,
+  countryOfOrigin: 1,
+}, {
+  unique: true,
+});
+
 module.exports = {
   model: mongoose.model('options', optionSchema),
   schema: optionSchema,
