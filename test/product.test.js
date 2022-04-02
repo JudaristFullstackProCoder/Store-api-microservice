@@ -20,6 +20,9 @@ before( () => {
 });
 after(async () => {
   await mongooseDisconnect();
+  // delete entities created for testing purposes
+  await Category.deleteMany({}).exec();
+  await Store.deleteMany({}).exec();
 });
 
 // Create Product
@@ -55,10 +58,6 @@ describe('POST /api/v1/product', () => {
           image: {},
           pre_video: {},
        }
-      // delete entities crated for testi
-      await Category.deleteMany({}).exec();
-      await Store.deleteMany({}).exec();
-
        const res = await request(app).post('/api/v1/product').send({
         ...product
        });
@@ -79,10 +78,48 @@ describe('POST /api/v1/product', () => {
   });
 });
 
+// Get Product
+describe('GET /api/v1/product/id', () => {
+  it('should return status 200 when we retrieve a product', async () => {
+      
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+    // get category of the product
+    const category = await Category.findOne({
+      _id: product.category.toString(),
+    }).exec();
+
+    const res = await request(app).get(`/api/v1/product/${product._id}`);
+    const data = res.body;
+    expect(res.status).to.equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.have.property('_id');
+    expect(data.data).to.have.property('images');
+    // expect(data.data).to.have.property('image');
+    expect(data.data).to.have.property('name', product.name);
+    expect(data.data).to.have.property('online', product.online);
+    expect(data.data).to.have.property('price', product.price);
+    expect(data.data).to.have.property('description', product.description);
+    // when we retreieve a product, the controller use the populate method of mongoose to fetch date from other table
+    // represented in the entites by the id
+    // eg: category is represented in product by _id, when we fetch product we alse fetch category informations from
+    // category table and replace _id by this information to hava a full product description
+    expect(data.data.category).to.have.property('_id', product.category._id.toString());
+    expect(data.data.category).to.have.property('_id', category._id.toString());
+    expect(data.data.category).to.have.property('name', category.name);
+
+    expect(data.data).to.have.property('shopkeeper', product.shopkeeper.toString());
+    expect(data.data).to.have.property('store', product.store.toString());
+  });
+});
+
+
 // Delete Product
 describe('DELETE /api/v1/product/id', () => {
   it('should return status 200 when we delete a product', async () => {
-      
+    
     const product = await Product.findOne({
       name: 'product-name',
     }).exec();
