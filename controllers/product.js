@@ -1,3 +1,5 @@
+/* eslint consistent-return: "off" */
+
 const mongoose = require('mongoose');
 const mongooseConnection = require('../db/mongoConnect');
 
@@ -23,10 +25,10 @@ const getProduct = async function getProd(req, res, next) {
       .populate('options.option', 'name')
       .populate('category', 'name')
       .exec();
+    return responses.ok(res, product);
   } catch (err) {
     return next(err);
   }
-  return responses.ok(res, product);
 };
 
 const updateProduct = async function upProd(req, res, next) {
@@ -44,63 +46,77 @@ const getAllProductWithPagination = function getAllProdWithPage() {
 };
 
 const addProductOption = async function addProdOption(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
-  }, {
-    $push: { options: { option: req.body.option, value: req.body.value } },
-  }, { new: true }, (err, product) => {
-    if (err) return next(err);
-    return responses.ok(res, product);
-  });
-  return next(new Error());
+  try {
+    Product.updateOne({
+      _id: req.params.id,
+    }, {
+      $push: { options: { option: req.body.option, value: req.body.value } },
+    }, { new: true }, (err, product) => {
+      if (err) return next(err);
+      return responses.ok(res, product);
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 const updateProductOption = async function updateProductOption(req, res, next) {
-  const { id } = req.params;
-  const { optionId } = req.params;
-  Product.findOneAndUpdate({
-    _id: id,
-    'product.options.option': optionId,
-  }, {
-    value: req.body.value,
-  }, { new: true }, (err, data) => {
-    if (err) {
-      return next(err);
-    }
-    return res.json({
-      success: true,
-      data,
+  try {
+    const { id } = req.params;
+    const { optionId } = req.params;
+    Product.findOneAndUpdate({
+      _id: id,
+      'product.options.option': optionId,
+    }, {
+      value: req.body.value,
+    }, { new: true }, (err, data) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({
+        success: true,
+        data,
+      });
     });
-  });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 const getProductOption = async function getProductOption(req, res, next) {
-  const { id } = req.params;
-  const { optionId } = req.params;
-  Product.findOne({
-    _id: id,
-    'product.options.option': optionId,
-  }, { _id: 1, 'product.options.option': 1, 'product.options.value': 1 }, {}, (err, data) => {
-    if (err) {
-      return next(err);
-    }
-    return res.json({
-      success: true,
-      data,
+  try {
+    const { id } = req.params;
+    const { optionId } = req.params;
+    Product.findOne({
+      _id: id,
+      'product.options.option': optionId,
+    }, { _id: 1, 'product.options.option': 1, 'product.options.value': 1 }, {}, (err, data) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({
+        success: true,
+        data,
+      });
     });
-  });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 const deleteProductOption = async function deleteProductOption(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
-  }, {
-    $pull: { options: { option: req.body.option } },
-  }, {}, (err, result) => {
-    if (err) return next(err);
-    return responses.ok(res, result);
-  });
-  return false;
+  try {
+    Product.updateOne({
+      _id: req.params.id,
+    }, {
+      $pull: { options: { option: req.body.option } },
+    }, {}, (err, result) => {
+      if (err) return next(err);
+      return responses.ok(res, result);
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 /**
@@ -123,7 +139,6 @@ const addProductImage = async function addProdImage(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return false;
 };
 
 const addProductAdditionalsImages = async function addProdAdditionalsImages(req, res, next) {
@@ -139,7 +154,6 @@ const addProductAdditionalsImages = async function addProdAdditionalsImages(req,
   } catch (err) {
     return next(err);
   }
-  return false;
 };
 
 const addProductVideo = function addProdVideo(req, res, next) {
@@ -157,31 +171,34 @@ const addProductVideo = function addProdVideo(req, res, next) {
   } catch (err) {
     return next(err);
   }
-  return false;
 };
 
 /**
  * Add a composition to a product
  */
 const addProductComposition = function addProductComposition(req, res, next) {
-  const productComposition = new ProductComposition({
-    image: req.body.image,
-    price: req.body.price,
-    options: {
-      option: req.body.option,
-      value: req.body.value,
-    },
-    product: req.params.id,
-  });
-  productComposition.save((err, data) => {
-    if (err) {
-      return next(err);
-    }
-    return res.json({
-      success: true,
-      data,
+  try {
+    const productComposition = new ProductComposition({
+      image: req.body.image,
+      price: req.body.price,
+      options: {
+        option: req.body.option,
+        value: req.body.value,
+      },
+      product: req.params.id,
     });
-  });
+    productComposition.save((err, data) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({
+        success: true,
+        data,
+      });
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 /**
@@ -202,21 +219,25 @@ const deleteProductComposition = function deleteProductComposition(req, res, nex
  *  Add an option inside a composition of a product
  */
 const addProductCompositionOption = function addProductCompositionOption(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
-  }, {
-    $push: {
-      compositions: {
-        options: {
-          option: req.body.option,
-          value: req.body.value,
+  try {
+    Product.updateOne({
+      _id: req.params.id,
+    }, {
+      $push: {
+        compositions: {
+          options: {
+            option: req.body.option,
+            value: req.body.value,
+          },
         },
       },
-    },
-  }, { new: true }, (err, product) => {
-    if (err) return next(err);
-    return responses.ok(res, product);
-  });
+    }, { new: true }, (err, product) => {
+      if (err) return next(err);
+      return responses.ok(res, product);
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 
 /**
