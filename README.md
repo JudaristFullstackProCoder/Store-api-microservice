@@ -25,60 +25,6 @@ For product search to be possible, products must be stored in mongodb and Elasti
 NB: Products stored in Elasticsearch will first be populated using mongoose's `populated` method.
 NB: The products in Mongodb will therefore be updated, each time those are modified in mongodb.
 
-## store properties
-
-The api manage crud of store, each store have his properties (id, name, settings, shopkeeper) and settings
-
-* name : string
-* settings : object
-* shopkeeper : id (The store user owner)
-
-## prouduct properties
-
-The api manage crud of products, each product have (name, price, description, options, category, online, shopkeeper, store, images, pre_video, compositions)
-
-* name: string
-* price : int
-* description : string
-* options : object
-* category : id
-* online : bool
-* shopkeeper (author) : id
-* store : id
-* image: object
-* images : array of object
-* pre_video: object
-* compositions: array of object
-
-## category and child category properties
-
-This api manage crud of category and child category
-
-* category
-
-    1. name : string
-
-* child category
-
-    1. name : string
-    2. category : id
-    3. category : id of the parent category
-
-## promocode properties
-
-The api manage promo code crud
-
-* name : string
-* discount : int
-* to  : int
-* from : int
-* remaininguse : int (remaining use)
-* maxuse : int (max nomber of use)
-
-## option properties
-
-* name
-
 ### Product options
 
 Product option allow us to add some additionals informations to a product depending on their category.
@@ -174,25 +120,6 @@ Its the video that present the product (facultative).
 * docker-compose -f docker-compose.yml -f docker-compose.dev.yml -d up (development env)
 * docker-compose -f docker-compose.yml -f docker-compose.dev.prod -d up (production env)
 * docker-compose down
-
-## Design document
-
-### Differents entities
-
-- Product
-- Category
-- Child category
-- Promocode
-- Option
-- Store
-
-### UML
-
-#### CLASS DIAGRAM
-
-#### USE CASE DIAGRAM
-
-#### SEQUENCE DIAGRAM
 
 ## Local development
 
