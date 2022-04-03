@@ -5,10 +5,8 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const swaggerUi = require('swagger-ui-express');
+const cors = require('cors');
 const morgan = require('morgan');
-
-const swaggerDocument = require('../swagger.json');
 
 const app = express();
 
@@ -25,7 +23,7 @@ const uploadRoutes = require('../routes/upload');
 
 // Middleware
 app.use(express.json());
-app.get('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
