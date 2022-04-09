@@ -4,6 +4,8 @@
 
 The goal of this project is to create an api is to manage entities : store, product, category, child catehory, option, promo code.
 
+## The front end of this version is hosted [here](https://store-api-front.vercel.app/)
+
 ## Tools and sofwares
 
 1. [Visual studio code](https://code.visualstudio.com/)
