@@ -6,21 +6,12 @@ const responses = require('../middlewares/responses');
 mongooseConnect(mongoose);
 
 const createOption = async function createOpt(req, res, next) {
-  // required fields
-  const requiredFields = ['name'];
-  if (!req.body[requiredFields[0]]) {
-    return next(res, false, `${requiredFields[0]} is required`);
-  }
   // One name per Option
   const named = await Option.findOne({
     name: req.body.name,
-  }, 'name').exec();
+  }).exec();
 
-  /**
-     * @var {Array} email
-     * @conditon Then email address already used
-     */
-  if (named) {
+  if (named !== null) {
     return next(new Error('this name is already assigned to an option'));
   }
 
