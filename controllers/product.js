@@ -50,7 +50,7 @@ const addProductOption = async function addProdOption(req, res, next) {
     // Dont allow same option id
     const pr = await Product.findOne({
       _id: req.params.id,
-      'options.option': '624f55bc229d2cc31798bb5f',
+      'options.option': req.body.option,
     }).exec();
     if (pr) {
       return next(new Error(`option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint 
