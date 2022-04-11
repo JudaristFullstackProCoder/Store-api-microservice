@@ -1,35 +1,37 @@
 const mongoose = require('mongoose');
 
-const { Schema } = mongoose;
+const mongooseConnect = require('../db/mongoConnect');
+
+mongooseConnect(mongoose);
 
 /**
  * Promocodes mongoose model
  */
-const promoCodeSchema = new Schema({
+const promoCodeSchema = new mongoose.Schema({
   name: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: true,
     unique: true,
   },
   discount: {
-    type: Schema.Types.Number,
+    type: mongoose.Schema.Types.Number,
     required: true,
   },
   from: {
-    type: Schema.Types.Number, // timestamp GMT
+    type: mongoose.Schema.Types.Number, // timestamp GMT
     required: true,
     default: Date.now(),
   },
   to: {
-    type: Schema.Types.Number, // timestamp GMT
+    type: mongoose.Schema.Types.Number, // timestamp GMT
     required: true,
   },
   maxuse: {
-    type: Schema.Types.Number,
+    type: mongoose.Schema.Types.Number,
     required: true,
   },
   remaininguse: {
-    type: Schema.Types.Number,
+    type: mongoose.Schema.Types.Number,
     required: true,
   },
 }, {

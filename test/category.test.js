@@ -44,7 +44,6 @@ describe("POST /api/v1/category", () => {
         name: 'Category of test'
       });
     const data = res.body;
-    console.log(data);
     expect(res.status).to.equal(500);
     expect(data).to.have.property('error');
     expect(data).to.have.property('error', true);

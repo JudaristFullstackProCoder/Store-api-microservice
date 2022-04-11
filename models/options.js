@@ -6,11 +6,13 @@
  * will take the options of their category
  */
 const mongoose = require('mongoose');
-const { Schema } = require('mongoose');
+const connectMongoose = require('../db/mongoConnect');
 
-const optionSchema = new Schema({
+connectMongoose(mongoose);
+
+const optionSchema = new mongoose.Schema({
   name: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: [true, "the option's name is required"],
     trim: true,
     minlength: 4,

@@ -1,22 +1,24 @@
 const mongoose = require('mongoose');
 
-const { Schema } = mongoose;
+const mongooseConnect = require('../db/mongoConnect');
+
+mongooseConnect(mongoose);
 
 /**
  * @description Describe the structure of all settings of a store.
  * Because all store settings are the same.
  */
-const storeSettingSchema = new Schema({
+const storeSettingSchema = new mongoose.Schema({
 
 });
 
 /**
  * @description Describe the structure of a store.
  */
-const storeSchema = new Schema({
+const storeSchema = new mongoose.Schema({
   // the name if the store
   name: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: [true, 'store name is required'],
     trim: true,
     minlength: 4,
@@ -24,7 +26,7 @@ const storeSchema = new Schema({
   },
   // the owner of the store
   shopkeeper: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     required: [true, 'store shopkeeper id is required !'],
   },
   settings: {

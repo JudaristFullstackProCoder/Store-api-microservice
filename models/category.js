@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
-const { Schema } = require('mongoose');
+
+const connectMongoose = require('../db/mongoConnect');
+
+connectMongoose(mongoose);
 
 /**
  * @description Describe the structure of a child category
  */
-const childCategorySchema = new Schema({
+const childCategorySchema = new mongoose.Schema({
   // the parent category
   parent: {
     type: mongoose.Types.ObjectId,
@@ -13,7 +16,7 @@ const childCategorySchema = new Schema({
   },
   // name of the child category
   name: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: [true, "child category's name is required"],
     trim: true,
     minLength: 3,
@@ -21,12 +24,12 @@ const childCategorySchema = new Schema({
     unique: true,
   },
   abbr: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     default: null,
   },
   // child category's options
   options: {
-    type: [Schema.Types.ObjectId],
+    type: [mongoose.Schema.Types.ObjectId],
     required: [true, "child category's options is required"],
     default: [],
     ref: 'options',
@@ -36,28 +39,13 @@ const childCategorySchema = new Schema({
 /**
  * @description Describe the strucuture of a parent category
  */
-const categorySchema = new Schema({
+const categorySchema = new mongoose.Schema({
   name: {
-    type: Schema.Types.String,
+    type: mongoose.Schema.Types.String,
     required: [true, "category's name is required"],
     trim: true,
     unique: true,
   },
-});
-
-// Create index
-childCategorySchema.index({
-  name: 1,
-  countryOfOrigin: 1,
-}, {
-  unique: true,
-});
-
-categorySchema.index({
-  name: 1,
-  countryOfOrigin: 1,
-}, {
-  unique: true,
 });
 
 // Exports

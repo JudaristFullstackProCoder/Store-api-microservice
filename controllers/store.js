@@ -18,7 +18,7 @@ const createStore = async function createStore(req, res, next) {
        * @var {Array} email
        * @conditon Then email address already used
        */
-    if (named != null) {
+    if (named !== null) {
       return next(new Error('this name is already assigned to a shop'));
     }
 
