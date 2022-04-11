@@ -47,13 +47,28 @@ const getAllProductWithPagination = function getAllProdWithPage() {
 
 const addProductOption = async function addProdOption(req, res, next) {
   try {
+    // Dont allow same option id
+    const pr = await Product.findOne({
+      _id: req.params.id,
+      'options.option': '624f55bc229d2cc31798bb5f',
+    }).exec();
+    if (pr) {
+      return next(new Error(`option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint 
+      PATCH /api/v1/product/[product id]/option/[option id] instead `));
+    }
+    // update the product
     Product.updateOne({
       _id: req.params.id,
     }, {
       $push: { options: { option: req.body.option, value: req.body.value } },
-    }, { new: true }, (err, product) => {
+    }, { new: true }, async (err) => {
       if (err) return next(err);
-      return responses.ok(res, product);
+      const returned = await Product.findOne({
+        _id: req.params.id,
+      }).populate('options.option', 'name')
+        .populate('category', 'name')
+        .exec();
+      return responses.ok(res, returned);
     });
   } catch (err) {
     return next(err);
