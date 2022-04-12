@@ -8,7 +8,7 @@ router.route('/:id').get(productController.getProduct)
 
 router.route('/:id/option')
   .post(productController.addProductOption);
-router.route('/:id/option/:option_id').delete(productController.deleteProductOption)
+router.route('/:id/option/:optionId').delete(productController.deleteProductOption)
   .patch(productController.updateProductOption).get(productController.getProductOption);
 
 module.exports = router;
