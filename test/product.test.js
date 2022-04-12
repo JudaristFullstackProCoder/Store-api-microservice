@@ -3,27 +3,20 @@ process.env.NODE_ENV = 'testing';
 const mongoose = require('mongoose');
 const request = require("supertest");
 const mongooseConnect = require('../db/mongoConnect');
-const mongooseDisconnect = require('../db/mongoDisconnect');
 require('dotenv').config({path: require('path').resolve('.env.test.local')});
 // MODELS
 const Product = require('../models/product').model;
 const Category = require('../models/category').model;
 const Store = require('../models/store').model;
+const Option = require('../models/options').model;
 
 const expect = require("chai").expect;
 const logger = require('../libs/logger');
 //Require the dev-dependencies
 let app = require('../server/app');
+// connect this mongoose instence
+mongooseConnect(mongoose);
 
-before( () => {
-  mongooseConnect(mongoose);
-});
-after(async () => {
-  await mongooseDisconnect();
-  // delete entities created for testing purposes
-  await Category.deleteMany({}).exec();
-  await Store.deleteMany({}).exec();
-});
 
 // Create Product
 describe('POST /api/v1/product', () => {
@@ -62,6 +55,7 @@ describe('POST /api/v1/product', () => {
         ...product
        });
        const data = res.body;
+       console.log(data);
        expect(res.status).to.equal(201);
        expect(data).to.have.property('data');
        expect(data).to.have.property('success', true);
@@ -77,6 +71,137 @@ describe('POST /api/v1/product', () => {
        expect(data.data).to.have.property('store', product.store);
   });
 });
+
+// Add option to a product
+
+describe('POST /api/v1/product/id/option', () => {
+  it('Should return the good status when we add an option o a product', async () => {
+    const product = await Product.findOne({
+      name: "product-name",
+    }).exec();
+    // create an option for test
+    let option = await new Option({
+      name: 'op-test-product',
+    }).save();
+    option = await Option.findOne({
+      name: "op-test-product"
+    }).exec();
+    const response = await request(app).post(`/api/v1/product/${product._id}/option`).send({
+      option: option._id.toString(),
+      value: "exemple value",
+    });
+    const data = response.body;
+    expect(response.statusCode).equal(200);
+    // response should have both error and data property
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.have.property('_id');
+    expect(data.data).to.have.property('name');
+    expect(data.data).to.have.property('price');
+    expect(data.data).to.have.property('description');
+    expect(data.data).to.have.property('options');
+    // check sub options into product
+    expect(data.data.options[0]).to.have.property('_id');
+    // check if the first sub option matches the criteria
+    expect(data.data.options[1]).to.have.property('option');
+    expect(data.data.options[1]).to.have.property('_id');
+    expect(data.data.options[1]).to.have.property('value');
+    // end verification of the first sub options
+    expect(data.data).to.have.property('category');
+    expect(data.data).to.have.property('online');
+    expect(data.data).to.have.property('shopkeeper');
+    expect(data.data).to.have.property('store');
+    expect(data.data).to.have.property('images');
+  });
+})
+
+// Add option that already exist to a product
+
+describe('POST /api/v1/product/id/option', () => {
+  it('Should return the 500 status when we add an option that already exist in product', async () => {
+    const product = await Product.findOne({
+      name: "product-name",
+    }).exec();
+
+    let option = await Option.findOne({
+      name: "op-test-product"
+    }).exec();
+
+    const response = await request(app).post(`/api/v1/product/${product._id}/option`).send({
+      option: option._id.toString(),
+      value: "exemple value",
+    });
+
+    const data = response.body;
+    // response should have both error and data property
+    expect(data).to.have.property('error', true);
+    expect(data).to.have.property('data');
+    // check ig the status is 500
+    expect(response.statusCode).equal(500);
+  });
+})
+
+// Update product option
+
+describe('PATCH /api/v1/product/id/option/option_id', () => {
+  it('should return the good response when we update a product option', async () => {
+    const product = await Product.findOne({
+      name: "product-name",
+    }).exec();
+
+    let option = await Option.findOne({
+      name: "op-test-product"
+    }).exec();
+
+    const response = await request(app).patch(`/api/v1/product/${product._id}/option/${option._id.toString()}`).send({
+      value: "change the value of the option",
+    });
+
+    const data = response.body;
+    console.log(data);
+    // response should have both error and data property
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.have.property('_id');
+    expect(data.data).to.have.property('name');
+    expect(data.data).to.have.property('price');
+    expect(data.data).to.have.property('description');
+    expect(data.data).to.have.property('options');
+    expect(data.data).to.have.property('category');
+    expect(data.data).to.have.property('online');
+    expect(data.data).to.have.property('shopkeeper');
+    expect(data.data).to.have.property('store');
+    expect(data.data).to.have.property('images');
+    // sub obtions
+    expect(data.data).to.have.property('options');
+    expect(data.data.options[0]).to.have.property('_id');
+    expect(data.data.options[1]).to.have.property('option');
+      // sub option is populated by mongoose
+    expect(data.data.options[1]).to.have.property('option');
+    expect(data.data.options[1].option).to.have.property('_id');
+    expect(data.data.options[1].option).to.have.property('name');
+    // sub options
+    // check ig the status is 200
+    expect(response.statusCode).equal(200);
+  });
+});
+
+// Delete product option
+describe('DELETE /api/v1/product/:id/option/:optionId', () => {
+  it('Should return the good response when we delete a product option', async () => {
+    let option = await Option.findOne({
+      name: "op-test-product"
+    }).exec();
+    // retrieve the product from the database to get the id
+    const product = await Product.findOne({
+      name: "product-name",
+    }).exec();
+
+    const response = await request(app).delete(`/api/v1/product/${product._id}/${option._id}`);
+    const data = response.body;
+    expect(response.statusCode).equal(200);
+  });
+})
 
 // Get Product
 describe('GET /api/v1/product/id', () => {
@@ -109,7 +234,14 @@ describe('GET /api/v1/product/id', () => {
     expect(data.data.category).to.have.property('_id', product.category._id.toString());
     expect(data.data.category).to.have.property('_id', category._id.toString());
     expect(data.data.category).to.have.property('name', category.name);
-
+    // product options
+    expect(data.data).to.have.property('options');
+    expect(data.data.options[0]).to.have.property('_id');
+      // sub option is populated by mongoose
+    expect(data.data.options[0]).to.have.property('option');
+    expect(data.data.options[1].option).to.have.property('_id');
+    expect(data.data.options[1].option).to.have.property('name');
+    // product options
     expect(data.data).to.have.property('shopkeeper', product.shopkeeper.toString());
     expect(data.data).to.have.property('store', product.store.toString());
   });
@@ -123,8 +255,12 @@ describe('DELETE /api/v1/product/id', () => {
     const product = await Product.findOne({
       name: 'product-name',
     }).exec();
-
     const res = await request(app).delete(`/api/v1/product/${product._id}`);
+    // clean the database
+    await Category.deleteMany({});
+    await Option.deleteMany({});
+    await Store.deleteMany({});
+
     const data = res.body;
     expect(res.status).to.equal(200);
     expect(data).to.have.property('data');
