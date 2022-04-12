@@ -9,6 +9,7 @@ const responses = require('../middlewares/responses');
 const Product = require('../models/product').model;
 const { ProductComposition } = require('../models/product');
 const CM = require('../libs/ApiCrudManager');
+const category = require('../models/category').model;
 
 const crudManager = new CM();
 
@@ -22,8 +23,8 @@ const getProduct = async function getProd(req, res, next) {
     product = await Product.findOne({
       _id: req.params.id,
     })
-      .populate('options.option', 'name')
-      .populate('category', 'name')
+      .populate('options.option')
+      .populate('category', 'name', category)
       .exec();
     return responses.ok(res, product);
   } catch (err) {
@@ -81,10 +82,14 @@ const updateProductOption = async function updateProductOption(req, res, next) {
     const { optionId } = req.params;
     Product.findOneAndUpdate({
       _id: id,
-      'product.options.option': optionId,
+      'options.option': optionId,
     }, {
-      value: req.body.value,
-    }, { new: true }, (err, data) => {
+      $set: {
+        'options.$.value': req.body.value,
+      },
+    }, {
+      new: true,
+    }, (err, data) => {
       if (err) {
         return next(err);
       }
@@ -104,7 +109,7 @@ const getProductOption = async function getProductOption(req, res, next) {
     const { optionId } = req.params;
     Product.findOne({
       _id: id,
-      'product.options.option': optionId,
+      'products.options.option': optionId,
     }, { _id: 1, 'product.options.option': 1, 'product.options.value': 1 }, {}, (err, data) => {
       if (err) {
         return next(err);
