@@ -130,7 +130,7 @@ const deleteProductOption = async function deleteProductOption(req, res, next) {
       _id: req.params.id,
     }, {
       $pull: { options: { option: req.body.option } },
-    }, {}, (err, result) => {
+    }, { new: true }, (err, result) => {
       if (err) return next(err);
       return responses.ok(res, result);
     });
