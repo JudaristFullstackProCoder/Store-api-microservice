@@ -280,6 +280,14 @@ const deleteProductCompositionOption = function deleteProductCompositionOption(r
   });
 };
 
+const updateProductCompositonOption = function updateProductCompositonOption(req, res, next) {
+  return res.json({});
+};
+
+const updateProductComposition = function updateProductComposition(req, res, next) {
+  return res.json({});
+};
+
 module.exports = {
   createProduct,
   getProduct,
@@ -297,4 +305,6 @@ module.exports = {
   deleteProductComposition,
   addProductCompositionOption,
   deleteProductCompositionOption,
+  updateProductCompositonOption,
+  updateProductComposition,
 };
