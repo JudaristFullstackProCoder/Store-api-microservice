@@ -99,11 +99,11 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     required: false,
   },
-  compositions: {
+  compositions: [{
     type: mongoose.Schema.Types.ObjectId,
     required: false,
     ref: 'productcompositions',
-  },
+  }],
 });
 
 // mongoosastic
