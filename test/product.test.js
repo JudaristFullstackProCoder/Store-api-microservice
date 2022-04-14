@@ -55,7 +55,32 @@ describe('POST /api/v1/product', () => {
         ...product
        });
        const data = response.body;
-       console.log(data);
+       /**
+         data format:
+          {
+            "success": true,
+            "data": {
+              "name": "product-name",
+              "price": 10,
+              "description": "A product",
+              "options": [
+                {
+                  "_id": "62578bb8054b3386968624f6"
+                }
+              ],
+              "category": "62578bb8054b3386968624ef",
+              "online": true,
+              "shopkeeper": "62578bb8054b3386968624ee",
+              "store": "62578bb8054b3386968624f3",
+              "images": [
+                {}
+              ],
+              "compositions": [],
+              "_id": "62578bb8054b3386968624f5",
+              "__v": 0
+            }
+          }
+        */
        expect(response.status).to.equal(201);
        expect(data).to.have.property('data');
        expect(data).to.have.property('success', true);
@@ -91,6 +116,43 @@ describe('POST /api/v1/product/id/option', () => {
       value: "exemple value",
     });
     const data = response.body;
+    /**
+     exemple data value:
+          {
+        "success": true,
+        "data": {
+          "_id": "62578bb8054b3386968624f5",
+          "name": "product-name",
+          "price": 10,
+          "description": "A product",
+          "options": [
+            {
+              "_id": "62578bb8054b3386968624f6"
+            },
+            {
+              "option": {
+                "_id": "62578c04b3dad17a2283c023",
+                "name": "op-test-product"
+              },
+              "value": "exemple value",
+              "_id": "62578c04b3dad17a2283c027"
+            }
+          ],
+          "category": {
+            "_id": "62578bb8054b3386968624ef",
+            "name": "category"
+          },
+          "online": true,
+          "shopkeeper": "62578bb8054b3386968624ee",
+          "store": "62578bb8054b3386968624f3",
+          "images": [
+            {}
+          ],
+          "compositions": [],
+          "__v": 0
+        }
+      }
+     */
     expect(response.statusCode).equal(200);
     // response should have both error and data property
     expect(data).to.have.property('success', true);
@@ -133,6 +195,13 @@ describe('POST /api/v1/product/id/option', () => {
     });
 
     const data = response.body;
+    /**
+     exmple data format;
+     {
+        "error": true,
+        "data": "option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint \n      PATCH /api/v1/product/[product id]/option/[option id] instead "
+      }
+     */
     // response should have both error and data property
     expect(data).to.have.property('error', true);
     expect(data).to.have.property('data');
@@ -195,7 +264,37 @@ describe('PATCH /api/v1/product/id/option/option_id', () => {
     });
 
     const data = response.body;
-    console.log(data);
+    /**
+      exemple data value:
+            {
+        "success": true,
+        "data": {
+          "_id": "62578bb8054b3386968624f5",
+          "name": "product-name",
+          "price": 10,
+          "description": "A product",
+          "options": [
+            {
+              "_id": "62578bb8054b3386968624f6"
+            },
+            {
+              "option": "62578c04b3dad17a2283c023",
+              "value": "change the value of the option",
+              "_id": "62578c04b3dad17a2283c027"
+            }
+          ],
+          "category": "62578bb8054b3386968624ef",
+          "online": true,
+          "shopkeeper": "62578bb8054b3386968624ee",
+          "store": "62578bb8054b3386968624f3",
+          "images": [
+            {}
+          ],
+          "compositions": [],
+          "__v": 0
+        }
+      }
+     */
     // response should have both error and data property
     expect(data).to.have.property('success', true);
     expect(data).to.have.property('data');
@@ -237,6 +336,44 @@ describe('GET /api/v1/product/id', () => {
 
     const response = await request(app).get(`/api/v1/product/${product._id}`);
     const data = response.body;
+    /**
+      exemple data format:
+      {
+        "success": true,
+        "data": {
+          "_id": "62578bb8054b3386968624f5",
+          "name": "product-name",
+          "price": 10,
+          "description": "A product",
+          "options": [
+            {
+              "_id": "62578bb8054b3386968624f6"
+            },
+            {
+              "option": {
+                "_id": "62578c04b3dad17a2283c023",
+                "name": "op-test-product",
+                "__v": 0
+              },
+              "value": "change the value of the option",
+              "_id": "62578c04b3dad17a2283c027"
+            }
+          ],
+          "category": {
+            "_id": "62578bb8054b3386968624ef",
+            "name": "category"
+          },
+          "online": true,
+          "shopkeeper": "62578bb8054b3386968624ee",
+          "store": "62578bb8054b3386968624f3",
+          "images": [
+            {}
+          ],
+          "compositions": [],
+          "__v": 0
+        }
+      }
+     */
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
     expect(data).to.have.property('success', true);
@@ -286,9 +423,22 @@ describe('DELETE /api/v1/product/:id/option/:optionId', () => {
 
     const response = await request(app).delete(`/api/v1/product/${product._id}/option/${option._id}`);
     const data = response.body;
+    /**
+     exemple data format;
+     {
+      "success": true,
+      "data": {
+        "acknowledged": true,
+        "modifiedCount": 1,
+        "upsertedId": null,
+        "upsertedCount": 0,
+        "matchedCount": 1
+      }
+    }
+     */
     expect(response.statusCode).equal(200);
     expect(data).to.have.property('success', true);
-    expect(data).to.have.property(data);
+    expect(data).to.have.property('data');
     expect(data.data).to.have.property(acknowledged, true);
     expect(data.data).to.have.property(modifiedCount, 1);
     expect(data.data).to.have.property(matchedCount, 1);
@@ -311,6 +461,34 @@ describe('DELETE /api/v1/product/id', () => {
     await Store.deleteMany({});
 
     const data = response.body;
+    /**
+     data format exemple:
+     {
+      "success": true,
+      "data": {
+        "_id": "62578bb8054b3386968624f5",
+        "name": "product-name",
+        "price": 10,
+        "description": "A product",
+        "options": [
+          {
+            "option": "62578c04b3dad17a2283c023",
+            "value": "change the value of the option",
+            "_id": "62578c04b3dad17a2283c027"
+          }
+        ],
+        "category": "62578bb8054b3386968624ef",
+        "online": true,
+        "shopkeeper": "62578bb8054b3386968624ee",
+        "store": "62578bb8054b3386968624f3",
+        "images": [
+          {}
+        ],
+        "compositions": [],
+        "__v": 0
+      }
+    }
+     */
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
     expect(data).to.have.property('success', true);
