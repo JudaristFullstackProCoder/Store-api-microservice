@@ -139,10 +139,47 @@ describe('POST /api/v1/product/id/option', () => {
     // check ig the status is 500
     expect(response.statusCode).equal(500);
   });
-})
+});
+
+// Get product option
+
+describe('GET /api/v1/product/:id/option/:optionId', () => {
+  it('Should return good headers after we get a product option', async () => {
+    const product = await Product.findOne({
+      name: "product-name",
+    }).exec();
+
+    let option = await Option.findOne({
+      name: "op-test-product"
+    }).exec();
+    const response = await request(app).get(`/api/v1/product/${product._id}/option/${option._id}`);
+    const data = response.body;
+    /**
+      data format:
+      {
+      "success": true,
+      "data": {
+        "option": {
+          "_id": "62577c81451d7f23ecd169e9",
+          "name": "op-test-product",
+          "__v": 0
+        },
+        "value": "exemple value",
+        "_id": "62577c81451d7f23ecd169ed"
+       }
+      }
+     */
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.have.property('option');
+    expect(data.data.option).to.have.property('_id', option._id.toString());
+    expect(data.data.option).to.have.property('name', option.name);
+    expect(data.data).to.have.property('value');
+  });
+});
 
 // Update product option
-
 describe('PATCH /api/v1/product/id/option/option_id', () => {
   it('should return the good response when we update a product option', async () => {
     const product = await Product.findOne({
@@ -232,6 +269,9 @@ describe('GET /api/v1/product/id', () => {
     expect(data.data).to.have.property('store', product.store.toString());
   });
 });
+
+// Product composition
+
 
 // Delete product option
 describe('DELETE /api/v1/product/:id/option/:optionId', () => {
