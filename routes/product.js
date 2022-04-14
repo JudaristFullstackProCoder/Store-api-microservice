@@ -11,14 +11,14 @@ router.route('/:id/option')
 router.route('/:id/option/:optionId').delete(productController.deleteProductOption)
   .patch(productController.updateProductOption).get(productController.getProductOption);
 
-router.route('/:id/variable').post(productController.addProductComposition);
+router.route('/:id/variable').post(productController.addProductVariation);
 router.route('/:id/variable/:variableId')
-  .delete(productController.deleteProductComposition)
-  .patch(productController.updateProductComposition);
-router.route('/:id/variable/:variableId').post(productController.addProductCompositionOption);
-router.route('/:id/variable/:variableId/option')
-  .post(productController.addProductCompositionOption)
-  .delete(productController.deleteProductCompositionOption)
-  .patch(productController.updateProductCompositonOption);
+  .delete(productController.deleteProductVariation)
+  .patch(productController.updateProductVariation);
+router.route('/:id/variable/:variableId/option').post(productController.addProductVariationOption);
+router.route('/:id/variable/:variableId/option/:optionId')
+  .delete(productController.deleteProductVariationOption)
+  .patch(productController.updateProductVariationOption)
+  .get(productController.getProductVariationOption);
 
 module.exports = router;

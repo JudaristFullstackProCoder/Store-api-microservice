@@ -7,7 +7,7 @@ mongooseConnection(mongoose);
 
 const responses = require('../middlewares/responses');
 const Product = require('../models/product').model;
-const { ProductComposition } = require('../models/product');
+const { ProductVariation } = require('../models/product');
 const CM = require('../libs/ApiCrudManager');
 const category = require('../models/category').model;
 
@@ -103,26 +103,9 @@ const updateProductOption = async function updateProductOption(req, res, next) {
   }
 };
 
-const getProductOption = async function getProductOption(req, res, next) {
-  try {
-    const { id } = req.params;
-    const { optionId } = req.params;
-    Product.findOne({
-      _id: id,
-      'products.options.option': optionId,
-    }, { _id: 1, 'product.options.option': 1, 'product.options.value': 1 }, {}, (err, data) => {
-      if (err) {
-        return next(err);
-      }
-      return res.json({
-        success: true,
-        data,
-      });
-    });
-  } catch (err) {
-    return next(err);
-  }
-};
+const getProductOption = function getProductOption(req, res, next) {
+
+}
 
 const deleteProductOption = async function deleteProductOption(req, res, next) {
   try {
@@ -196,9 +179,9 @@ const addProductVideo = function addProdVideo(req, res, next) {
 /**
  * Add a composition to a product
  */
-const addProductComposition = function addProductComposition(req, res, next) {
+const addProductVariation = function addProductVariation(req, res, next) {
   try {
-    const productComposition = new ProductComposition({
+    const productComposition = new ProductVariation({
       image: req.body.image,
       price: req.body.price,
       options: {
@@ -224,7 +207,7 @@ const addProductComposition = function addProductComposition(req, res, next) {
 /**
  * Delete a composition from a product
  */
-const deleteProductComposition = function deleteProductComposition(req, res, next) {
+const deleteProductVariation = function deleteProductVariation(req, res, next) {
   Product.updateOne({
     _id: req.params.id,
   }, {
@@ -238,7 +221,7 @@ const deleteProductComposition = function deleteProductComposition(req, res, nex
 /**
  *  Add an option inside a composition of a product
  */
-const addProductCompositionOption = function addProductCompositionOption(req, res, next) {
+const addProductVariationOption = function addProductVariationOption(req, res, next) {
   try {
     Product.updateOne({
       _id: req.params.id,
@@ -263,7 +246,7 @@ const addProductCompositionOption = function addProductCompositionOption(req, re
 /**
  * Delete an option inside a composition of a product
  */
-const deleteProductCompositionOption = function deleteProductCompositionOption(req, res, next) {
+const deleteProductVariationOption = function deleteProductVariationOption(req, res, next) {
   Product.updateOne({
     _id: req.params.id,
   }, {
@@ -280,11 +263,15 @@ const deleteProductCompositionOption = function deleteProductCompositionOption(r
   });
 };
 
-const updateProductCompositonOption = function updateProductCompositonOption(req, res, next) {
+const updateProductVariationOption = function updateProductVariationOption(req, res, next) {
   return res.json({});
 };
 
-const updateProductComposition = function updateProductComposition(req, res, next) {
+const getProductVariationOption = function getProductVariationOption(req, res, next) {
+
+}
+
+const updateProductVariation = function updateProductVariation(req, res, next) {
   return res.json({});
 };
 
@@ -295,16 +282,17 @@ module.exports = {
   deleteProduct,
   addProductOption,
   deleteProductOption,
-  getProductOption,
   updateProductOption,
   addProductImage,
   getAllProductWithPagination,
   addProductAdditionalsImages,
   addProductVideo,
-  addProductComposition,
-  deleteProductComposition,
-  addProductCompositionOption,
-  deleteProductCompositionOption,
-  updateProductCompositonOption,
-  updateProductComposition,
+  addProductVariation,
+  deleteProductVariation,
+  addProductVariationOption,
+  deleteProductVariationOption,
+  updateProductVariationOption,
+  updateProductVariation,
+  getProductVariationOption,
+  getProductOption,
 };

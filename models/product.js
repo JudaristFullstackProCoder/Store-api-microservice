@@ -28,7 +28,7 @@ const productOptionsSchema = new mongoose.Schema({
 /**
  * Product composition schema
  */
-const productComposition = new mongoose.Schema({
+const ProductVariation = new mongoose.Schema({
   options: [productOptionsSchema],
   image: {
     type: mongoose.Schema.Types.Mixed,
@@ -113,5 +113,5 @@ productSchema.plugin(mongoosastic, {
 // Exports
 module.exports = {
   model: mongoose.model('products', productSchema),
-  ProductComposition: mongoose.model('productcompositions', productComposition),
+  ProductVariation: mongoose.model('productvariations', ProductVariation),
 };
