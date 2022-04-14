@@ -8,8 +8,10 @@ router.route('/:id').get(productController.getProduct)
 
 router.route('/:id/option')
   .post(productController.addProductOption);
-router.route('/:id/option/:optionId').delete(productController.deleteProductOption)
-  .patch(productController.updateProductOption).get(productController.getProductOption);
+router.route('/:id/option/:optionId')
+  .delete(productController.deleteProductOption)
+  .patch(productController.updateProductOption)
+  .get(productController.getProductOption);
 
 router.route('/:id/variable').post(productController.addProductVariation);
 router.route('/:id/variable/:variableId')

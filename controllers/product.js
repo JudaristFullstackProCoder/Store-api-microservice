@@ -103,9 +103,51 @@ const updateProductOption = async function updateProductOption(req, res, next) {
   }
 };
 
-const getProductOption = function getProductOption(req, res, next) {
+const getProductOption = async function getProductOption(req, res, next) {
+  try {
+    const { id: productId, optionId } = req.params;
+    /** @var {Array} productOtions  */
+    let productOtions = await Product.findOne({
+      _id: productId,
+    }).select('options')
+      .populate('options.option')
+      .exec();
+    console.log(JSON.stringify(productOtions));
+    /**
+    * productOptions format
+    {
+      "_id": "62577c6e29e7943996d0651c",
+      "options": [
+        {
+          "_id": "62577c6e29e7943996d0651d"
+        },
+        {
+          "option": {
+            "_id": "62577c81451d7f23ecd169e9",
+            "name": "op-test-product",
+            "__v": 0
+          },
+          "value": "exemple value",
+          "_id": "62577c81451d7f23ecd169ed"
+        },
+        { ... },
+        { ... }
+      ]
+    }
+     */
 
-}
+    productOtions = productOtions.options;
+    productOtions.forEach((option) => {
+      if (option.option?._id?.toString() === optionId) {
+        return responses.ok(res, option);
+      }
+    });
+    // Not found
+    return responses.notFound(req, res);
+  } catch (error) {
+    return next(error);
+  }
+};
 
 const deleteProductOption = async function deleteProductOption(req, res, next) {
   try {
