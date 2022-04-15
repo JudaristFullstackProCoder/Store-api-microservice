@@ -3,78 +3,57 @@ const responses = require('../middlewares/responses');
 const Category = require('../models/category').model;
 const { ChildCategoryModel } = require('../models/category');
 const mongooseConnect = require('../db/mongoConnect');
+const CM = require('../libs/ApiCrudManager');
+
+const crudManager = new CM();
 
 mongooseConnect(mongoose);
 
 const createCategory = async function createCtg(req, res, next) {
-  // required fields
-  // Only the name is required
-  const requiredFields = ['name'];
-  for (let i = 0; i < requiredFields.length; i += 1) {
-    if (!req.body[requiredFields[i]]) {
-      return next(res, `${requiredFields[i]} is required`);
-    }
-  }
-  // One name per Option
-  const named = await Category.findOne({
-    name: req.body.name,
-  }, 'name').exec();
-
-  /**
-     * @var {Array|null} name
-     * @conditon Then category's name already used
-     */
-  if (named != null) {
-    return next(new Error('this name is already assigned to a category'));
-  }
-
-  let category = new Category(req.body);
   try {
-    category = await category.save();
-  } catch (err) {
-    return next(err);
+    // One name per Option
+    const named = await Category.findOne({
+      name: req.body.name,
+    }, 'name').exec();
+
+    if (named != null) {
+      return next(new Error('this name is already assigned to a category'));
+    }
+
+    return crudManager.create({ req, res, next }, Category);
+  } catch (error) {
+    return next(error);
   }
-  return responses.created(res, category);
 };
 
 const updateCategory = async function upCtg(req, res, next) {
-  let updated = null;
   try {
-    updated = await Category.findOneAndUpdate({
-      _id: new mongoose.Types.ObjectId(req.params.id || ''),
-    }, req.body, {
-      new: true,
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.update({ req, res, next }, Category, {
+      message: 'category updated successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, updated);
 };
 
 // deleted === the deleted category and
 // if the category wasn't found then deleted === null
 const deleteCategory = async function delCtg(req, res, next) {
-  let deleted = null;
   try {
-    deleted = await Category.findOneAndDelete({
-      _id: new mongoose.Types.ObjectId(req.params.id),
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.delete({ req, res, next }, Category, {
+      message: 'category deleted successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, deleted);
 };
 
 const getCategory = async function getCtg(req, res, next) {
-  let option = null;
   try {
-    option = await Category.findOne({
-      _id: req.params.id,
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.read({ req, res, next }, Category);
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, option);
 };
 
 /**
