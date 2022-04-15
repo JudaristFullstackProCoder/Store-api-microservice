@@ -13,12 +13,13 @@ router.route('/:id/option/:optionId')
   .patch(productController.updateProductOption)
   .get(productController.getProductOption);
 
-router.route('/:id/variable').post(productController.addProductVariation);
-router.route('/:id/variable/:variableId')
+router.route('/:id/variation').post(productController.addProductVariation);
+router.route('/:id/variation/:variationId')
   .delete(productController.deleteProductVariation)
-  .patch(productController.updateProductVariation);
-router.route('/:id/variable/:variableId/option').post(productController.addProductVariationOption);
-router.route('/:id/variable/:variableId/option/:optionId')
+  .patch(productController.updateProductVariation)
+  .get(productController.getProductVariation);
+router.route('/:id/variation/:variationId/option').post(productController.addProductVariationOption);
+router.route('/:id/variation/:variationId/option/:optionId')
   .delete(productController.deleteProductVariationOption)
   .patch(productController.updateProductVariationOption)
   .get(productController.getProductVariationOption);
