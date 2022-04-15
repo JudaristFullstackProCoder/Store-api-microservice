@@ -61,82 +61,54 @@ const getCategory = async function getCtg(req, res, next) {
  * @returns
  */
 const createChildCategory = async function createChCtg(req, res, next) {
-  // required fields
-  // Only the name is required
-  const requiredFields = ['name', 'parent'];
-  for (let i = 0; i < requiredFields.length; i += 1) {
-    if (!req.body[requiredFields[i]]) {
-      return next(res, `${requiredFields[i]} is required`);
-    }
-  }
-  // One name per Option
-  const named = await ChildCategoryModel.findOne({
-    name: req.body.name,
-  }, 'name').exec();
-
-  if (named) {
-    return next(res, new Error(), 'this name is already assigned to a child category');
-  }
-
-  let childCategory = new ChildCategoryModel(req.body);
   try {
-    childCategory = await childCategory.save();
-  } catch (err) {
-    return next(err);
+    // One name per Option
+    const named = await ChildCategoryModel.findOne({
+      name: req.body.name,
+    }, 'name').exec();
+
+    if (named) {
+      return next(res, new Error(), 'this name is already assigned to a child category');
+    }
+    return crudManager.create({ req, res, next }, ChildCategoryModel, {
+      message: 'sub-category created successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.created(res, childCategory);
 };
 
 // deleted === the deleted category is the category was found
 // deleted === null if the category was not found
 const deleteChildCategory = async function delChCtg(req, res, next) {
-  let deleted = null;
   try {
-    deleted = await ChildCategoryModel.findOneAndDelete({
-      _id: new mongoose.Types.ObjectId(req.params.id),
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.delete({ req, res, next }, ChildCategoryModel, {
+      message: 'sub-category deleted successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, deleted);
 };
 
 const updateChildCategory = async function upChCtg(req, res, next) {
-  let updated = null;
   try {
-    updated = await ChildCategoryModel.findOneAndUpdate({
-      _id: new mongoose.Types.ObjectId(req.params.id || ''),
-    }, req.body, {
-      new: true,
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.update({ req, res, next }, ChildCategoryModel, {
+      message: 'sub-category updated successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, updated);
 };
 
 const getChildCategory = async function getChCtg(req, res, next) {
-  let child = null;
   try {
-    child = await ChildCategoryModel.findOne({
-      _id: req.params.id,
-    }).exec();
-  } catch (err) {
-    return next(err);
+    return crudManager.read({ req, res, next }, ChildCategoryModel);
+  } catch (error) {
+    return next(error);
   }
-
-  return responses.ok(res, child);
 };
 
 const addChildCategoryOption = async function addChCtgOpt(req, res, next) {
-  // required fields
-  const requiredFields = ['option'];
-  for (let i = 0; i < requiredFields.length; i += 1) {
-    if (!req.body[requiredFields[i]]) {
-      return next(res, `${requiredFields[i]} is required`);
-    }
-  }
-
   // check if the option that we want to add already exist
   try {
     const child = await ChildCategoryModel.findOne({
