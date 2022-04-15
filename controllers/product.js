@@ -39,6 +39,7 @@ const updateProduct = async function upProd(req, res, next) {
 const deleteProduct = async function delProd(req, res, next) {
   return crudManager.delete({ req, res, next }, Product, {
     // afterDelete : delete the files directory associated with this product
+    message: 'product deleted successfully',
   });
 };
 
@@ -64,12 +65,7 @@ const addProductOption = async function addProdOption(req, res, next) {
       $push: { options: { option: req.body.option, value: req.body.value } },
     }, { new: true }, async (err) => {
       if (err) return next(err);
-      const returned = await Product.findOne({
-        _id: req.params.id,
-      }).populate('options.option', 'name')
-        .populate('category', 'name')
-        .exec();
-      return responses.ok(res, returned);
+      return responses.created(res, 'product option added succesfully');
     });
   } catch (err) {
     return next(err);
@@ -89,13 +85,13 @@ const updateProductOption = async function updateProductOption(req, res, next) {
       },
     }, {
       new: true,
-    }, (err, data) => {
+    }, (err) => {
       if (err) {
         return next(err);
       }
       return res.json({
         success: true,
-        data,
+        data: 'product option updated succesfully',
       });
     });
   } catch (err) {
@@ -112,7 +108,6 @@ const getProductOption = async function getProductOption(req, res, next) {
     }).select('options')
       .populate('options.option')
       .exec();
-    console.log(JSON.stringify(productOtions));
     /**
     * productOptions format
     {
@@ -138,6 +133,7 @@ const getProductOption = async function getProductOption(req, res, next) {
 
     productOtions = productOtions.options;
     productOtions.forEach((option) => {
+      /* eslint no-underscore-dangle: "off" */
       if (option.option?._id?.toString() === optionId) {
         return responses.ok(res, option);
       }
@@ -155,9 +151,9 @@ const deleteProductOption = async function deleteProductOption(req, res, next) {
       _id: req.params.id,
     }, {
       $pull: { options: { option: req.body.option } },
-    }, { new: true }, (err, result) => {
+    }, {}, (err) => {
       if (err) return next(err);
-      return responses.ok(res, result);
+      return responses.ok(res, 'product option deleted successfully');
     });
   } catch (err) {
     return next(err);
@@ -218,67 +214,68 @@ const addProductVideo = function addProdVideo(req, res, next) {
   }
 };
 
-/**
- * Add a composition to a product
- */
-const addProductVariation = function addProductVariation(req, res, next) {
+const addProductVariation = async function addProductVariation(req, res, next) {
   try {
-    const productComposition = new ProductVariation({
-      image: req.body.image,
-      price: req.body.price,
-      options: {
-        option: req.body.option,
-        value: req.body.value,
-      },
-      product: req.params.id,
-    });
-    productComposition.save((err, data) => {
-      if (err) {
-        return next(err);
-      }
-      return res.json({
-        success: true,
-        data,
-      });
+    return crudManager.create({ req, res, next }, ProductVariation, {
+      message: 'product variation created sucessfully',
     });
   } catch (err) {
     return next(err);
   }
 };
 
-/**
- * Delete a composition from a product
- */
-const deleteProductVariation = function deleteProductVariation(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
-  }, {
-    $pull: { compositions: { _id: req.body.id } },
-  }, {}, (err, result) => {
-    if (err) return next(err);
-    return responses.ok(res, result);
-  });
+const getProductVariation = async function getProductVariation(req, res, next) {
+  try {
+    return crudManager.read({ req, res, next }, ProductVariation);
+  } catch (error) {
+    return next(error);
+  }
 };
 
-/**
- *  Add an option inside a composition of a product
- */
-const addProductVariationOption = function addProductVariationOption(req, res, next) {
+const deleteProductVariation = async function deleteProductVariation(req, res, next) {
   try {
-    Product.updateOne({
+    return crudManager.delete({ req, res, next }, ProductVariation, {
+      message: 'product variation deleted successfully',
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updateProductVariation = async function updateProductVariation(req, res, next) {
+  try {
+    return crudManager.update({ req, res, next }, ProductVariation, {
+      message: 'product variation updated successfully',
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const addProductVariationOption = async function addProductVariationOption(req, res, next) {
+  try {
+    // Dont allow same option id
+    const pr = await ProductVariation.findOne({
+      _id: req.params.id,
+      'options.option': req.body.option,
+    }).exec();
+    if (pr) {
+      return next(new Error(`option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint 
+      PATCH /api/v1/product/{productId}/variation/{variationId}/option/{optionId} instead `));
+    }
+
+    ProductVariation.updateOne({
       _id: req.params.id,
     }, {
       $push: {
-        compositions: {
-          options: {
-            option: req.body.option,
-            value: req.body.value,
-          },
+        options: {
+          option: req.body.option,
+          value: req.body.value,
         },
       },
-    }, { new: true }, (err, product) => {
+    }, { new: true }, (err) => {
       if (err) return next(err);
-      return responses.ok(res, product);
+      return responses.created(res, 'product variation option created successfully');
     });
   } catch (err) {
     return next(err);
@@ -293,28 +290,65 @@ const deleteProductVariationOption = function deleteProductVariationOption(req, 
     _id: req.params.id,
   }, {
     $pull: {
-      compositions: {
-        options: {
-          _id: req.body.id,
-        },
+      options: {
+        _id: req.body.id,
       },
     },
-  }, {}, (err, result) => {
+  }, {}, (err) => {
     if (err) return next(err);
-    return responses.ok(res, result);
+    return responses.ok(res, 'product variation option deleted successfully');
   });
 };
 
-const updateProductVariationOption = function updateProductVariationOption(req, res, next) {
-  return res.json({});
+const updateProductVariationOption = async function updateProductVariationOption(req, res, next) {
+  try {
+    const { id } = req.params;
+    const { optionId } = req.params;
+    ProductVariation.findOneAndUpdate({
+      _id: id,
+      'options.option': optionId,
+    }, {
+      $set: {
+        'options.$.value': req.body.value,
+      },
+    }, {
+      new: true,
+    }, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({
+        success: true,
+        data: 'product variation option updated successfully',
+      });
+    });
+  } catch (err) {
+    return next(err);
+  }
 };
 
-const getProductVariationOption = function getProductVariationOption(req, res, next) {
+const getProductVariationOption = async function getProductVariationOption(req, res, next) {
+  try {
+    const { id: productId, optionId } = req.params;
+    /** @var {Array} productOtions  */
+    let productOtions = await Product.findOne({
+      _id: productId,
+    }).select('options')
+      .populate('options.option')
+      .exec();
 
-}
-
-const updateProductVariation = function updateProductVariation(req, res, next) {
-  return res.json({});
+    productOtions = productOtions.options;
+    productOtions.forEach((option) => {
+      /* eslint no-underscore-dangle: "off" */
+      if (option.option?._id?.toString() === optionId) {
+        return responses.ok(res, option);
+      }
+    });
+    // Not found
+    return responses.notFound(req, res);
+  } catch (error) {
+    return next(error);
+  }
 };
 
 module.exports = {
@@ -337,4 +371,5 @@ module.exports = {
   updateProductVariation,
   getProductVariationOption,
   getProductOption,
+  getProductVariation,
 };
