@@ -32,7 +32,7 @@ const ProductVariation = new mongoose.Schema({
   options: [productOptionsSchema],
   image: {
     type: mongoose.Schema.Types.Mixed,
-    required: true,
+    required: false,
   },
   price: {
     type: mongoose.Schema.Types.Number,
@@ -41,6 +41,7 @@ const ProductVariation = new mongoose.Schema({
   product: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, 'product id is required for product composition'],
+    ref: 'products',
   },
 });
 
