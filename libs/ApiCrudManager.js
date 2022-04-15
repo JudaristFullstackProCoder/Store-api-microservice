@@ -56,7 +56,7 @@ class ApiCrudManager {
      */
   async update(ctx, model, options = {}) {
     try {
-      await model.findOneAndUpdate({
+      await model.findOneAndUpdate(options.filters || {
         _id: new mongoose.Types.ObjectId(ctx.req.params.id),
       }, ctx.req.body, {
         new: true,
