@@ -59,11 +59,17 @@ describe('PATCH /api/v1/category/id', () => {
       name: 'Category of test (updated)'
     });
     const data = res.body;
+    /**
+      data response format:
+      {
+        success: true,
+        data: 'category updated successfully'
+      }
+     */
     expect(res.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('category updated successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('name', 'Category of test (updated)');
   });
 });
 
@@ -92,14 +98,17 @@ describe('POST /api/v1/category/child', () => {
         options: [],
       });
     const data = res.body;
+    /**
+     response data format:
+     {
+       success: true,
+       data: 'sub-category created successfully'
+     }
+     */
     expect(res.status).to.equal(201);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('sub-category created successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('options');
-    expect(data.data.parent).equal(category._id.toString());
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('abbr');
-    expect(data.data).to.have.property('name');
   });
 });
 
@@ -128,12 +137,17 @@ describe('PATCH /api/v1/category/child/id', () => {
       abbr: 'New Abbreviation'
     });
     const data = res.body;
+    /**
+      response data format:
+      {
+        success: true,
+        data: 'sub-category updated successfully'
+      }
+     */
     expect(res.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string( 'sub-category updated successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id', childCategory._id.toString());
-    expect(data.data).to.have.property('name', 'Child Category test (updated)');
-    expect(data.data).to.have.property('abbr', 'New Abbreviation');
   });
 });
 
@@ -191,13 +205,17 @@ describe('DELETE /api/v1/category/child/id', () => {
     let childCategory = await ChildCategory.findOne({name: 'Child Category test (updated)'}).exec();
     const res = await request(app).delete(`/api/v1/category/child/${childCategory._id}`);
     const data = res.body;
+    /**
+     response format:
+     {
+       success: true,
+       data: 'sub-category deleted successfully'
+     }
+     */
     expect(res.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('sub-category deleted successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id', childCategory._id.toString());
-    expect(data.data.name).equal(childCategory.name);
-    expect(data.data.abbr).equal(childCategory.abbr);
-    expect(data.data.options).to.have.lengthOf(0);
   });
 });
 
@@ -207,10 +225,16 @@ describe('DELETE /api/v1/category/id', () => {
     let category = await Category.findOne({name: 'Category of test (updated)'}).exec();
     const res = await request(app).delete(`/api/v1/category/${category._id}`);
     const data = res.body;
+    /**
+      response data format:
+      {
+        success: true,
+        data: 'category deleted successfully'
+      }
+     */
     expect(res.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('category deleted successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('name', 'Category of test (updated)');
   });
 });

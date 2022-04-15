@@ -25,11 +25,16 @@ it('should return status 201 when we create an option', async () => {
           name: 'Option test',
      });
      const data = res.body;
+     /**
+       response data format:
+       {
+            success: true,
+            data: 'option crated uccessfully'
+       }
+      */
      expect(res.status).to.equal(201);
      expect(data).to.have.property('data');
      expect(data).to.have.property('success', true);
-     expect(data.data).to.have.property('_id');
-     expect(data.data).to.have.property('name', 'Option test');
   });
 });
 
@@ -72,11 +77,17 @@ describe('PATCH /api/v1/option', () => {
                name: 'Another name !',
           });
           const data = res.body;
+          /**
+            response data format:
+            {
+                 success: true,
+                 data: 'option updated successfully'
+            }
+           */
           expect(res.status).to.equal(200);
           expect(data).to.have.property('data');
+          expect(data.data).to.be.string('option updated successfully');
           expect(data).to.have.property('success', true);
-          expect(data.data).to.have.property('_id', option._id.toString());
-          expect(data.data).to.have.property('name', 'Another name !');
      });
 });
 
@@ -90,10 +101,15 @@ describe('DELETE /api/v1/option', () => {
           name: 'Option test',
      });
      const data = res.body;
+     /**
+       response data format:
+       {
+            success: true,
+            data: 'option deleted successfully'
+       }
+      */
      expect(res.status).to.equal(200);
      expect(data).to.have.property('data');
      expect(data).to.have.property('success', true);
-     expect(data.data).to.have.property('_id', option._id.toString());
-     expect(data.data).to.have.property('name', option.name);
   });
 });

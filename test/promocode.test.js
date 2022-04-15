@@ -68,14 +68,8 @@ describe('UPDATE /api/v1/promocode/id', () => {
     const data = response.body;
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('updated');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id', promocode._id.toString());
-    expect(data.data).to.have.property('maxuse', promocodeUpdate.maxuse);
-    expect(data.data).to.have.property('to', promocodeUpdate.to);
-    expect(data.data).to.have.property('from', promocodeUpdate.from);
-    expect(data.data).to.have.property('discount', promocodeUpdate.discount);
-    expect(data.data).to.have.property('remaininguse', promocodeUpdate.remaininguse);
-    expect(data.data).to.have.property('name', promocodeUpdate.name);
   });
 });
 
@@ -114,13 +108,7 @@ describe('DELETE /api/v1/promocode/id', () => {
     const data = response.body;
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
+    // expect(data.data).to.be.string('data');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('maxuse', promocode.maxuse);
-    expect(data.data).to.have.property('to', promocode.to);
-    expect(data.data).to.have.property('from', promocode.from);
-    expect(data.data).to.have.property('discount', promocode.discount);
-    expect(data.data).to.have.property('remaininguse', promocode.remaininguse);
-    expect(data.data).to.have.property('name', promocode.name);
   })
 });
