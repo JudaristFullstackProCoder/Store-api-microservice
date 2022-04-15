@@ -1,3 +1,4 @@
+/* eslint class-methods-use-this: "off"  */
 const mongoose = require('mongoose');
 const mongooseConnection = require('../db/mongoConnect');
 const responses = require('../middlewares/responses');
@@ -11,7 +12,6 @@ class ApiCrudManager {
      * @param {Object} options
      */
   async create(ctx, Model, options = {}) {
-    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let obj = new Model(ctx.req.body);
     try {
       if (Object.prototype.toString.call(options.beforeCreate || null) === '[object Function]') {
@@ -36,7 +36,6 @@ class ApiCrudManager {
      * @param {Array} requiredFields
      */
   async read(ctx, model) {
-    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let product = null;
 
     try {
@@ -56,7 +55,6 @@ class ApiCrudManager {
      * @param {mongoose.Model} model
      */
   async update(ctx, model) {
-    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let updated = null;
 
     try {
@@ -82,7 +80,6 @@ class ApiCrudManager {
      * }
      */
   async delete(ctx, model, options = {}) {
-    this.SkipEslintClassMethodsUseThisRule = true; // skip eslint ruel : class-methods-use-this
     let deleted = null;
     if (Object.prototype.toString.call(options.beforeDelete || null) === '[object Function]') {
       // Then the argument is a valid function
