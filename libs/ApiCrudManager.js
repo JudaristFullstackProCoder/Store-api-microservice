@@ -26,7 +26,7 @@ class ApiCrudManager {
       // Then the argument is a valid function
       options.afterCreate();
     }
-    return responses.created(ctx.res, obj);
+    return responses.created(ctx.res, options.message || obj);
   }
 
   /**
@@ -54,11 +54,9 @@ class ApiCrudManager {
      *  res : {express.Response}, next : {express.NextFunction}}
      * @param {mongoose.Model} model
      */
-  async update(ctx, model) {
-    let updated = null;
-
+  async update(ctx, model, options = {}) {
     try {
-      updated = await model.findOneAndUpdate({
+      await model.findOneAndUpdate({
         _id: new mongoose.Types.ObjectId(ctx.req.params.id),
       }, ctx.req.body, {
         new: true,
@@ -67,7 +65,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(ctx.res, updated);
+    return responses.ok(ctx.res, options.message || 'updated');
   }
 
   /**
@@ -80,13 +78,12 @@ class ApiCrudManager {
      * }
      */
   async delete(ctx, model, options = {}) {
-    let deleted = null;
     if (Object.prototype.toString.call(options.beforeDelete || null) === '[object Function]') {
       // Then the argument is a valid function
       options.beforeDelete();
     }
     try {
-      deleted = await model.findOneAndDelete({
+      await model.findOneAndDelete({
         _id: new mongoose.Types.ObjectId(ctx.req.params.id),
       }).exec();
       // if we want to do something after the db resource was deleted
@@ -98,7 +95,7 @@ class ApiCrudManager {
       return ctx.next(err);
     }
 
-    return responses.ok(ctx.res, deleted);
+    return responses.ok(ctx.res, options.message || 'created');
   }
 }
 
