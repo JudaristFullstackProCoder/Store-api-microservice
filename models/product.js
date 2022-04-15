@@ -43,6 +43,10 @@ const ProductVariation = new mongoose.Schema({
     required: [true, 'product id is required for product composition'],
     ref: 'products',
   },
+  name: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
 });
 
 const productSchema = new mongoose.Schema({
