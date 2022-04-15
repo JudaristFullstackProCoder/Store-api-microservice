@@ -1,65 +1,56 @@
 const mongoose = require('mongoose');
 const mongooseConnect = require('../db/mongoConnect');
 const Option = require('../models/options').model;
-const responses = require('../middlewares/responses');
+const CM = require('../libs/ApiCrudManager');
+
+const crudManager = new CM();
 
 mongooseConnect(mongoose);
 
 const createOption = async function createOpt(req, res, next) {
-  // One name per Option
-  const named = await Option.findOne({
-    name: req.body.name,
-  }).exec();
-
-  if (named !== null) {
-    return next(new Error('this name is already assigned to an option'));
-  }
-
-  let option = new Option(req.body);
   try {
-    option = await option.save();
-  } catch (err) {
-    return next(res, err, err.message);
+    // One name per Option
+    const named = await Option.findOne({
+      name: req.body.name,
+    }).exec();
+
+    if (named !== null) {
+      return next(new Error('this name is already assigned to an option'));
+    }
+    return crudManager.create({ req, res, next }, Option, {
+      message: 'option crated uccessfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.created(res, option);
 };
 
 const deleteOption = async function delOpt(req, res, next) {
-  let option = null;
   try {
-    option = await Option.findOneAndDelete({
-      _id: new mongoose.Types.ObjectId(req.params.id),
-    }).exec();
-  } catch (err) {
-    return next(res, err, err.message);
+    return crudManager.delete({ req, res, next }, Option, {
+      message: 'option deleted successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, option);
 };
 
 const updateOption = async function upOpt(req, res, next) {
-  let updated = null;
   try {
-    updated = await Option.findOneAndUpdate({
-      _id: new mongoose.Types.ObjectId(req.params.id || ''),
-    }, req.body, {
-      new: true,
-    }).exec();
-  } catch (err) {
-    return next(res, err, err.message);
+    return crudManager.update({ req, res, next }, Option, {
+      message: 'option updated successfully',
+    });
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, updated);
 };
 
 const getOption = async function getOpt(req, res, next) {
-  let option = null;
   try {
-    option = await Option.findOne({
-      _id: req.params.id,
-    }).exec();
-  } catch (err) {
-    return next(res, err, err.message);
+    return crudManager.read({ req, res, next }, Option);
+  } catch (error) {
+    return next(error);
   }
-  return responses.ok(res, option);
 };
 
 module.exports = {
