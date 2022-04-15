@@ -9,6 +9,7 @@ const Product = require('../models/product').model;
 const Category = require('../models/category').model;
 const Store = require('../models/store').model;
 const Option = require('../models/options').model;
+const ProductVariation = require('../models/product').ProductVariation;
 
 const expect = require("chai").expect;
 const logger = require('../libs/logger');
@@ -120,60 +121,13 @@ describe('POST /api/v1/product/id/option', () => {
      exemple data value:
           {
         "success": true,
-        "data": {
-          "_id": "62578bb8054b3386968624f5",
-          "name": "product-name",
-          "price": 10,
-          "description": "A product",
-          "options": [
-            {
-              "_id": "62578bb8054b3386968624f6"
-            },
-            {
-              "option": {
-                "_id": "62578c04b3dad17a2283c023",
-                "name": "op-test-product"
-              },
-              "value": "exemple value",
-              "_id": "62578c04b3dad17a2283c027"
-            }
-          ],
-          "category": {
-            "_id": "62578bb8054b3386968624ef",
-            "name": "category"
-          },
-          "online": true,
-          "shopkeeper": "62578bb8054b3386968624ee",
-          "store": "62578bb8054b3386968624f3",
-          "images": [
-            {}
-          ],
-          "compositions": [],
-          "__v": 0
-        }
-      }
+        "data": 'product option added succesfully'
      */
-    expect(response.statusCode).equal(200);
+    expect(response.statusCode).equal(201);
     // response should have both error and data property
     expect(data).to.have.property('success', true);
     expect(data).to.have.property('data');
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('name');
-    expect(data.data).to.have.property('price');
-    expect(data.data).to.have.property('description');
-    expect(data.data).to.have.property('options');
-    // check sub options into product
-    expect(data.data.options[0]).to.have.property('_id');
-    // check if the first sub option matches the criteria
-    expect(data.data.options[1]).to.have.property('option');
-    expect(data.data.options[1]).to.have.property('_id');
-    expect(data.data.options[1]).to.have.property('value');
-    // end verification of the first sub options
-    expect(data.data).to.have.property('category');
-    expect(data.data).to.have.property('online');
-    expect(data.data).to.have.property('shopkeeper');
-    expect(data.data).to.have.property('store');
-    expect(data.data).to.have.property('images');
+    expect(data.data).to.be.string('product option added succesfully');
   });
 })
 
@@ -268,56 +222,12 @@ describe('PATCH /api/v1/product/id/option/option_id', () => {
       exemple data value:
             {
         "success": true,
-        "data": {
-          "_id": "62578bb8054b3386968624f5",
-          "name": "product-name",
-          "price": 10,
-          "description": "A product",
-          "options": [
-            {
-              "_id": "62578bb8054b3386968624f6"
-            },
-            {
-              "option": "62578c04b3dad17a2283c023",
-              "value": "change the value of the option",
-              "_id": "62578c04b3dad17a2283c027"
-            }
-          ],
-          "category": "62578bb8054b3386968624ef",
-          "online": true,
-          "shopkeeper": "62578bb8054b3386968624ee",
-          "store": "62578bb8054b3386968624f3",
-          "images": [
-            {}
-          ],
-          "compositions": [],
-          "__v": 0
-        }
-      }
+        "data": 'product option updated succesfully'
      */
     // response should have both error and data property
     expect(data).to.have.property('success', true);
     expect(data).to.have.property('data');
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('name');
-    expect(data.data).to.have.property('price');
-    expect(data.data).to.have.property('description');
-    expect(data.data).to.have.property('options');
-    expect(data.data).to.have.property('category');
-    expect(data.data).to.have.property('online');
-    expect(data.data).to.have.property('shopkeeper');
-    expect(data.data).to.have.property('store');
-    expect(data.data).to.have.property('images');
-    // sub obtions
-    expect(data.data).to.have.property('options');
-    expect(data.data.options[0]).to.have.property('_id');
-    expect(data.data.options[1]).to.have.property('option');
-      // sub option is populated by mongoose
-    expect(data.data.options[1]).to.have.property('option');
-    expect(data.data.options[1]).to.have.property('_id');
-    expect(data.data.options[1]).to.have.property('value');
-    // sub options
-    // check ig the status is 200
+    expect(data.data).to.be.string('product option updated succesfully');
     expect(response.statusCode).equal(200);
   });
 });
@@ -395,7 +305,6 @@ describe('GET /api/v1/product/id', () => {
     expect(data.data).to.have.property('options');
     expect(data.data.options[0]).to.have.property('_id');
       // sub option is populated by mongoose
-      console.log(data.data.options)
     expect(data.data.options[1]).to.have.property('option');
     expect(data.data.options[1].option).to.have.property('_id');
     expect(data.data.options[1].option).to.have.property('name');
@@ -407,8 +316,89 @@ describe('GET /api/v1/product/id', () => {
   });
 });
 
-// Product composition
+// Product variation
 
+describe('POST /api/v1/product/:id/variation', () => {
+  it('Should return the good response when we add a variation to a product', async () => {
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+    const response = await request(app).post(`/api/v1/product/${product._id}/variation`).send({
+      price: 0,
+      product: product._id.toString(),
+      name: 'variation',
+    });
+    const data = response.body;
+    /**
+      response data format:
+      {
+        success; true,
+        data: 'product variation created sucessfully'
+      }
+     */
+    expect(response.statusCode).equal(201);
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.be.string('product variation created sucessfully');
+  });
+});
+
+// update product variation
+
+describe('PATCH /api/v1/product/:id/variation/variationId', () => {
+  it('Should return the goof response when we update a variation', async () => {
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+    const variation = await ProductVariation.findOne({
+      name: 'variation',
+    }).exec();
+    console.log(variation);
+    const response = await request(app).patch(`/api/v1/product/${product._id}/variation/${variation._id}`).send({
+      price: 100000,
+      name: 'variation2',
+    });
+    const data = response.body;
+    /**
+      response data format:
+      {
+        success; true,
+        data: 'product variation updated sucessfully'
+      }
+     */
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.be.string('product variation updated successfully');
+  });
+});
+
+// Delete product variation
+
+describe('DELETE /api/v1/product/:id/variation/variationId', () => {
+  it('Should return the good response when we delete a variation', async () => {
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+    const variation = await ProductVariation.findOne({
+      name: 'variation2',
+      price: 100000,
+    }).exec();
+    const response = await request(app).delete(`/api/v1/product/${product._id}/variation/${variation._id}`);
+    const data = response.body;
+    /**
+      response data format:
+      {
+        success; true,
+        data: 'product variation deleted sucessfully'
+      }
+     */
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('success', true);
+    expect(data).to.have.property('data');
+    expect(data.data).to.be.string('product variation deleted successfully');
+  });
+});
 
 // Delete product option
 describe('DELETE /api/v1/product/:id/option/:optionId', () => {
@@ -427,23 +417,13 @@ describe('DELETE /api/v1/product/:id/option/:optionId', () => {
      exemple data format;
      {
       "success": true,
-      "data": {
-        "acknowledged": true,
-        "modifiedCount": 1,
-        "upsertedId": null,
-        "upsertedCount": 0,
-        "matchedCount": 1
-      }
+      "data": 'product option deleted successfully'
     }
      */
     expect(response.statusCode).equal(200);
     expect(data).to.have.property('success', true);
     expect(data).to.have.property('data');
-    expect(data.data).to.have.property(acknowledged, true);
-    expect(data.data).to.have.property(modifiedCount, 1);
-    expect(data.data).to.have.property(matchedCount, 1);
-    expect(data.data).to.have.property(upsertedCount);
-    expect(data.data).to.have.property(upsertedId);
+    expect(data.data).to.be.string('product option deleted successfully');
   });
 });
 
@@ -465,42 +445,11 @@ describe('DELETE /api/v1/product/id', () => {
      data format exemple:
      {
       "success": true,
-      "data": {
-        "_id": "62578bb8054b3386968624f5",
-        "name": "product-name",
-        "price": 10,
-        "description": "A product",
-        "options": [
-          {
-            "option": "62578c04b3dad17a2283c023",
-            "value": "change the value of the option",
-            "_id": "62578c04b3dad17a2283c027"
-          }
-        ],
-        "category": "62578bb8054b3386968624ef",
-        "online": true,
-        "shopkeeper": "62578bb8054b3386968624ee",
-        "store": "62578bb8054b3386968624f3",
-        "images": [
-          {}
-        ],
-        "compositions": [],
-        "__v": 0
-      }
-    }
+      "data": "product deleted successfully"
      */
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
+    expect(data.data).to.be.string('product deleted successfully');
     expect(data).to.have.property('success', true);
-    expect(data.data).to.have.property('_id');
-    expect(data.data).to.have.property('images');
-    // expect(data.data).to.have.property('image');
-    expect(data.data).to.have.property('name', product.name);
-    expect(data.data).to.have.property('online', product.online);
-    expect(data.data).to.have.property('price', product.price);
-    expect(data.data).to.have.property('description', product.description);
-    expect(data.data).to.have.property('category', product.category.toString());
-    expect(data.data).to.have.property('shopkeeper', product.shopkeeper.toString());
-    expect(data.data).to.have.property('store', product.store.toString());
   });
 });
