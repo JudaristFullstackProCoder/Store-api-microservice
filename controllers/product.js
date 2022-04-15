@@ -236,6 +236,10 @@ const deleteProductVariation = async function deleteProductVariation(req, res, n
   try {
     return crudManager.delete({ req, res, next }, ProductVariation, {
       message: 'product variation deleted successfully',
+      filters: {
+        product: req.params.id,
+        _id: req.params.variationId,
+      },
     });
   } catch (error) {
     return next(error);
@@ -246,6 +250,10 @@ const updateProductVariation = async function updateProductVariation(req, res, n
   try {
     return crudManager.update({ req, res, next }, ProductVariation, {
       message: 'product variation updated successfully',
+      filters: {
+        product: req.params.id,
+        _id: req.params.variationId,
+      },
     });
   } catch (error) {
     return next(error);
