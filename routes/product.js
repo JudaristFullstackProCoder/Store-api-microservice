@@ -13,7 +13,8 @@ router.route('/:id/option/:optionId')
   .patch(productController.updateProductOption)
   .get(productController.getProductOption);
 
-router.route('/:id/variation').post(productController.addProductVariation);
+router.route('/:id/variation').post(productController.addProductVariation)
+  .get(productController.getAllProductVariations);
 router.route('/:id/variation/:variationId')
   .delete(productController.deleteProductVariation)
   .patch(productController.updateProductVariation)
