@@ -35,18 +35,32 @@ class ApiCrudManager {
      * @param {mongoose.Model} model
      * @param {Array} requiredFields
      */
-  async read(ctx, model) {
-    let product = null;
-
+  async read(ctx, model, options = {}) {
     try {
-      product = await model.findOne({
+      const product = await model.findOne(options.filters || {
         _id: ctx.req.params.id,
       }).exec();
+      return responses.ok(ctx.res, product);
     } catch (err) {
       return ctx.next(err);
     }
+  }
 
-    return responses.ok(ctx.res, product);
+  /**
+   * @param {Object} ctx {req : {express.Request},
+   *  res : {express.Response}, next : {express.NextFunction}}
+   * @param {mongoose.Model} model
+   * @param {Array} requiredFields
+   */
+  async readAll(ctx, model, options = {}) {
+    try {
+      const product = await model.find(options.filters || {
+        _id: ctx.req.params.id,
+      }).exec();
+      return responses.ok(ctx.res, product);
+    } catch (err) {
+      return ctx.next(err);
+    }
   }
 
   /**
