@@ -343,6 +343,67 @@ describe('POST /api/v1/product/:id/variation', () => {
   });
 });
 
+// get all product variations
+
+describe('GET /api/v1/product/:id/variation', () => {
+  it('Should return all the variations of a given product', async () => {
+   
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+    const response = await request(app).get(`/api/v1/product/${product._id}/variation`);
+    const data = response.body;
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    /**
+     * response format:
+    {
+      success: true,
+      data: {
+        [
+          {
+            _id: '625ba31f58df8d4404a26172',
+            price: 0,
+            product: '625ba31f58df8d4404a26158',
+            name: 'variation',
+            options: [],
+            __v: 0
+          },
+          { ... },
+          { ... }
+        ]
+      }
+    }
+     */
+  });
+});
+
+// Add production option
+
+describe('POST /api/v1/product/:id/variation/:id/option', () => {
+  it('Should return the good response and http headers when adding prod variation option', async () => {
+    
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+
+    const prodVariationOptionExemple = await (new Option({
+      name: 'color',
+    })).save();
+
+    const variations = await request(app).get(`/api/v1/product/${product._id}/variation`);
+    const {data: variationsData} = variations.body;
+    const firstVariation = variationsData[0];
+    
+    const response = await request(app).post(`/api/v1/product/${product._id}/variation/${firstVariation._id}`).send({
+      option: prodVariationOptionExemple._id.toString(),
+      value: 'red',
+    });
+
+  });
+})
+
 // update product variation
 
 describe('PATCH /api/v1/product/:id/variation/variationId', () => {
