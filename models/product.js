@@ -93,7 +93,7 @@ const productSchema = new mongoose.Schema({
   // product's additionals images
   images: {
     type: mongoose.Schema.Types.Array,
-    validate: [function validateImages(arr) { return arr.length <= 5; }, 'maximum number of files reached'],
+    validate: [function validateImages(arr) { return arr.length <= 5; }, 'maximum number of files (5) reached'],
   },
   image: {
     type: mongoose.Schema.Types.Mixed,
@@ -104,7 +104,7 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     required: false,
   },
-  compositions: [{
+  variations: [{
     type: mongoose.Schema.Types.ObjectId,
     required: false,
     ref: 'productcompositions',
