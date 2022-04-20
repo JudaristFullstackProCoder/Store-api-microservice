@@ -226,7 +226,25 @@ const addProductVariation = async function addProductVariation(req, res, next) {
 
 const getProductVariation = async function getProductVariation(req, res, next) {
   try {
-    return crudManager.read({ req, res, next }, ProductVariation);
+    return crudManager.read({ req, res, next }, ProductVariation, {
+      filters: {
+        product: req.params.id,
+        _id: req.params.variationId,
+      },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getAllProductVariations = async function getAllProductVariations(req, res, next) {
+  try {
+    return crudManager.readAll({ req, res, next }, ProductVariation, {
+      filters: {
+        product: req.params.id,
+        // req.params.id is the id of the product ref in ProductVariation record
+      },
+    });
   } catch (error) {
     return next(error);
   }
@@ -271,9 +289,9 @@ const addProductVariationOption = async function addProductVariationOption(req, 
       return next(new Error(`option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint 
       PATCH /api/v1/product/{productId}/variation/{variationId}/option/{optionId} instead `));
     }
-
     ProductVariation.updateOne({
-      _id: req.params.id,
+      product: req.params.id,
+      _id: req.params.variationId,
     }, {
       $push: {
         options: {
@@ -281,7 +299,7 @@ const addProductVariationOption = async function addProductVariationOption(req, 
           value: req.body.value,
         },
       },
-    }, { new: true }, (err) => {
+    }, {}, (err) => {
       if (err) return next(err);
       return responses.created(res, 'product variation option created successfully');
     });
@@ -290,16 +308,14 @@ const addProductVariationOption = async function addProductVariationOption(req, 
   }
 };
 
-/**
- * Delete an option inside a composition of a product
- */
 const deleteProductVariationOption = function deleteProductVariationOption(req, res, next) {
-  Product.updateOne({
-    _id: req.params.id,
+  ProductVariation.updateOne({
+    product: req.params.id,
+    _id: req.params.variationId,
   }, {
     $pull: {
       options: {
-        _id: req.body.id,
+        option: req.body.option,
       },
     },
   }, {}, (err) => {
@@ -312,8 +328,10 @@ const updateProductVariationOption = async function updateProductVariationOption
   try {
     const { id } = req.params;
     const { optionId } = req.params;
+    const { variationId } = req.params;
     ProductVariation.findOneAndUpdate({
-      _id: id,
+      _id: variationId,
+      product: id,
       'options.option': optionId,
     }, {
       $set: {
@@ -380,4 +398,5 @@ module.exports = {
   getProductVariationOption,
   getProductOption,
   getProductVariation,
+  getAllProductVariations,
 };
