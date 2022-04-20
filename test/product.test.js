@@ -248,41 +248,40 @@ describe('GET /api/v1/product/id', () => {
     const data = response.body;
     /**
       exemple data format:
+{
+  "success": true,
+  "data": {
+    "_id": "626083a9fce9518edd18e41c",
+    "name": "product-name",
+    "price": 10,
+    "description": "A product",
+    "options": [
       {
-        "success": true,
-        "data": {
-          "_id": "62578bb8054b3386968624f5",
-          "name": "product-name",
-          "price": 10,
-          "description": "A product",
-          "options": [
-            {
-              "_id": "62578bb8054b3386968624f6"
-            },
-            {
-              "option": {
-                "_id": "62578c04b3dad17a2283c023",
-                "name": "op-test-product",
-                "__v": 0
-              },
-              "value": "change the value of the option",
-              "_id": "62578c04b3dad17a2283c027"
-            }
-          ],
-          "category": {
-            "_id": "62578bb8054b3386968624ef",
-            "name": "category"
-          },
-          "online": true,
-          "shopkeeper": "62578bb8054b3386968624ee",
-          "store": "62578bb8054b3386968624f3",
-          "images": [
-            {}
-          ],
-          "compositions": [],
-          "__v": 0
-        }
+        "_id": "626083a9fce9518edd18e41d"
+      },
+      {
+        "option": {
+          "_id": "626083b6234702a0e4687644",
+          "name": "op-test-product"
+        },
+        "value": "exemple value",
+        "_id": "626083b6234702a0e4687648"
       }
+    ],
+    "category": {
+      "_id": "626083a9fce9518edd18e416",
+      "name": "category"
+    },
+    "online": true,
+    "shopkeeper": "626083a9fce9518edd18e415",
+    "store": "626083a9fce9518edd18e41a",
+    "images": [
+      {}
+    ],
+    "compositions": [],
+    "__v": 0
+  }
+}
      */
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
@@ -316,7 +315,7 @@ describe('GET /api/v1/product/id', () => {
   });
 });
 
-// Product variation
+// create Product variation
 
 describe('POST /api/v1/product/:id/variation', () => {
   it('Should return the good response when we add a variation to a product', async () => {
@@ -324,7 +323,7 @@ describe('POST /api/v1/product/:id/variation', () => {
       name: 'product-name',
     }).exec();
     const response = await request(app).post(`/api/v1/product/${product._id}/variation`).send({
-      price: 0,
+      price: 200,
       product: product._id.toString(),
       name: 'variation',
     });
@@ -343,7 +342,7 @@ describe('POST /api/v1/product/:id/variation', () => {
   });
 });
 
-// get all product variations
+// get all variation of a given product
 
 describe('GET /api/v1/product/:id/variation', () => {
   it('Should return all the variations of a given product', async () => {
@@ -379,9 +378,9 @@ describe('GET /api/v1/product/:id/variation', () => {
   });
 });
 
-// Add production option
+// Add production variation option
 
-describe('POST /api/v1/product/:id/variation/:id/option', () => {
+describe('POST /api/v1/product/:id/variation/:variationId/option', () => {
   it('Should return the good response and http headers when adding prod variation option', async () => {
     
     const product = await Product.findOne({
@@ -395,15 +394,112 @@ describe('POST /api/v1/product/:id/variation/:id/option', () => {
     const variations = await request(app).get(`/api/v1/product/${product._id}/variation`);
     const {data: variationsData} = variations.body;
     const firstVariation = variationsData[0];
-    
-    const response = await request(app).post(`/api/v1/product/${product._id}/variation/${firstVariation._id}`).send({
+    const response = await request(app).post(`/api/v1/product/${product._id}/variation/${firstVariation._id}/option`).send({
       option: prodVariationOptionExemple._id.toString(),
       value: 'red',
     });
-
+    const data = response.body;
+    expect(response.statusCode).equal(201);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.be.string('product variation option created successfully');
   });
-})
+});
 
+// get product variation option
+
+describe('GET /api/v1/product/:id/variation/:variationId/option', () => {
+  it('Should return the good response when get prod variation option', async () => {
+    
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+
+    const prodVariationOptionExemple = await Option.findOne({
+      name: 'color',
+    }).exec();
+
+    const variations = await request(app).get(`/api/v1/product/${product._id}/variation`);
+    const {data: variationsData} = variations.body;
+    const firstVariation = variationsData[0];
+    console.log(`/api/v1/product/${product._id}/variation/${firstVariation._id}/option/${prodVariationOptionExemple._id}`);
+    const response = await request(app).get(`/api/v1/product/${product._id}/variation/${firstVariation._id}/option/${prodVariationOptionExemple._id}`);
+    const data = response.body;
+    /**
+      response data format exemple:
+      {
+        success: true,
+        data: {
+          option: { _id: '62607ff9466cc0581ad774d6', name: 'color' },
+          value: 'red',
+          _id: '62607ff9466cc0581ad774da'
+        }
+      }
+    */
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.have.property('option');
+    expect(data.data).to.have.property('value');
+    expect(data.data).to.have.property('_id');
+    // expect data option structure
+    expect(data.data.option).to.have.property('_id', prodVariationOptionExemple._id.toString());
+    expect(data.data.option).to.have.property('name', prodVariationOptionExemple.name);
+  });
+});
+
+// update product variation option
+
+describe('PATCH /api/v1/product/:id/variation/:variationId/option', () => {
+  it('Should return the good response when update prod variation option', async () => {
+    
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+
+    const prodVariationOptionExemple = await Option.findOne({
+      name: 'color',
+    }).exec();
+
+    const variations = await request(app).get(`/api/v1/product/${product._id}/variation`);
+    const {data: variationsData} = variations.body;
+    const firstVariation = variationsData[0];
+    const response = await request(app).patch(`/api/v1/product/${product._id}/variation/${firstVariation._id}/option/${prodVariationOptionExemple._id}`).send({
+      // change product variation option value from red to purple
+      value: 'purple',
+    });
+    const data = response.body;
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.be.string('product variation option updated successfully');
+  });
+});
+
+// Delete product variation option
+
+describe('DELETE /api/v1/product/:id/variation/:variationId/option', () => {
+  it('Should return the good response when update prod variation option', async () => {
+    
+    const product = await Product.findOne({
+      name: 'product-name',
+    }).exec();
+
+    const prodVariationOptionExemple = await Option.findOne({
+      name: 'color',
+    }).exec();
+
+    const variations = await request(app).get(`/api/v1/product/${product._id}/variation`);
+    const {data: variationsData} = variations.body;
+    const firstVariation = variationsData[0];
+    const response = await request(app).delete(`/api/v1/product/${product._id}/variation/${firstVariation._id}/option/${prodVariationOptionExemple._id}`);
+    const data = response.body;
+    expect(response.statusCode).equal(200);
+    expect(data).to.have.property('data');
+    expect(data).to.have.property('success', true);
+    expect(data.data).to.be.string('product variation option deleted successfully');
+  });
+});
 // update product variation
 
 describe('PATCH /api/v1/product/:id/variation/variationId', () => {
@@ -496,11 +592,6 @@ describe('DELETE /api/v1/product/id', () => {
       name: 'product-name',
     }).exec();
     const response = await request(app).delete(`/api/v1/product/${product._id}`);
-    // clean the database
-    await Category.deleteMany({});
-    await Option.deleteMany({});
-    await Store.deleteMany({});
-
     const data = response.body;
     /**
      data format exemple:
