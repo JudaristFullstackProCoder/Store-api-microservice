@@ -315,7 +315,7 @@ const deleteProductVariationOption = function deleteProductVariationOption(req, 
   }, {
     $pull: {
       options: {
-        option: req.body.option,
+        option: req.params.optionId,
       },
     },
   }, {}, (err) => {
@@ -326,9 +326,7 @@ const deleteProductVariationOption = function deleteProductVariationOption(req, 
 
 const updateProductVariationOption = async function updateProductVariationOption(req, res, next) {
   try {
-    const { id } = req.params;
-    const { optionId } = req.params;
-    const { variationId } = req.params;
+    const { id, optionId, variationId } = req.params;
     ProductVariation.findOneAndUpdate({
       _id: variationId,
       product: id,
@@ -355,16 +353,17 @@ const updateProductVariationOption = async function updateProductVariationOption
 
 const getProductVariationOption = async function getProductVariationOption(req, res, next) {
   try {
-    const { id: productId, optionId } = req.params;
-    /** @var {Array} productOtions  */
-    let productOtions = await Product.findOne({
-      _id: productId,
+    const { id: productId, optionId, variationId } = req.params;
+    let productVariationOptions = await ProductVariation.findOne({
+      product: productId,
+      _id: variationId,
+      'options.option': optionId,
     }).select('options')
-      .populate('options.option')
+      .populate('options.option', 'name')
       .exec();
 
-    productOtions = productOtions.options;
-    productOtions.forEach((option) => {
+    productVariationOptions = productVariationOptions.options;
+    productVariationOptions.forEach((option) => {
       /* eslint no-underscore-dangle: "off" */
       if (option.option?._id?.toString() === optionId) {
         return responses.ok(res, option);
