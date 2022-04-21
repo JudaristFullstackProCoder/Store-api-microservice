@@ -19,7 +19,11 @@ The goal of this project is to create an api is to manage entities : store, prod
 ## For Testing
 
 For testing this api i started using a vscode extension called [Thunder Client](https://www.thunderclient.com/), but i realise that this is not efficient.
-Testing the Api with testing librairy may be more sufficient and more simple. For testing i use [chai-http](https://www.chaijs.com/plugins/chai-http/), [axios](https://axios-http.com/), [chai](https://www.chaijs.com/), and [mocha](https://mochajs.org/). 
+Testing the Api with testing librairy may be more sufficient and more simple. For testing i use [chai-http](https://www.chaijs.com/plugins/chai-http/), [chai](https://www.chaijs.com/), and [mocha](https://mochajs.org/).
+
+## App Architecture
+
+![alt](./docs/images/DiagrammeArchitectureMKP.PNG)
 
 ## About Elasticsearch
 
@@ -34,23 +38,17 @@ Products have common property (name, price ...) but in some case we want to add 
 to a product. These options depend on the category of the product : each category have specific options
 and this options will be used by all product that have this category. Exemple : Given two category PC and Book; PC have specific option like RAM, CPU, HDD that Book doesn't have.
 
-### Product images
-
-Product's images allow to store additional images to a product.
-
 ### Variable product
 
 Allow us give a different price and image to a product depending on his specificity. For example a PC Core i7 with 8 GO RAM will cost less than a PC Core i7 with 32 GO RAM.
 This product variability is inspired from woocommerce  take a look at this for more understanding [Woocommerce variable product](https://woocommerce.com/document/variable-product/).
 the API will create this type of product from the several specificity (product options)
 
-### Product store and shopkeeper
+## UML Diagramm
 
-`store` is where product is stored, and `shopkeper` the user who create this product.
+### Create product
 
-### Product pre_video
-
-Its the video that present the product (facultative).
+![alt](./docs/images/DiagrammeSequenceCreateProduct.PNG)
 
 ## Api endpoints
 
@@ -100,7 +98,6 @@ Its the video that present the product (facultative).
 * `PATCH` /api/v1/promocodes/:id
 * `DELETE` /api/v1/promocodes/:id
 
-### Product's files upload
 #### When you upload a featured image for a product, the API will create a folder that corresponds to the product id and it is in this folder that all the files for this product will be saved.
 
 * `POST` /api/v1/upload/product/:id/image (add or replace featured image)
@@ -114,7 +111,7 @@ Its the video that present the product (facultative).
 
 * `cd` to project folder
 * `run command` docker buil -t `image name` .
-*  docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container            port`:`your pc port` --name `image name`     `image name`
+* docker run -v %cd%:/store-api -v /store-api/node_modules  -p `container            port`:`your pc port` --name `image name`     `image name`
 * docker run -v %cd%:/store-api -v /store-api/node_modules --env PORT=value -p `container port`:`your pc port` --name `image name` `image name`
 
 ## With Docker Compose
@@ -130,5 +127,3 @@ Its the video that present the product (facultative).
 * Clone the repository
 * npm install
 * npm run dev
-
-made by `Judarist Fullstack  - judearist@gmail.com`
