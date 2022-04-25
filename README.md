@@ -91,6 +91,14 @@ the API will create this type of product from the several specificity (product o
 * `POST`   /api/v1/products/:id/options
 * `DELETE`   /api/v1/products/:id/options
 
+### Products variations
+
+* `POST` /api/v1/product/:id/variation
+* `GET`  /api/v1/product/:id/variation/:variationId
+* `PATCH` /api/v1/product/:id/variation/:variationId
+* `DELETE` /api/v1/product/:id/variation/:variationId
+* `PUT` /api/v1/product/:id/variation/:variationId/image
+
 ### Promocodes
 
 * `POST` /api/v1/promocodes
