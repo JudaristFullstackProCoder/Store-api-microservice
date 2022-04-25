@@ -173,9 +173,9 @@ const addProductImage = async function addProdImage(req, res, next) {
       _id: new mongoose.Types.ObjectId(req.params.id),
     }, {
       image: req.file,
-    }, { new: true }, (err, product) => {
+    }, { new: true }, (err) => {
       if (err) return next(err);
-      return responses.ok(res, product);
+      return responses.ok(res, req.file);
     });
   } catch (err) {
     return next(err);
@@ -275,6 +275,30 @@ const updateProductVariation = async function updateProductVariation(req, res, n
     });
   } catch (error) {
     return next(error);
+  }
+};
+
+/**
+ * When an image is uploaded for a product variation this method is called to
+ * store informations of the uploaded file within the product corresponding product variation
+ * @returns
+ */
+const addProductVariationImage = async function addProdImage(req, res, next) {
+  // This method is called when we upload an image for a product
+  // Store all informatios about uploaded image into the product
+  const { id, variationId } = req.params;
+  try {
+    ProductVariation.findOneAndUpdate({
+      product: new mongoose.Types.ObjectId(id),
+      _id: new mongoose.Types.ObjectId(variationId),
+    }, {
+      image: req.file,
+    }, {}, (err) => {
+      if (err) return next(err);
+      return responses.ok(res, req.file);
+    });
+  } catch (err) {
+    return next(err);
   }
 };
 
@@ -398,4 +422,5 @@ module.exports = {
   getProductOption,
   getProductVariation,
   getAllProductVariations,
+  addProductVariationImage,
 };
