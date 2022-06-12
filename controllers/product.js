@@ -34,7 +34,9 @@ const getProduct = async function getProd(req, res, next) {
 };
 
 const updateProduct = async function upProd(req, res, next) {
-  return crudManager.update({ req, res, next }, Product);
+  return crudManager.update({ req, res, next }, Product, {
+    message: 'product updated successfully :) ',
+  });
 };
 
 const deleteProduct = async function delProd(req, res, next) {
@@ -48,6 +50,34 @@ const getAllProductWithPagination = function getAllProdWithPage() {
 
 };
 
+const addProductOptionByParams = async function addProductOptionByParams(req, res, next) {
+  try {
+    // Dont allow same option id
+    const pr = await Product.findOne({
+      _id: req.params.id,
+      'options.option': req.params.optionId,
+    }).exec();
+    if (pr) {
+      return next(new Error(`option with id ${req.params.optionId} already exist in this product`));
+    }
+    // Check if the option value is null
+    if (!req.body.value) {
+      return responses.badRequest(res, 'option must have value in request body');
+    }
+    // update the product
+    Product.updateOne({
+      _id: req.params.id,
+    }, {
+      $push: { options: { option: req.params.optionId, value: req.body.value } },
+    }, { new: true }, async (err) => {
+      if (err) return next(err);
+      return responses.created(res, 'product option added succesfully');
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 const addProductOption = async function addProdOption(req, res, next) {
   try {
     // Dont allow same option id
@@ -56,8 +86,11 @@ const addProductOption = async function addProdOption(req, res, next) {
       'options.option': req.body.option,
     }).exec();
     if (pr) {
-      return next(new Error(`option with id 624f55bc229d2cc31798bb5f already exist in this product use the endpoint 
-      PATCH /api/v1/product/[product id]/option/[option id] instead `));
+      return next(new Error(`option with id ${req.body.option} already exist in this product`));
+    }
+    // Check if the option value is null
+    if (!req.body.value) {
+      return responses.badRequest(res, 'option must have value in request body');
     }
     // update the product
     Product.updateOne({
@@ -407,6 +440,7 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addProductOption,
+  addProductOptionByParams,
   deleteProductOption,
   updateProductOption,
   addProductImage,
