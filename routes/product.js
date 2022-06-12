@@ -8,6 +8,8 @@ router.route('/:id').get(productController.getProduct)
 
 router.route('/:id/option')
   .post(productController.addProductOption);
+router.post('/:id/option/:optionId')
+  .post(productController.addProductOptionByParams);
 router.route('/:id/option/:optionId')
   .delete(productController.deleteProductOption)
   .patch(productController.updateProductOption)
