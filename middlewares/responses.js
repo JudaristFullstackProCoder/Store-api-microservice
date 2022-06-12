@@ -44,4 +44,11 @@ module.exports = {
     });
   },
 
+  badRequest(res, data = 'bad request !') {
+    return res.status(400).json({
+      success: false,
+      data,
+    });
+  },
+
 };
