@@ -26,7 +26,8 @@ const getProduct = async function getProd(req, res, next) {
       .populate('options.option', 'name')
       .populate('category', 'name', category)
       .exec();
-    return responses.ok(res, product);
+    const responseToCall = product ? responses.ok : responses.notFound;
+    return responseToCall(res, product);
   } catch (err) {
     return next(err);
   }
