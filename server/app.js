@@ -19,7 +19,6 @@ const productsRoutes = require('../routes/product');
 const categoryRoutes = require('../routes/category');
 const optionsRoutes = require('../routes/option');
 const promoCodeRoutes = require('../routes/promoCode');
-const uploadRoutes = require('../routes/upload');
 
 // Middleware
 app.use(express.json());
@@ -29,7 +28,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(helmet());
 app.use(morgan('dev'));
-app.use(express.static('../uploads'));
 
 // Handle routes
 app.use('/api/v1/store', storeRoutes);
@@ -37,7 +35,6 @@ app.use('/api/v1/product', productsRoutes);
 app.use('/api/v1/category', categoryRoutes);
 app.use('/api/v1/option', optionsRoutes);
 app.use('/api/v1/promocode', promoCodeRoutes);
-app.use('/api/v1/upload', uploadRoutes);
 
 // Error handler middleware
 app.use(errorLogger, clientErrorHandler);
