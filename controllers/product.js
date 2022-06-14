@@ -209,7 +209,9 @@ const addProductImage = async function addProdImage(req, res, next) {
       image: req.file,
     }, { new: true }, (err) => {
       if (err) return next(err);
-      return responses.ok(res, req.file);
+      if (!res.headersSent) {
+        return responses.ok(res, req.file);
+      }
     });
   } catch (err) {
     return next(err);
