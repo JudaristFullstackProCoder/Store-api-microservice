@@ -106,7 +106,6 @@ the API will create this type of product from the several specificity (product o
 * `PATCH` /api/v1/promocodes/:id
 * `DELETE` /api/v1/promocodes/:id
 
-
 ## Create an image to use the API as a microservice
 
 * `cd` to project folder
