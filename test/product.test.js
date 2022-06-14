@@ -98,8 +98,7 @@ describe('POST /api/v1/product', () => {
   });
 });
 
-// Add option to a product
-
+// Add option to a product | Add product option
 describe('POST /api/v1/product/id/option', () => {
   it('Should return the good status when we add an option o a product', async () => {
     const product = await Product.findOne({
@@ -598,6 +597,7 @@ describe('DELETE /api/v1/product/id', () => {
      {
       "success": true,
       "data": "product deleted successfully"
+     }
      */
     expect(response.status).to.equal(200);
     expect(data).to.have.property('data');
