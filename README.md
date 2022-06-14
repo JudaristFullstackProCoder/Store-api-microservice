@@ -106,14 +106,6 @@ the API will create this type of product from the several specificity (product o
 * `PATCH` /api/v1/promocodes/:id
 * `DELETE` /api/v1/promocodes/:id
 
-#### When you upload a featured image for a product, the API will create a folder that corresponds to the product id and it is in this folder that all the files for this product will be saved.
-
-* `POST` /api/v1/upload/product/:id/image (add or replace featured image)
-* `DELETE` /api/v1/upload/product/:id/image (delete featured image)
-* `POST` /api/v1/upload/product/:id/video (add or replace featured video)
-* `DELETE` /api/v1/upload/product/:id/video (delete featured video)
-* `POST` /api/v1/upload/product/:id/images (add more images)
-* `POST` /api/v1/upload/product/:id/images/:name (delete an image in the additional images)
 
 ## Create an image to use the API as a microservice
 
