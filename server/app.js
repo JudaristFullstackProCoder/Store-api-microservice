@@ -30,7 +30,7 @@ app.use(helmet());
 app.use(morgan('dev'));
 
 // Handle routes
-app.use('/', (req, res) => res.json({
+app.get('/', (req, res) => res.json({
   name: 'e-commerce api',
   data: 'Welcome to api',
   description: 'this is a e-commerce api designed to CRUD product, category, store, child category, options, promocode and also variable product',
