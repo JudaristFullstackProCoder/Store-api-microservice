@@ -21,10 +21,6 @@ The goal of this project is to create an api is to manage entities : store, prod
 For testing this api i started using a vscode extension called [Thunder Client](https://www.thunderclient.com/), but i realise that this is not efficient.
 Testing the Api with testing librairy may be more sufficient and more simple. For testing i use [chai-http](https://www.chaijs.com/plugins/chai-http/), [chai](https://www.chaijs.com/), and [mocha](https://mochajs.org/).
 
-## App Architecture
-
-![alt](./docs/images/DiagrammeArchitectureMKP.PNG)
-
 ## About Elasticsearch
 
 For product search to be possible, products must be stored in mongodb and Elasticsearch at the same time. However mongodb will be used as the main storage as Elasticsearch will be used only for research. It will be possible to search for products with very advanced criteria thanks to Elasticsearch. When a product is therefore created, an event will be triggered which will trigger the registration of the product in elasticsearch.
@@ -43,12 +39,6 @@ and this options will be used by all product that have this category. Exemple : 
 Allow us give a different price and image to a product depending on his specificity. For example a PC Core i7 with 8 GO RAM will cost less than a PC Core i7 with 32 GO RAM.
 This product variability is inspired from woocommerce  take a look at this for more understanding [Woocommerce variable product](https://woocommerce.com/document/variable-product/).
 the API will create this type of product from the several specificity (product options)
-
-## UML Diagramm
-
-### Create product
-
-![alt](./docs/images/DiagrammeSequenceCreateProduct.PNG)
 
 ## Api endpoints
 
